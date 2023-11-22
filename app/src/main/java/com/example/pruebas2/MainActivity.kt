@@ -20,57 +20,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.pruebas2.ui.theme.Pruebas2Theme
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Pruebas2Theme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    DatePickerView()
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "Front") {
+                    composable("Front") { Front(navController) }
+                    composable("Calendar") { Calendar(navController) }
                 }
+
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePickerView() {
-    val datePickerState = rememberDatePickerState(selectableDates = object : SelectableDates {
-        override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-            // Permitir la selección de todas las fechas
-            return true
-        }
-    })
-    val selectedDate = datePickerState.selectedDateMillis?.let {
-        convertMillisToDate(it)
-    }
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        DatePicker(
-            state = datePickerState
-        )
-        Spacer(
-            modifier = Modifier.height(
-                32.dp
-            )
-        )
-        Text(
-            text = selectedDate.toString(),
-            color = Color.Red
-        )
-    }
-}
 
 
-private fun convertMillisToDate(millis: Long): String {
-    val formatter = SimpleDateFormat("dd/MM/yyyy")
-    return formatter.format(Date(millis))
-}
