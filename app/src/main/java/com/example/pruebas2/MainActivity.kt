@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = "Front") {
                     composable("Front") { Front(navController) }
                     composable("Calendar") { Calendar(navController) }
+                    composable("Diary") { Diary(navController) }
                 }
 
             }
