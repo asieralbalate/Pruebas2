@@ -1,6 +1,7 @@
 package com.example.pruebas2
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,72 +16,96 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+
+data class AdjectiveColorPair(val adjective: String, val color: Color)
 
 @Composable
-fun Day(){
+fun Day(selectedDiaryAdjective: Int?, onAdjectiveSelected: (Int?) -> Unit){
+    val adjectivesWithColors = listOf(
+        AdjectiveColorPair("Fantastic", Color.Yellow),
+        AdjectiveColorPair("Terrible", Color.Gray),
+        AdjectiveColorPair("Productive", Color.Green),
+        AdjectiveColorPair("Challenging", Color.Red),
+        AdjectiveColorPair("Relaxing", Color.Blue),
+        AdjectiveColorPair("Exciting", Color.Black),
+        AdjectiveColorPair("Hectic", Color.Red),
+        AdjectiveColorPair("Joyful", Color.Magenta),
+        AdjectiveColorPair("Frustrating", Color.Magenta),
+        AdjectiveColorPair("Rewarding", Color(0xFFFFD700)) // Gold
+    )
     Column (Modifier.fillMaxSize()){
-        DayFeedback()
+        DayFeedback(selectedDiaryAdjective, onAdjectiveSelected, adjectivesWithColors)
     }
 }
 
 @Composable
-fun DayFeedback() {
-    var selectedAdjective by remember { mutableStateOf<String?>(null) }
-
-    val adjectivesWithColors = listOf(
-        "Fantastic" to Color.Yellow,
-        "Terrible" to Color.Gray,
-        "Productive" to Color.Green,
-        "Challenging" to Color.Red,
-        "Relaxing" to Color.Blue,
-        "Exciting" to Color.Black,
-        "Hectic" to Color.Red,
-        "Joyful" to Color.Magenta,
-        "Frustrating" to Color.Magenta,
-        "Rewarding" to Color(0xFFFFD700) // Gold
-    )
+fun DayFeedback(selectedDiaryAdjective: Int?,
+                onAdjectiveSelected: (Int?) -> Unit,
+                adjectivesWithColors: List<AdjectiveColorPair>) {
 
     Column {
+        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)){
+            Text(text = "How was your day?", fontSize = 30.sp)
+        }
         for ((adjective, color) in adjectivesWithColors) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .selectable(
-                        selected = (selectedAdjective == adjective),
-                        onClick = {
-                            selectedAdjective = if (selectedAdjective == adjective) {
-                                null
-                            } else {
-                                adjective
-                            }
-                        }
-                    )
-            ) {
-                Checkbox(
-                    checked = (selectedAdjective == adjective),
-                    onCheckedChange = null,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Box(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .background(color)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = adjective, modifier = Modifier.align(Alignment.CenterVertically))
-            }
+            AdjectiveRow(
+                adjective = adjective,
+                color = color,
+                selectedDiaryAdjective = selectedDiaryAdjective,
+                onAdjectiveSelected = onAdjectiveSelected,
+                adjectivesWithColors = adjectivesWithColors
+            )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Text("Selected Adjective: ${selectedAdjective ?: "None"}")
+        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+            Text(text ="Selected: ${selectedDiaryAdjective ?: "None"}", fontSize = 20.sp)
+        }
+    }
+}
+
+@Composable
+fun AdjectiveRow(
+    adjective: String,
+    color: Color,
+    selectedDiaryAdjective: Int?,
+    onAdjectiveSelected: (Int?) -> Unit,
+    adjectivesWithColors: List<AdjectiveColorPair>
+) {
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = 8.dp, start = 20.dp)
+            .selectable(
+                selected = (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }),
+                onClick = {
+                    onAdjectiveSelected(if (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }) {
+                        null
+                    } else {
+                        adjectivesWithColors.indexOfFirst { it.adjective == adjective }
+                    })
+                }
+            )
+    ) {
+        Checkbox(
+            checked = (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }),
+            onCheckedChange = null,
+            modifier = Modifier.size(30.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Box(
+            modifier = Modifier
+                .size(34.dp)
+                .background(color)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = adjective, fontSize = 20.sp, modifier = Modifier.align(Alignment.CenterVertically))
     }
 }

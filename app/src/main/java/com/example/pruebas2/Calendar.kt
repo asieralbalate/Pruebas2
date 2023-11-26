@@ -84,7 +84,7 @@ fun DatePickerView(navController: NavHostController) {
 
 
 @SuppressLint("SimpleDateFormat")
-private fun convertMillisToDate(millis: Long): String {
+fun convertMillisToDate(millis: Long): String {
     val formatter = SimpleDateFormat("dd/MM/yyyy")
     return formatter.format(Date(millis))
 }
