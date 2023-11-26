@@ -1,6 +1,6 @@
 package com.example.pruebas2
 
-import androidx.compose.foundation.clickable
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerFormatter
-import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableDates
@@ -23,10 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import java.text.SimpleDateFormat
@@ -45,7 +41,7 @@ fun Calendar(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerView(navController: NavHostController) {
-    var currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
+    val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
 
     val datePickerState =
         rememberDatePickerState(currentSelectedDateMillis, selectableDates = object : SelectableDates {
@@ -81,12 +77,13 @@ fun DatePickerView(navController: NavHostController) {
         )
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Button(onClick = { navController.navigate("Diary") }, content = { Text(text = "Diary") })
-            Button(onClick = { /*TODO*/ }, content = { Text(text = "Resume") })
+            Button(onClick = { navController.navigate("Resume") }, content = { Text(text = "Resume") })
         }
     }
 }
 
 
+@SuppressLint("SimpleDateFormat")
 private fun convertMillisToDate(millis: Long): String {
     val formatter = SimpleDateFormat("dd/MM/yyyy")
     return formatter.format(Date(millis))

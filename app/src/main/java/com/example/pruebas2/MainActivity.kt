@@ -37,10 +37,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             Pruebas2Theme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "Front") {
+                NavHost(navController = navController, startDestination = "Calendar") {
                     composable("Front") { Front(navController) }
                     composable("Calendar") { Calendar(navController) }
                     composable("Diary") { Diary(navController) }
+                    composable("Resume") { Resume(navController) }
                 }
 
             }
