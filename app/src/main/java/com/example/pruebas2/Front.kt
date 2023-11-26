@@ -25,7 +25,7 @@ fun Front(navController: NavHostController) {
     }
 }
 
-private fun getCurrentDate(): String {
+fun getCurrentDate(): String {
     val calendar = java.util.Calendar.getInstance()
     val formatter = SimpleDateFormat("d", Locale.getDefault())
     val dayOfMonth = formatter.format(calendar.time).toInt()
