@@ -27,70 +27,45 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun Steps(){
+fun Steps(selectedStepsAdjective: Int?, onStepsSelected: (Int?) -> Unit){
+    val adjectivesWithColors = listOf(
+        AdjectiveColorPair("Fantastic", Color.Yellow),
+        AdjectiveColorPair("Terrible", Color.Gray),
+        AdjectiveColorPair("Productive", Color.Green),
+        AdjectiveColorPair("Challenging", Color.Red),
+        AdjectiveColorPair("Relaxing", Color.Blue),
+        AdjectiveColorPair("Exciting", Color.Black),
+        AdjectiveColorPair("Hectic", Color.Red),
+        AdjectiveColorPair("Joyful", Color.Magenta),
+        AdjectiveColorPair("Frustrating", Color.Magenta),
+        AdjectiveColorPair("Rewarding", Color(0xFFFFD700)) // Gold
+    )
     Column (Modifier.fillMaxSize()){
-        StepsFeedback()
+        StepsFeedback(selectedStepsAdjective, onStepsSelected, adjectivesWithColors)
     }
 }
 
 @Composable
-fun StepsFeedback() {
-    var selectedWeatherAdjective by remember { mutableStateOf<String?>(null) }
-
-    val adjectivesWithColors = listOf(
-        "Sunny" to Color.Yellow,
-        "Cloudy" to Color.Gray,
-        "Rainy" to Color.Green,
-        "Snowy" to Color.Red,
-        "Windy" to Color.Blue,
-        "Hot" to Color.Black,
-        "Cold" to Color.Red,
-        "Warm" to Color.Magenta,
-        "Chaotic" to Color.Magenta,
-        "Foggy" to Color(0xFFFFD700) // Gold
-    )
+fun StepsFeedback(selectedStepsAdjective: Int?,
+                  onStepsSelected: (Int?) -> Unit,
+                  adjectivesWithColors: List<AdjectiveColorPair> ) {
 
     Column {
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 15.dp)){
-            Text(text = "How many steps did you do?", fontSize = 28.sp)
+        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)){
+            Text(text = "How many steps have you taken?", fontSize = 25.sp)
         }
         for ((adjective, color) in adjectivesWithColors) {
-            Row(horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 8.dp, start = 20.dp)
-                    .selectable(
-                        selected = (selectedWeatherAdjective == adjective),
-                        onClick = {
-                            selectedWeatherAdjective = if (selectedWeatherAdjective == adjective) {
-                                null
-                            } else {
-                                adjective
-                            }
-                        }
-                    )
-            ) {
-                Checkbox(
-                    checked = (selectedWeatherAdjective == adjective),
-                    onCheckedChange = null,
-                    modifier = Modifier.size(30.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Box(
-                    modifier = Modifier
-                        .size(34.dp)
-                        .background(color)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = adjective, fontSize = 20.sp ,modifier = Modifier.align(Alignment.CenterVertically))
-            }
+            AdjectiveRow(
+                adjective = adjective,
+                color = color,
+                selectedDiaryAdjective = selectedStepsAdjective,
+                onAdjectiveSelected = onStepsSelected,
+                adjectivesWithColors = adjectivesWithColors
+            )
         }
         Spacer(modifier = Modifier.height(16.dp))
         Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
-            Text(text ="Selected: ${selectedWeatherAdjective ?: "None"}", fontSize = 20.sp)
+            Text(text ="Selected: ${selectedStepsAdjective ?: "None"}", fontSize = 20.sp)
         }
-
     }
 }

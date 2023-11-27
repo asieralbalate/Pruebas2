@@ -4,17 +4,22 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -48,6 +53,9 @@ import com.example.pruebas2.ui.theme.Purple40
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
+
+data class AdjectiveColorPair(val adjective: String, val color: Color)
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Diary(navController: NavHostController) {
@@ -58,14 +66,18 @@ fun Diary(navController: NavHostController) {
         floatingActionButtonPosition = FabPosition.End,
         content = {
             var selectedDiaryAdjective by remember { mutableStateOf<Int?>(null) }
-            var selectedWeatherAdjective by remember { mutableStateOf<String?>(null) }
+            var selectedWeatherAdjective by remember { mutableStateOf<Int?>(null) }
+            var selectedStepsAdjective by remember { mutableStateOf<Int?>(null) }
+            var selectedSpendAdjective by remember { mutableStateOf<Int?>(null) }
+            var selectedWeightAdjective by remember { mutableStateOf<Int?>(null) }
+            var selectedFoodAdjective by remember { mutableStateOf<Int?>(null) }
+            var selectedSleepAdjective by remember { mutableStateOf<Int?>(null) }
             Box(
                 modifier = Modifier.padding(
                     top = it.calculateTopPadding()
                 )
             ) {
                 MyTabs(
-                    navController,
                     selectedDiaryAdjective,
                     { newDiaryAdjective ->
                         selectedDiaryAdjective = newDiaryAdjective
@@ -73,6 +85,26 @@ fun Diary(navController: NavHostController) {
                     selectedWeatherAdjective,
                     { newWeatherAdjective ->
                         selectedWeatherAdjective = newWeatherAdjective
+                    },
+                    selectedStepsAdjective,
+                    { newStepsAdjective ->
+                        selectedStepsAdjective = newStepsAdjective
+                    },
+                    selectedSpendAdjective,
+                    { newSpendAdjective ->
+                        selectedSpendAdjective = newSpendAdjective
+                    },
+                    selectedWeightAdjective,
+                    { newWeightAdjective ->
+                        selectedWeightAdjective = newWeightAdjective
+                    },
+                    selectedFoodAdjective,
+                    { newFoodAdjective ->
+                        selectedFoodAdjective = newFoodAdjective
+                    },
+                    selectedSleepAdjective,
+                    { newSleepAdjective ->
+                        selectedSleepAdjective = newSleepAdjective
                     }
                 )
             }
@@ -83,9 +115,13 @@ fun Diary(navController: NavHostController) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyTabs(
-    navController: NavHostController,
     selectedDiaryAdjective: Int?, onAdjectiveSelected: (Int?) -> Unit,
-    selectedWeatherAdjective: String?, onWeatherSelected: (String?) -> Unit
+    selectedWeatherAdjective: Int?, onWeatherSelected: (Int?) -> Unit,
+    selectedStepsAdjective: Int?, onStepsSelected: (Int?) -> Unit,
+    selectedSpendAdjective: Int?, onSpendSelected: (Int?) -> Unit,
+    selectedWeightAdjective: Int?, onWeightSelected: (Int?) -> Unit,
+    selectedFoodAdjective: Int?, onFoodSelected: (Int?) -> Unit,
+    selectedSleepAdjective: Int?, onSleepSelected: (Int?) -> Unit
 ) {
     val scope = rememberCoroutineScope()
 
@@ -99,7 +135,7 @@ fun MyTabs(
         R.drawable.sleep,
     )
 
-    val pagerState = rememberPagerState(initialPage = 0, initialPageOffsetFraction = 0f) { 4 }
+    val pagerState = rememberPagerState(initialPage = 0, initialPageOffsetFraction = 0f) { 7 }
     Column {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
@@ -127,8 +163,11 @@ fun MyTabs(
             when (page) {
                 0 -> Day(selectedDiaryAdjective, onAdjectiveSelected)
                 1 -> Weather(selectedWeatherAdjective, onWeatherSelected)
-                2 -> Steps()
-                3 -> ""
+                2 -> Steps(selectedStepsAdjective, onStepsSelected)
+                3 -> Spend(selectedSpendAdjective, onSpendSelected)
+                4 -> Weights(selectedWeightAdjective, onWeightSelected)
+                5 -> Food(selectedFoodAdjective, onFoodSelected)
+                6 -> Sleep(selectedSleepAdjective, onSleepSelected)
             }
         }
     }
@@ -166,7 +205,6 @@ fun MyTopBar(navController: NavHostController) {
             }
 
         })
-
 }
 
 
@@ -174,10 +212,11 @@ fun MyTopBar(navController: NavHostController) {
 fun MyFAB(context: Context) {
     FloatingActionButton(onClick = {
         UploadData(
-        date = "hola",
-        selectedDiaryAdjective = 1,
-        contexto = context,
-    ) }, containerColor = Purple40) {
+            date = "hola",
+            selectedDiaryAdjective = 1,
+            contexto = context,
+        )
+    }, containerColor = Purple40) {
         Image(
             painterResource(id = R.drawable.save),
             contentDescription = "null",
@@ -186,12 +225,12 @@ fun MyFAB(context: Context) {
     }
 }
 
-fun UploadData(date: String, selectedDiaryAdjective: Int? , contexto: Context) {
+fun UploadData(date: String, selectedDiaryAdjective: Int?, contexto: Context) {
     val requestQueue = Volley.newRequestQueue(contexto)
     val url = "https://dailyasiercalendar.000webhostapp.com/insertar.php"
-    val parametros= JSONObject()
-    parametros.put("dates",date)
-    parametros.put("day",selectedDiaryAdjective)
+    val parametros = JSONObject()
+    parametros.put("dates", date)
+    parametros.put("day", selectedDiaryAdjective)
     val requerimiento = JsonObjectRequest(
         Request.Method.POST,
         url,
@@ -206,3 +245,47 @@ fun UploadData(date: String, selectedDiaryAdjective: Int? , contexto: Context) {
     requestQueue.add(requerimiento)
 }
 
+@Composable
+fun AdjectiveRow(
+    adjective: String,
+    color: Color,
+    selectedDiaryAdjective: Int?,
+    onAdjectiveSelected: (Int?) -> Unit,
+    adjectivesWithColors: List<AdjectiveColorPair>
+) {
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = 8.dp, start = 20.dp)
+            .selectable(
+                selected = (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }),
+                onClick = {
+                    onAdjectiveSelected(if (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }) {
+                        null
+                    } else {
+                        adjectivesWithColors.indexOfFirst { it.adjective == adjective }
+                    })
+                }
+            )
+    ) {
+        Checkbox(
+            checked = (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }),
+            onCheckedChange = null,
+            modifier = Modifier.size(30.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Box(
+            modifier = Modifier
+                .size(34.dp)
+                .background(color)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = adjective,
+            fontSize = 20.sp,
+            modifier = Modifier.align(Alignment.CenterVertically)
+        )
+    }
+}
