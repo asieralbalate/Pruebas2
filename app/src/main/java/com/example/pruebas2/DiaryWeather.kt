@@ -37,8 +37,6 @@ fun Weather(selectedWeatherAdjective: Int?, onWeatherSelected: (Int?) -> Unit){
 
 @Composable
 fun WeatherFeedback(selectedWeatherAdjective: Int?, onWeatherSelected: (Int?) -> Unit, adjectivesWithColors: List<AdjectiveColorPair>) {
-
-
     Column {
         Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)){
             Text(text = "How has the weather been?", fontSize = 30.sp)

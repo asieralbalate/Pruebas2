@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -42,7 +43,6 @@ fun Calendar(navController: NavHostController) {
 @Composable
 fun DatePickerView(navController: NavHostController) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
-
     val datePickerState =
         rememberDatePickerState(currentSelectedDateMillis, selectableDates = object : SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
@@ -51,11 +51,13 @@ fun DatePickerView(navController: NavHostController) {
             }
         })
 
-
+    val formattedDate = datePickerState.selectedDateMillis?.let {
+        formatDateForDisplay(it)
+    }
     val selectedDate = datePickerState.selectedDateMillis?.let {
             convertMillisToDate(it)
-           /* navController.navigate("Front")*/
     }
+
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         DatePicker(dateFormatter =  DatePickerDefaults.dateFormatter() ,
@@ -76,7 +78,7 @@ fun DatePickerView(navController: NavHostController) {
             )
         )
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            Button(onClick = { navController.navigate("Diary") }, content = { Text(text = "Diary") })
+            Button(onClick = { navController.navigate("Diary/${formattedDate}") }, content = { Text(text = "Diary") })
             Button(onClick = { navController.navigate("Resume") }, content = { Text(text = "Resume") })
         }
     }
@@ -89,3 +91,22 @@ fun convertMillisToDate(millis: Long): String {
     return formatter.format(Date(millis))
 }
 
+@SuppressLint("SimpleDateFormat")
+fun formatDateForDisplay(millis: Long): String {
+    val date = Date(millis)
+    val dayOfMonth = SimpleDateFormat("dd").format(date)
+    val month = SimpleDateFormat("MMMM").format(date)
+    val year = SimpleDateFormat("yyyy").format(date)
+
+    val daySuffix = when (dayOfMonth.toInt()) {
+        in 11..13 -> "th"
+        else -> when (dayOfMonth.toInt() % 10) {
+            1 -> "st"
+            2 -> "nd"
+            3 -> "rd"
+            else -> "th"
+        }
+    }
+
+    return "$dayOfMonth$daySuffix of $month $year"
+}

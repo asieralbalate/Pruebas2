@@ -58,20 +58,28 @@ data class AdjectiveColorPair(val adjective: String, val color: Color)
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Diary(navController: NavHostController) {
+fun Diary(selectedDate: String, navController: NavHostController) {
     val context = LocalContext.current
+    var selectedDiaryAdjective by remember { mutableStateOf<Int? >(null) }
+    var selectedWeatherAdjective by remember { mutableStateOf<Int?>(null) }
+    var selectedStepsAdjective by remember { mutableStateOf<Int?>(null) }
+    var selectedSpendAdjective by remember { mutableStateOf<Int?>(null) }
+    var selectedWeightAdjective by remember { mutableStateOf<Int?>(null) }
+    var selectedFoodAdjective by remember { mutableStateOf<Int?>(null) }
+    var selectedSleepAdjective by remember { mutableStateOf<Int?>(null) }
     Scaffold(
-        topBar = { MyTopBar(navController) },
-        floatingActionButton = { MyFAB(context) },
+        topBar = { MyTopBar(navController, selectedDate) },
+        floatingActionButton = {
+            MyFAB(
+                selectedDate, selectedDiaryAdjective,
+                selectedWeatherAdjective, selectedStepsAdjective,
+                selectedSpendAdjective, selectedWeightAdjective,
+                selectedFoodAdjective, selectedSleepAdjective,
+                context
+            )
+        },
         floatingActionButtonPosition = FabPosition.End,
         content = {
-            var selectedDiaryAdjective by remember { mutableStateOf<Int?>(null) }
-            var selectedWeatherAdjective by remember { mutableStateOf<Int?>(null) }
-            var selectedStepsAdjective by remember { mutableStateOf<Int?>(null) }
-            var selectedSpendAdjective by remember { mutableStateOf<Int?>(null) }
-            var selectedWeightAdjective by remember { mutableStateOf<Int?>(null) }
-            var selectedFoodAdjective by remember { mutableStateOf<Int?>(null) }
-            var selectedSleepAdjective by remember { mutableStateOf<Int?>(null) }
             Box(
                 modifier = Modifier.padding(
                     top = it.calculateTopPadding()
@@ -175,8 +183,7 @@ fun MyTabs(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopBar(navController: NavHostController) {
-    val currentDate = getCurrentDate()
+fun MyTopBar(navController: NavHostController, selectedDate: String) {
     TopAppBar(modifier = Modifier.height(40.dp), colors = TopAppBarColors(
         containerColor = Purple40,
         scrolledContainerColor = Color.White,
@@ -197,7 +204,7 @@ fun MyTopBar(navController: NavHostController) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 Text(
-                    text = currentDate,
+                    text = selectedDate,
                     fontSize = 28.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Bold
@@ -209,12 +216,28 @@ fun MyTopBar(navController: NavHostController) {
 
 
 @Composable
-fun MyFAB(context: Context) {
+fun MyFAB(
+    dateCal: String,
+    selectedDiaryAdjective: Int?,
+    selectedWeatherAdjective: Int?,
+    selectedStepsAdjective: Int?,
+    selectedSpendAdjective: Int?,
+    selectedWeightAdjective: Int?,
+    selectedFoodAdjective: Int?,
+    selectedSleepAdjective: Int?,
+    contexto: Context,
+) {
     FloatingActionButton(onClick = {
         UploadData(
-            date = "hola",
-            selectedDiaryAdjective = 1,
-            contexto = context,
+            dateCal = dateCal,
+            selectedDiaryAdjective = selectedDiaryAdjective,
+            selectedWeatherAdjective = selectedWeatherAdjective,
+            selectedStepsAdjective = selectedStepsAdjective,
+            selectedSpendAdjective = selectedSpendAdjective,
+            selectedWeightAdjective = selectedWeightAdjective,
+            selectedFoodAdjective = selectedFoodAdjective,
+            selectedSleepAdjective = selectedSleepAdjective,
+            contexto = contexto,
         )
     }, containerColor = Purple40) {
         Image(
@@ -225,12 +248,28 @@ fun MyFAB(context: Context) {
     }
 }
 
-fun UploadData(date: String, selectedDiaryAdjective: Int?, contexto: Context) {
+fun UploadData(
+    dateCal: String,
+    selectedDiaryAdjective: Int?,
+    selectedWeatherAdjective: Int?,
+    selectedStepsAdjective: Int?,
+    selectedSpendAdjective: Int?,
+    selectedWeightAdjective: Int?,
+    selectedFoodAdjective: Int?,
+    selectedSleepAdjective: Int?,
+    contexto: Context,
+) {
     val requestQueue = Volley.newRequestQueue(contexto)
-    val url = "https://dailyasiercalendar.000webhostapp.com/insertar.php"
+    val url = "https://dailyasiercalendar.000webhostapp.com/insertCalendar.php"
     val parametros = JSONObject()
-    parametros.put("dates", date)
+    parametros.put("dateCal", dateCal)
     parametros.put("day", selectedDiaryAdjective)
+    parametros.put("weather", selectedWeatherAdjective)
+    parametros.put("steps", selectedStepsAdjective)
+    parametros.put("spend", selectedSpendAdjective)
+    parametros.put("weights", selectedWeightAdjective)
+    parametros.put("food", selectedFoodAdjective)
+    parametros.put("sleep", selectedSleepAdjective)
     val requerimiento = JsonObjectRequest(
         Request.Method.POST,
         url,
@@ -242,6 +281,27 @@ fun UploadData(date: String, selectedDiaryAdjective: Int?, contexto: Context) {
 
         }
     )
+    requestQueue.add(requerimiento)
+}
+
+fun CheckDate(dateCal: String, existeFechaCallback: (Boolean) -> Unit, contexto: Context) {
+    val requestQueue = Volley.newRequestQueue(contexto)
+    val url = "https://dailyasiercalendar.000webhostapp.com/checkCalendar.php?dateCal=$dateCal"
+
+    val requerimiento = JsonObjectRequest(
+        Request.Method.GET,
+        url,
+        null,
+        { response ->
+            // Si la respuesta contiene datos, significa que la fecha ya existe
+            existeFechaCallback(response.length() > 0)
+        },
+        { error ->
+            // Manejar errores según sea necesario
+            existeFechaCallback(false)
+        }
+    )
+
     requestQueue.add(requerimiento)
 }
 
