@@ -2,9 +2,11 @@ package com.example.pruebas2
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxColors
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -27,7 +31,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
@@ -47,10 +53,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.android.volley.Request
+import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.example.pruebas2.ui.theme.Purple40
+import com.example.pruebas2.ui.theme.BoxColor
+import com.example.pruebas2.ui.theme.TabsColor
+import com.example.pruebas2.ui.theme.TopBarColor
 import kotlinx.coroutines.launch
+import org.json.JSONException
 import org.json.JSONObject
 
 
@@ -60,13 +70,13 @@ data class AdjectiveColorPair(val adjective: String, val color: Color)
 @Composable
 fun Diary(selectedDate: String, navController: NavHostController) {
     val context = LocalContext.current
-    var selectedDiaryAdjective by remember { mutableStateOf<Int? >(null) }
-    var selectedWeatherAdjective by remember { mutableStateOf<Int?>(null) }
-    var selectedStepsAdjective by remember { mutableStateOf<Int?>(null) }
-    var selectedSpendAdjective by remember { mutableStateOf<Int?>(null) }
-    var selectedWeightAdjective by remember { mutableStateOf<Int?>(null) }
-    var selectedFoodAdjective by remember { mutableStateOf<Int?>(null) }
-    var selectedSleepAdjective by remember { mutableStateOf<Int?>(null) }
+    var selectedDiaryAdjective by remember { mutableStateOf<Int?>(-1) }
+    var selectedWeatherAdjective by remember { mutableStateOf<Int?>(-1) }
+    var selectedStepsAdjective by remember { mutableStateOf<Int?>(-1) }
+    var selectedSpendAdjective by remember { mutableStateOf<Int?>(-1) }
+    var selectedWeightAdjective by remember { mutableStateOf<Int?>(-1) }
+    var selectedFoodAdjective by remember { mutableStateOf<Int?>(-1) }
+    var selectedSleepAdjective by remember { mutableStateOf<Int?>(-1) }
     Scaffold(
         topBar = { MyTopBar(navController, selectedDate) },
         floatingActionButton = {
@@ -81,9 +91,11 @@ fun Diary(selectedDate: String, navController: NavHostController) {
         floatingActionButtonPosition = FabPosition.End,
         content = {
             Box(
-                modifier = Modifier.padding(
-                    top = it.calculateTopPadding()
-                )
+                modifier = Modifier
+                    .padding(
+                        top = it.calculateTopPadding()
+                    )
+                    .background(BoxColor)
             ) {
                 MyTabs(
                     selectedDiaryAdjective,
@@ -147,9 +159,8 @@ fun MyTabs(
     Column {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
-            containerColor = Purple40,
-            contentColor = Color.White,
-
+            containerColor = TabsColor,
+            contentColor = Color.White
             ) {
             imageResources.forEachIndexed { index, imageResource ->
                 Tab(
@@ -185,10 +196,10 @@ fun MyTabs(
 @Composable
 fun MyTopBar(navController: NavHostController, selectedDate: String) {
     TopAppBar(modifier = Modifier.height(40.dp), colors = TopAppBarColors(
-        containerColor = Purple40,
+        containerColor = TopBarColor,
         scrolledContainerColor = Color.White,
-        navigationIconContentColor = Purple40,
-        titleContentColor = Purple40,
+        navigationIconContentColor =TopBarColor,
+        titleContentColor = TopBarColor,
         actionIconContentColor = Color.White
     ), navigationIcon = {
         IconButton(onClick = { navController.navigate("Calendar") }, content = {
@@ -228,7 +239,7 @@ fun MyFAB(
     contexto: Context,
 ) {
     FloatingActionButton(onClick = {
-        UploadData(
+        InsertData(
             dateCal = dateCal,
             selectedDiaryAdjective = selectedDiaryAdjective,
             selectedWeatherAdjective = selectedWeatherAdjective,
@@ -239,7 +250,8 @@ fun MyFAB(
             selectedSleepAdjective = selectedSleepAdjective,
             contexto = contexto,
         )
-    }, containerColor = Purple40) {
+
+    }, containerColor = TopBarColor) {
         Image(
             painterResource(id = R.drawable.save),
             contentDescription = "null",
@@ -249,6 +261,67 @@ fun MyFAB(
 }
 
 fun UploadData(
+    dateCal: String,
+    selectedDiaryAdjective: Int?,
+    selectedWeatherAdjective: Int?,
+    selectedStepsAdjective: Int?,
+    selectedSpendAdjective: Int?,
+    selectedWeightAdjective: Int?,
+    selectedFoodAdjective: Int?,
+    selectedSleepAdjective: Int?,
+    contexto: Context,
+) {
+    CheckDate(dateCal,
+        {
+        exists ->
+            if (exists) {
+                UpdateData(dateCal,
+                    selectedDiaryAdjective,
+                    selectedWeatherAdjective,
+                    selectedStepsAdjective,
+                    selectedSpendAdjective,
+                    selectedWeightAdjective,
+                    selectedFoodAdjective,
+                    selectedSleepAdjective,
+                    contexto)
+            } else {
+                InsertData(dateCal,
+                    selectedDiaryAdjective,
+                    selectedWeatherAdjective,
+                    selectedStepsAdjective,
+                    selectedSpendAdjective,
+                    selectedWeightAdjective,
+                    selectedFoodAdjective,
+                    selectedSleepAdjective,
+                contexto)
+            }
+        },
+        contexto)
+}
+
+fun CheckDate(dateCal: String, existeFechaCallback: (Boolean) -> Unit, contexto: Context) {
+    val requestQueue = Volley.newRequestQueue(contexto)
+    val url = "https://dailyasiercalendar.000webhostapp.com/checkCalendar.php?dateCal=$dateCal"
+    val requerimiento = JsonArrayRequest(
+        Request.Method.GET,
+        url,
+        null,
+        { response ->
+            if (response.length() == 1) {
+                try {
+                    existeFechaCallback(true)
+                } catch (e: JSONException) {
+                }
+            } else {
+                existeFechaCallback(false)
+            }
+        }
+    ) { error ->
+    }
+    requestQueue.add(requerimiento)
+}
+
+fun InsertData(
     dateCal: String,
     selectedDiaryAdjective: Int?,
     selectedWeatherAdjective: Int?,
@@ -284,26 +357,40 @@ fun UploadData(
     requestQueue.add(requerimiento)
 }
 
-fun CheckDate(dateCal: String, existeFechaCallback: (Boolean) -> Unit, contexto: Context) {
+fun UpdateData(
+    dateCal: String,
+    selectedDiaryAdjective: Int?,
+    selectedWeatherAdjective: Int?,
+    selectedStepsAdjective: Int?,
+    selectedSpendAdjective: Int?,
+    selectedWeightAdjective: Int?,
+    selectedFoodAdjective: Int?,
+    selectedSleepAdjective: Int?,
+    contexto: Context,
+) {
     val requestQueue = Volley.newRequestQueue(contexto)
-    val url = "https://dailyasiercalendar.000webhostapp.com/checkCalendar.php?dateCal=$dateCal"
-
+    val url = "https://dailyasiercalendar.000webhostapp.com/updateCalendar.php"
+    val parametros = JSONObject()
+    parametros.put("dateCal", dateCal)
+    parametros.put("day", selectedDiaryAdjective)
+    parametros.put("weather", selectedWeatherAdjective)
+    parametros.put("steps", selectedStepsAdjective)
+    parametros.put("spend", selectedSpendAdjective)
+    parametros.put("weights", selectedWeightAdjective)
+    parametros.put("food", selectedFoodAdjective)
+    parametros.put("sleep", selectedSleepAdjective)
     val requerimiento = JsonObjectRequest(
-        Request.Method.GET,
+        Request.Method.PUT,
         url,
-        null,
+        parametros,
         { response ->
-            // Si la respuesta contiene datos, significa que la fecha ya existe
-            existeFechaCallback(response.length() > 0)
         },
         { error ->
-            // Manejar errores según sea necesario
-            existeFechaCallback(false)
         }
     )
-
     requestQueue.add(requerimiento)
 }
+
 
 @Composable
 fun AdjectiveRow(
@@ -333,13 +420,15 @@ fun AdjectiveRow(
         Checkbox(
             checked = (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }),
             onCheckedChange = null,
-            modifier = Modifier.size(30.dp)
+            modifier = Modifier.size(30.dp),
+            colors = CheckboxDefaults.colors(checkedColor = TopBarColor)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Box(
             modifier = Modifier
                 .size(34.dp)
                 .background(color)
+                .border(border = BorderStroke(1.dp, Color.Black))
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(

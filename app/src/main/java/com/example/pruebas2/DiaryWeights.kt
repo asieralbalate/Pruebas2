@@ -15,22 +15,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pruebas2.ui.theme.WeightsColor0
+import com.example.pruebas2.ui.theme.WeightsColor1
+import com.example.pruebas2.ui.theme.WeightsColor2
+import com.example.pruebas2.ui.theme.WeightsColor3
+import com.example.pruebas2.ui.theme.WeightsColor4
+import com.example.pruebas2.ui.theme.WeightsColor5
+import com.example.pruebas2.ui.theme.WeightsColor6
+import com.example.pruebas2.ui.theme.WeightsColor7
+import com.example.pruebas2.ui.theme.WeightsColor8
+import com.example.pruebas2.ui.theme.WeightsColor9
 
 @Composable
-fun Weights(selectedWeightAdjective: Int?, onWeightSelected: (Int?) -> Unit){
+fun Weights(selectedWeightAdjective: Int?, onWeightSelected: (Int?) -> Unit) {
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("Fantastic", Color.Yellow),
-        AdjectiveColorPair("Terrible", Color.Gray),
-        AdjectiveColorPair("Productive", Color.Green),
-        AdjectiveColorPair("Challenging", Color.Red),
-        AdjectiveColorPair("Relaxing", Color.Blue),
-        AdjectiveColorPair("Exciting", Color.Black),
-        AdjectiveColorPair("Hectic", Color.Red),
-        AdjectiveColorPair("Joyful", Color.Magenta),
-        AdjectiveColorPair("Frustrating", Color.Magenta),
-        AdjectiveColorPair("Rewarding", Color(0xFFFFD700)) // Gold
+        AdjectiveColorPair("Running", WeightsColor0),
+        AdjectiveColorPair("Climbing", WeightsColor1),
+        AdjectiveColorPair("Weightlifting", WeightsColor2),
+        AdjectiveColorPair("Cycling", WeightsColor3),
+        AdjectiveColorPair("Swimming", WeightsColor4),
+        AdjectiveColorPair("Boxing", WeightsColor5),
+        AdjectiveColorPair("Yoga", WeightsColor6),
+        AdjectiveColorPair("Dancing", WeightsColor7),
+        AdjectiveColorPair("Martial Arts", WeightsColor8),
+        AdjectiveColorPair("Gymnastics", WeightsColor9)
     )
-    Column (Modifier.fillMaxSize()){
+
+    Column(Modifier.fillMaxSize()) {
         WeightFeedback(selectedWeightAdjective, onWeightSelected, adjectivesWithColors)
     }
 }
@@ -39,10 +50,17 @@ fun Weights(selectedWeightAdjective: Int?, onWeightSelected: (Int?) -> Unit){
 fun WeightFeedback(
     selectedWeightAdjective: Int?,
     onWeightSelected: (Int?) -> Unit,
-     adjectivesWithColors: List<AdjectiveColorPair>) {
+    adjectivesWithColors: List<AdjectiveColorPair>
+) {
 
     Column {
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)){
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 15.dp)
+        ) {
             Text(text = "What exercise have you done today?", fontSize = 23.sp)
         }
         for ((adjective, color) in adjectivesWithColors) {
@@ -55,8 +73,12 @@ fun WeightFeedback(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
-            Text(text ="Selected: ${selectedWeightAdjective ?: "None"}", fontSize = 20.sp)
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "Selected: ${selectedWeightAdjective ?: "None"}", fontSize = 20.sp)
         }
     }
 }

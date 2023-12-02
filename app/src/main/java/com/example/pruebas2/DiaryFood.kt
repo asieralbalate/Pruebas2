@@ -15,20 +15,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pruebas2.ui.theme.FoodColor0
+import com.example.pruebas2.ui.theme.FoodColor1
+import com.example.pruebas2.ui.theme.FoodColor2
+import com.example.pruebas2.ui.theme.FoodColor3
+import com.example.pruebas2.ui.theme.FoodColor4
+import com.example.pruebas2.ui.theme.FoodColor5
+import com.example.pruebas2.ui.theme.FoodColor6
+import com.example.pruebas2.ui.theme.FoodColor7
+import com.example.pruebas2.ui.theme.FoodColor8
+import com.example.pruebas2.ui.theme.FoodColor9
 
 @Composable
 fun Food(selectedFoodAdjective: Int?, onFoodSelected: (Int?) -> Unit){
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("Fantastic", Color.Yellow),
-        AdjectiveColorPair("Terrible", Color.Gray),
-        AdjectiveColorPair("Productive", Color.Green),
-        AdjectiveColorPair("Challenging", Color.Red),
-        AdjectiveColorPair("Relaxing", Color.Blue),
-        AdjectiveColorPair("Exciting", Color.Black),
-        AdjectiveColorPair("Hectic", Color.Red),
-        AdjectiveColorPair("Joyful", Color.Magenta),
-        AdjectiveColorPair("Frustrating", Color.Magenta),
-        AdjectiveColorPair("Rewarding", Color(0xFFFFD700)) // Gold
+        AdjectiveColorPair("Italian", FoodColor0),
+        AdjectiveColorPair("American", FoodColor1),
+        AdjectiveColorPair("Turkish", FoodColor2),
+        AdjectiveColorPair("Mexican", FoodColor3),
+        AdjectiveColorPair("Japanese", FoodColor4),
+        AdjectiveColorPair("Indian", FoodColor5),
+        AdjectiveColorPair("Mediterranean", FoodColor6),
+        AdjectiveColorPair("Chinese", FoodColor7),
+        AdjectiveColorPair("Thai", FoodColor8),
+        AdjectiveColorPair("French", FoodColor9)
     )
     Column (Modifier.fillMaxSize()){
         FoodFeedback(selectedFoodAdjective, onFoodSelected, adjectivesWithColors)

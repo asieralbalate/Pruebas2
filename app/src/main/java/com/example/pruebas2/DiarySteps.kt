@@ -25,20 +25,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pruebas2.ui.theme.StepsColor0
+import com.example.pruebas2.ui.theme.StepsColor1
+import com.example.pruebas2.ui.theme.StepsColor2
+import com.example.pruebas2.ui.theme.StepsColor3
+import com.example.pruebas2.ui.theme.StepsColor4
+import com.example.pruebas2.ui.theme.StepsColor5
+import com.example.pruebas2.ui.theme.StepsColor6
+import com.example.pruebas2.ui.theme.StepsColor7
+import com.example.pruebas2.ui.theme.StepsColor8
+import com.example.pruebas2.ui.theme.StepsColor9
 
 @Composable
 fun Steps(selectedStepsAdjective: Int?, onStepsSelected: (Int?) -> Unit){
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("Fantastic", Color.Yellow),
-        AdjectiveColorPair("Terrible", Color.Gray),
-        AdjectiveColorPair("Productive", Color.Green),
-        AdjectiveColorPair("Challenging", Color.Red),
-        AdjectiveColorPair("Relaxing", Color.Blue),
-        AdjectiveColorPair("Exciting", Color.Black),
-        AdjectiveColorPair("Hectic", Color.Red),
-        AdjectiveColorPair("Joyful", Color.Magenta),
-        AdjectiveColorPair("Frustrating", Color.Magenta),
-        AdjectiveColorPair("Rewarding", Color(0xFFFFD700)) // Gold
+        AdjectiveColorPair("Less than 100", StepsColor0),
+        AdjectiveColorPair("100 - 500", StepsColor1),
+        AdjectiveColorPair("500 - 1.000", StepsColor2),
+        AdjectiveColorPair("1.000 - 2.000", StepsColor3),
+        AdjectiveColorPair("2.000 - 5.000", StepsColor4),
+        AdjectiveColorPair("5.000 - 10.000", StepsColor5),
+        AdjectiveColorPair("10.000 - 15.000", StepsColor6),
+        AdjectiveColorPair("15.000 - 20.000", StepsColor7),
+        AdjectiveColorPair("20.000 - 30.000", StepsColor8),
+        AdjectiveColorPair("More than 30k", StepsColor9)
     )
     Column (Modifier.fillMaxSize()){
         StepsFeedback(selectedStepsAdjective, onStepsSelected, adjectivesWithColors)

@@ -15,20 +15,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pruebas2.ui.theme.SpendColor0
+import com.example.pruebas2.ui.theme.SpendColor1
+import com.example.pruebas2.ui.theme.SpendColor2
+import com.example.pruebas2.ui.theme.SpendColor3
+import com.example.pruebas2.ui.theme.SpendColor4
+import com.example.pruebas2.ui.theme.SpendColor5
+import com.example.pruebas2.ui.theme.SpendColor6
+import com.example.pruebas2.ui.theme.SpendColor7
+import com.example.pruebas2.ui.theme.SpendColor8
+import com.example.pruebas2.ui.theme.SpendColor9
 
 @Composable
 fun Spend(selectedSpendAdjective: Int?, onSpendSelected: (Int?) -> Unit) {
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("Fantastic", Color.Yellow),
-        AdjectiveColorPair("Terrible", Color.Gray),
-        AdjectiveColorPair("Productive", Color.Green),
-        AdjectiveColorPair("Challenging", Color.Red),
-        AdjectiveColorPair("Relaxing", Color.Blue),
-        AdjectiveColorPair("Exciting", Color.Black),
-        AdjectiveColorPair("Hectic", Color.Red),
-        AdjectiveColorPair("Joyful", Color.Magenta),
-        AdjectiveColorPair("Frustrating", Color.Magenta),
-        AdjectiveColorPair("Rewarding", Color(0xFFFFD700)) // Gold
+        AdjectiveColorPair("Less than 1€", SpendColor0),
+        AdjectiveColorPair("1 - 5 €", SpendColor1),
+        AdjectiveColorPair("5 - 10 €", SpendColor2),
+        AdjectiveColorPair("10 - 20 €", SpendColor3),
+        AdjectiveColorPair("20 - 50 €", SpendColor4),
+        AdjectiveColorPair("50 - 100 €", SpendColor5),
+        AdjectiveColorPair("100 - 200 €", SpendColor6),
+        AdjectiveColorPair("200 - 500 €", SpendColor7),
+        AdjectiveColorPair("500 - 1.000 €", SpendColor8),
+        AdjectiveColorPair("More than 1.000 €", SpendColor9)
     )
     Column(Modifier.fillMaxSize()) {
         SpendFeedback(selectedSpendAdjective, onSpendSelected, adjectivesWithColors)
