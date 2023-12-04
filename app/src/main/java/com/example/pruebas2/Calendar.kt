@@ -54,6 +54,9 @@ fun DatePickerView(navController: NavHostController) {
     val formattedDate = datePickerState.selectedDateMillis?.let {
         formatDateForDisplay(it)
     }
+    val newFormattedDate = datePickerState.selectedDateMillis?.let {
+        newFormatDateForDisplay(it)
+    }
     val selectedDate = datePickerState.selectedDateMillis?.let {
             convertMillisToDate(it)
     }
@@ -78,7 +81,7 @@ fun DatePickerView(navController: NavHostController) {
             )
         )
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            Button(onClick = { navController.navigate("Diary/${formattedDate}") }, content = { Text(text = "Diary") })
+            Button(onClick = { navController.navigate("Diary/${newFormattedDate}") }, content = { Text(text = "Diary") })
             Button(onClick = { navController.navigate("Resume") }, content = { Text(text = "Resume") })
         }
     }
@@ -109,4 +112,12 @@ fun formatDateForDisplay(millis: Long): String {
     }
 
     return "$dayOfMonth$daySuffix of $month $year"
+}
+@SuppressLint("SimpleDateFormat")
+fun newFormatDateForDisplay(millis: Long): String {
+    val date = Date(millis)
+    val dayOfMonth = SimpleDateFormat("dd").format(date)
+    val month = SimpleDateFormat("MM").format(date)
+    val year = SimpleDateFormat("yyyy").format(date)
+    return "$dayOfMonth-$month-$year"
 }

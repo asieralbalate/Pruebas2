@@ -41,8 +41,20 @@ fun Day(selectedDiaryAdjective: Int?, onAdjectiveSelected: (Int?) -> Unit){
         AdjectiveColorPair1("Frustrating", DiaryColor8, R.drawable.frustrating),
         AdjectiveColorPair1("Rewarding", DiaryColor9, R.drawable.rewarding)
     )
+    val adjectivesWithColors = listOf(
+        AdjectiveColorPair("Fantastic", DiaryColor0),
+        AdjectiveColorPair("Terrible", DiaryColor1),
+        AdjectiveColorPair("Productive", DiaryColor2),
+        AdjectiveColorPair("Challenging", DiaryColor3),
+        AdjectiveColorPair("Relaxing", DiaryColor4),
+        AdjectiveColorPair("Exciting", DiaryColor5),
+        AdjectiveColorPair("Hectic", DiaryColor6),
+        AdjectiveColorPair("Joyful", DiaryColor7),
+        AdjectiveColorPair("Frustrating", DiaryColor8),
+        AdjectiveColorPair("Rewarding", DiaryColor9)
+    )
     Column (Modifier.fillMaxSize()){
-        DayFeedback(selectedDiaryAdjective, onAdjectiveSelected, adjectivesWithColors1)
+        DayFeedback(selectedDiaryAdjective, onAdjectiveSelected, adjectivesWithColors)
     }
 }
 
@@ -50,21 +62,20 @@ fun Day(selectedDiaryAdjective: Int?, onAdjectiveSelected: (Int?) -> Unit){
 fun DayFeedback(
     selectedDiaryAdjective: Int?,
     onAdjectiveSelected: (Int?) -> Unit,
-    adjectivesWithColors1: List<AdjectiveColorPair1>
+    adjectivesWithColors: List<AdjectiveColorPair>
 ) {
 
     Column {
         Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)){
             Text(text = "How has your day been?", fontSize = 30.sp)
         }
-        for ((adjective, color, image) in adjectivesWithColors1) {
-            AdjectiveRow1(
+        for ((adjective, color )in adjectivesWithColors) {
+            AdjectiveRow(
                 adjective = adjective,
                 color = color,
                 selectedDiaryAdjective = selectedDiaryAdjective,
                 onAdjectiveSelected = onAdjectiveSelected,
-                adjectivesWithColors = adjectivesWithColors1,
-                image = image
+                adjectivesWithColors = adjectivesWithColors
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
