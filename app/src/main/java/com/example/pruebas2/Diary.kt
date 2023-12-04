@@ -22,7 +22,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -31,9 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
@@ -65,6 +62,8 @@ import org.json.JSONObject
 
 
 data class AdjectiveColorPair(val adjective: String, val color: Color)
+data class AdjectiveColorPair1(val adjective: String, val color: Color, val image: Int)
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -391,6 +390,68 @@ fun UpdateData(
     requestQueue.add(requerimiento)
 }
 
+
+@Composable
+fun AdjectiveRow1(
+    adjective: String,
+    color: Color,
+    image: Int,
+    selectedDiaryAdjective: Int?,
+    onAdjectiveSelected: (Int?) -> Unit,
+    adjectivesWithColors: List<AdjectiveColorPair1>
+) {
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = 8.dp, start = 20.dp)
+            .selectable(
+                selected = (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }),
+                onClick = {
+                    onAdjectiveSelected(if (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }) {
+                        null
+                    } else {
+                        adjectivesWithColors.indexOfFirst { it.adjective == adjective }
+                    })
+                }
+            )
+    ) {
+        Checkbox(
+            checked = (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }),
+            onCheckedChange = null,
+            modifier = Modifier.size(30.dp),
+            colors = CheckboxDefaults.colors(checkedColor = TopBarColor)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Box(
+            modifier = Modifier
+                .size(34.dp)
+                .background(color)
+                .border(border = BorderStroke(1.dp, Color.Black))
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = adjective,
+            fontSize = 20.sp,
+            modifier = Modifier.align(Alignment.CenterVertically)
+        )
+        Box(
+            modifier = Modifier
+                .size(34.dp)
+                .background(color)
+                .border(border = BorderStroke(1.dp, Color.Black))
+        ) {
+            Image(
+                painter = painterResource(image),
+                contentDescription = null,
+                modifier = Modifier,
+                contentScale = ContentScale.FillWidth
+            )
+        }
+
+    }
+}
 
 @Composable
 fun AdjectiveRow(

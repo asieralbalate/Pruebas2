@@ -3,6 +3,7 @@ package com.example.pruebas2
 import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +36,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.pruebas2.ui.theme.BoxColor
 import com.example.pruebas2.ui.theme.Purple40
+import com.example.pruebas2.ui.theme.TabsColor
+import com.example.pruebas2.ui.theme.TopBarColor
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -47,10 +51,12 @@ fun Resume(navController: NavHostController) {
         floatingActionButtonPosition = FabPosition.End,
         content = {
             Box(
-                modifier = Modifier.padding(
-                    top = it.calculateTopPadding()
-                )
-            ) { MyResTabs() }
+                modifier = Modifier
+                    .padding(
+                        top = it.calculateTopPadding()
+                    )
+                    .background(BoxColor)
+            ) { MyResTabs()}
         })
 }
 
@@ -73,7 +79,7 @@ fun MyResTabs() {
     Column {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
-            containerColor = Purple40,
+            containerColor = TabsColor,
             contentColor = Color.White,
 
             ) {
@@ -107,15 +113,19 @@ fun MyResTabs() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyResTopBar(navController: NavHostController) {
-    val currentDate = getCurrentDate()
     TopAppBar(
         modifier = Modifier.height(40.dp),
         colors = TopAppBarColors(
-        containerColor = Purple40,
-        scrolledContainerColor = Color.White,
-        navigationIconContentColor = Purple40,
-        titleContentColor = Purple40,
-        actionIconContentColor = Color.White),
+            containerColor = TopBarColor,
+            scrolledContainerColor = Color.White,
+            navigationIconContentColor = TopBarColor,
+            titleContentColor = TopBarColor,
+            actionIconContentColor = Color.White
+        ), actions = { IconButton(onClick = { /*TODO*/ }) {
+            Image(
+                painterResource(id = R.drawable.actrionsresume), contentDescription = null
+            )
+        }},
         navigationIcon = {
             IconButton(onClick = { navController.navigate("Calendar") }, content = {
                 Image(
@@ -130,7 +140,7 @@ fun MyResTopBar(navController: NavHostController) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 Text(
-                    text = currentDate,
+                    text = "Year 202*",
                     fontSize = 28.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Bold
