@@ -1,5 +1,6 @@
 package com.example.pruebas2
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,8 +13,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pruebas2.ui.theme.SpendColor0
+import com.example.pruebas2.ui.theme.SpendColor1
+import com.example.pruebas2.ui.theme.SpendColor2
+import com.example.pruebas2.ui.theme.SpendColor3
+import com.example.pruebas2.ui.theme.SpendColor4
+import com.example.pruebas2.ui.theme.SpendColor5
+import com.example.pruebas2.ui.theme.SpendColor6
+import com.example.pruebas2.ui.theme.SpendColor7
+import com.example.pruebas2.ui.theme.SpendColor8
+import com.example.pruebas2.ui.theme.SpendColor9
 import com.example.pruebas2.ui.theme.WeightsColor0
 import com.example.pruebas2.ui.theme.WeightsColor1
 import com.example.pruebas2.ui.theme.WeightsColor2
@@ -51,13 +63,18 @@ fun WeightFeedback(
     onWeightSelected: (Int?) -> Unit,
     adjectivesWithColors: List<AdjectiveColorPair>
 ) {
-
+    val brush = Brush.linearGradient(listOf(
+        WeightsColor0, WeightsColor1, WeightsColor2, WeightsColor3,
+        WeightsColor4, WeightsColor5, WeightsColor6, WeightsColor7, WeightsColor8,
+        WeightsColor9
+    ))
     Column {
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
+                .background(brush).height(55.dp)
         ) {
             Text(text = "What exercise have you done today?", fontSize = 30.sp)
         }
@@ -70,14 +87,6 @@ fun WeightFeedback(
                 adjectivesWithColors = adjectivesWithColors,
                 image = image
             )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Selected: ${selectedWeightAdjective ?: "None"}", fontSize = 20.sp)
         }
     }
 }

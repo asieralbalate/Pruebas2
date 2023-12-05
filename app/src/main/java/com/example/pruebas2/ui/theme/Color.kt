@@ -23,7 +23,7 @@ val DiaryColor5 = Color(0xFFFDFFAE)
 val DiaryColor6 = Color(0xFFFFD89C)
 val DiaryColor7 = Color(0xFFF1C27B)
 val DiaryColor8 = Color(0xFFBFCCB5)
-val DiaryColor9 = Color(0xFFB7B7B7)
+val DiaryColor9 = Color(0xFFBED754)
 
 val WeatherColor0 = Color(0xFF6096B4)
 val WeatherColor1 = Color(0xFF93BFCF)

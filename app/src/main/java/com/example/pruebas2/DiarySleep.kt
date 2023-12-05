@@ -1,5 +1,6 @@
 package com.example.pruebas2
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,8 +13,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pruebas2.ui.theme.FoodColor0
+import com.example.pruebas2.ui.theme.FoodColor1
+import com.example.pruebas2.ui.theme.FoodColor2
+import com.example.pruebas2.ui.theme.FoodColor3
+import com.example.pruebas2.ui.theme.FoodColor4
+import com.example.pruebas2.ui.theme.FoodColor5
+import com.example.pruebas2.ui.theme.FoodColor6
+import com.example.pruebas2.ui.theme.FoodColor7
+import com.example.pruebas2.ui.theme.FoodColor8
+import com.example.pruebas2.ui.theme.FoodColor9
 import com.example.pruebas2.ui.theme.SleepColor0
 import com.example.pruebas2.ui.theme.SleepColor1
 import com.example.pruebas2.ui.theme.SleepColor2
@@ -49,9 +61,15 @@ fun SleepFeedback(
     selectedSleepAdjective: Int?,
     onSleepSelected: (Int?) -> Unit,
     adjectivesWithColors: List<AdjectiveColorPair>) {
-
+    val brush = Brush.linearGradient(listOf(
+         SleepColor0, SleepColor4,SleepColor1, SleepColor2, SleepColor3,
+         SleepColor5, SleepColor8,
+        SleepColor9,  SleepColor6,SleepColor7
+    ))
     Column {
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+        Row (horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth().background(brush = brush, alpha = 0.8f).height(55.dp)){
             Text(text = "How many hours have you slept?", fontSize = 30.sp)
         }
         for ((adjective, color, image) in adjectivesWithColors) {
@@ -63,10 +81,6 @@ fun SleepFeedback(
                 adjectivesWithColors = adjectivesWithColors,
                 image = image
             )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
-            Text(text ="Selected: ${selectedSleepAdjective ?: "None"}", fontSize = 20.sp)
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.pruebas2
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pruebas2.ui.theme.StepsColor0
@@ -24,6 +26,16 @@ import com.example.pruebas2.ui.theme.StepsColor6
 import com.example.pruebas2.ui.theme.StepsColor7
 import com.example.pruebas2.ui.theme.StepsColor8
 import com.example.pruebas2.ui.theme.StepsColor9
+import com.example.pruebas2.ui.theme.WeatherColor0
+import com.example.pruebas2.ui.theme.WeatherColor1
+import com.example.pruebas2.ui.theme.WeatherColor2
+import com.example.pruebas2.ui.theme.WeatherColor3
+import com.example.pruebas2.ui.theme.WeatherColor4
+import com.example.pruebas2.ui.theme.WeatherColor5
+import com.example.pruebas2.ui.theme.WeatherColor6
+import com.example.pruebas2.ui.theme.WeatherColor7
+import com.example.pruebas2.ui.theme.WeatherColor8
+import com.example.pruebas2.ui.theme.WeatherColor9
 
 @Composable
 fun Steps(selectedStepsAdjective: Int?, onStepsSelected: (Int?) -> Unit){
@@ -48,10 +60,16 @@ fun Steps(selectedStepsAdjective: Int?, onStepsSelected: (Int?) -> Unit){
 fun StepsFeedback(selectedStepsAdjective: Int?,
                   onStepsSelected: (Int?) -> Unit,
                   adjectivesWithColors: List<AdjectiveColorPair> ) {
-
+    val brush = Brush.linearGradient(listOf(
+        StepsColor0, StepsColor1, StepsColor2, StepsColor3,
+        StepsColor4, StepsColor5, StepsColor6, StepsColor7, StepsColor8,
+        StepsColor9
+    ))
     Column {
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
-            Text(text = "How many steps have you taken?", fontSize = 30.sp)
+        Row (horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth().background(brush).height(55.dp)){
+            Text(text = "How many steps have you taken?", fontSize = 32.sp)
         }
         for ((adjective, color, image) in adjectivesWithColors) {
             AdjectiveRow(
@@ -62,10 +80,6 @@ fun StepsFeedback(selectedStepsAdjective: Int?,
                 adjectivesWithColors = adjectivesWithColors,
                 image = image
             )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
-            Text(text ="Selected: ${selectedStepsAdjective ?: "None"}", fontSize = 20.sp)
         }
     }
 }

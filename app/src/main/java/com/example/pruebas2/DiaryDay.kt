@@ -1,6 +1,7 @@
 package com.example.pruebas2
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,8 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pruebas2.ui.theme.BoxColor
 import com.example.pruebas2.ui.theme.DiaryColor0
 import com.example.pruebas2.ui.theme.DiaryColor1
 import com.example.pruebas2.ui.theme.DiaryColor2
@@ -42,7 +47,11 @@ fun Day(selectedDiaryAdjective: Int?, onAdjectiveSelected: (Int?) -> Unit){
         AdjectiveColorPair("Rewarding", DiaryColor9, R.drawable.rewarding)
     )
 
-    Column (Modifier.fillMaxSize()){
+
+    Column (
+        Modifier
+            .fillMaxSize()
+            ){
         DayFeedback(selectedDiaryAdjective, onAdjectiveSelected, adjectivesWithColors)
     }
 }
@@ -53,25 +62,32 @@ fun DayFeedback(
     onAdjectiveSelected: (Int?) -> Unit,
     adjectivesWithColors: List<AdjectiveColorPair>
 ) {
-
-    Column {
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+    val brush = Brush.linearGradient(listOf(
+        DiaryColor0, DiaryColor1, DiaryColor2, DiaryColor3,
+        DiaryColor4, DiaryColor5, DiaryColor6, DiaryColor7, DiaryColor8,
+        DiaryColor9))
+    Column (Modifier.fillMaxSize()){
+        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                brush
+            ).height(55.dp)){
             Text(text = "How has your day been?", fontSize = 38.sp)
         }
-        for ((adjective, color , image)in adjectivesWithColors) {
-            AdjectiveRow(
-                adjective = adjective,
-                color = color,
-                selectedDiaryAdjective = selectedDiaryAdjective,
-                onAdjectiveSelected = onAdjectiveSelected,
-                adjectivesWithColors = adjectivesWithColors,
-                image = image
-            )
+        Column (modifier = Modifier){
+            for ((adjective, color , image)in adjectivesWithColors) {
+                AdjectiveRow(
+                    adjective = adjective,
+                    color = color,
+                    selectedDiaryAdjective = selectedDiaryAdjective,
+                    onAdjectiveSelected = onAdjectiveSelected,
+                    adjectivesWithColors = adjectivesWithColors,
+                    image = image
+                )
+            }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
-            Text(text ="Selected: ${selectedDiaryAdjective ?: "None"}", fontSize = 20.sp)
-        }
+
+
     }
 }
 

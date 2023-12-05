@@ -1,5 +1,6 @@
 package com.example.pruebas2
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pruebas2.ui.theme.FoodColor0
@@ -24,6 +26,16 @@ import com.example.pruebas2.ui.theme.FoodColor6
 import com.example.pruebas2.ui.theme.FoodColor7
 import com.example.pruebas2.ui.theme.FoodColor8
 import com.example.pruebas2.ui.theme.FoodColor9
+import com.example.pruebas2.ui.theme.WeightsColor0
+import com.example.pruebas2.ui.theme.WeightsColor1
+import com.example.pruebas2.ui.theme.WeightsColor2
+import com.example.pruebas2.ui.theme.WeightsColor3
+import com.example.pruebas2.ui.theme.WeightsColor4
+import com.example.pruebas2.ui.theme.WeightsColor5
+import com.example.pruebas2.ui.theme.WeightsColor6
+import com.example.pruebas2.ui.theme.WeightsColor7
+import com.example.pruebas2.ui.theme.WeightsColor8
+import com.example.pruebas2.ui.theme.WeightsColor9
 
 @Composable
 fun Food(selectedFoodAdjective: Int?, onFoodSelected: (Int?) -> Unit){
@@ -49,9 +61,15 @@ fun FoodFeedback(
     selectedFoodAdjective: Int?,
     onFoodSelected: (Int?) -> Unit,
     adjectivesWithColors: List<AdjectiveColorPair>) {
-
+    val brush = Brush.linearGradient(listOf(
+        FoodColor0, FoodColor1, FoodColor2, FoodColor3,
+        FoodColor4, FoodColor5, FoodColor6, FoodColor7, FoodColor8,
+        FoodColor9
+    ))
     Column {
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+        Row (horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth().background(brush).height(55.dp)){
             Text(text = "What have you eaten today?", fontSize = 38.sp)
         }
         for ((adjective, color, image) in adjectivesWithColors) {
@@ -63,10 +81,6 @@ fun FoodFeedback(
                 adjectivesWithColors = adjectivesWithColors,
                 image = image
             )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
-            Text(text ="Selected: ${selectedFoodAdjective ?: "None"}", fontSize = 20.sp)
         }
     }
 }

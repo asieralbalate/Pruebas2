@@ -60,50 +60,78 @@ fun Calendar(navController: NavHostController) {
 fun DatePickerView(navController: NavHostController) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
     val datePickerState =
-        rememberDatePickerState(currentSelectedDateMillis, selectableDates = object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                // Permitir la selección de todas las fechas
-                return true
-            }
-        })
+        rememberDatePickerState(
+            currentSelectedDateMillis,
+            selectableDates = object : SelectableDates {
+                override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                    // Permitir la selección de todas las fechas
+                    return true
+                }
+            })
 
     val newFormattedDate = datePickerState.selectedDateMillis?.let {
         newFormatDateForDisplay(it)
     }
     val selectedDate = datePickerState.selectedDateMillis?.let {
-            convertMillisToDate(it)
+        convertMillisToDate(it)
     }
 
     val selectedYear = newFormattedDate?.split("-")?.get(2)
-    Column(modifier = Modifier.background(BoxColor),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier.background(BoxColor),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         DatePicker(
             colors = DatePickerDefaults.colors(BoxColor),
-            dateFormatter =  DatePickerDefaults.dateFormatter() ,
+            dateFormatter = DatePickerDefaults.dateFormatter(),
             headline = {
                 if (selectedDate == null) {
                     Text(text = "No date selected", modifier = Modifier.padding(start = 10.dp))
                 } else {
-                    Text(text = selectedDate.toString(), modifier = Modifier.padding(start = 20.dp), fontWeight = FontWeight.Bold, fontFamily = RegText)
+                    Row (Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
+                        Text(
+                            text = selectedDate.toString(),
+                            modifier = Modifier.padding(start = 20.dp, top = 4.dp),
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = RegText
+                        )
+
+                    }
                 }
             },
             title = {
-                Row (
+                Row(
                     Modifier
                         .fillMaxWidth()
                         .background(TopBarColor)
-                        .height(60.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
-                    Image(painter = painterResource(id = R.drawable.calright), contentDescription = null, modifier = Modifier
-                        .size(60.dp)
-                        .padding(start = 10.dp))
-                    Text(text = "CalenDiary", color = Color.White, fontSize = 60.sp, fontFamily = FontTittle)
-                    Image(painter = painterResource(id = R.drawable.calleft), contentDescription = null, modifier = Modifier
-                        .size(60.dp)
-                        .padding(end = 10.dp))
+                        .height(58.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.calright),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(60.dp)
+                            .padding(start = 10.dp)
+                    )
+                    Text(
+                        text = "CalenDiary",
+                        color = Color.White,
+                        fontSize = 60.sp,
+                        fontFamily = FontTittle
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.calleft),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(60.dp)
+                            .padding(end = 10.dp)
+                    )
                 }
 
 
-                    },
+            },
             state = datePickerState,
             showModeToggle = true
         )
@@ -113,9 +141,15 @@ fun DatePickerView(navController: NavHostController) {
             )
         )
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            Button(onClick = { navController.navigate("Schedule/${newFormattedDate}") }, content = { Text(text = "Schedule", fontFamily = FontTittle, fontSize = 28.sp)})
-            Button(onClick = { navController.navigate("Diary/${newFormattedDate}") }, content = { Text(text = "Diary", fontFamily = FontTittle, fontSize = 28.sp)})
-            Button(onClick = { navController.navigate("Resume/${selectedYear}") }, content = { Text(text = "Resume",fontFamily = FontTittle, fontSize = 28.sp) })
+            Button(
+                onClick = { navController.navigate("Schedule/${newFormattedDate}") },
+                content = { Text(text = "Schedule", fontFamily = FontTittle, fontSize = 28.sp) })
+            Button(
+                onClick = { navController.navigate("Diary/${newFormattedDate}") },
+                content = { Text(text = "Diary", fontFamily = FontTittle, fontSize = 28.sp) })
+            Button(
+                onClick = { navController.navigate("Resume/${selectedYear}") },
+                content = { Text(text = "Resume", fontFamily = FontTittle, fontSize = 28.sp) })
         }
     }
 }

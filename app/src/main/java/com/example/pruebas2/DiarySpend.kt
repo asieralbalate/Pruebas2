@@ -1,5 +1,6 @@
 package com.example.pruebas2
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pruebas2.ui.theme.SpendColor0
@@ -24,6 +26,16 @@ import com.example.pruebas2.ui.theme.SpendColor6
 import com.example.pruebas2.ui.theme.SpendColor7
 import com.example.pruebas2.ui.theme.SpendColor8
 import com.example.pruebas2.ui.theme.SpendColor9
+import com.example.pruebas2.ui.theme.StepsColor0
+import com.example.pruebas2.ui.theme.StepsColor1
+import com.example.pruebas2.ui.theme.StepsColor2
+import com.example.pruebas2.ui.theme.StepsColor3
+import com.example.pruebas2.ui.theme.StepsColor4
+import com.example.pruebas2.ui.theme.StepsColor5
+import com.example.pruebas2.ui.theme.StepsColor6
+import com.example.pruebas2.ui.theme.StepsColor7
+import com.example.pruebas2.ui.theme.StepsColor8
+import com.example.pruebas2.ui.theme.StepsColor9
 
 @Composable
 fun Spend(selectedSpendAdjective: Int?, onSpendSelected: (Int?) -> Unit) {
@@ -50,14 +62,18 @@ fun SpendFeedback(
     onSpendSelected: (Int?) -> Unit,
     adjectivesWithColors: List<AdjectiveColorPair>
 ) {
-
+    val brush = Brush.linearGradient(listOf(
+        SpendColor0, SpendColor1, SpendColor2, SpendColor3,
+        SpendColor4, SpendColor5, SpendColor6, SpendColor8,
+        SpendColor9, SpendColor7
+    ))
     Column {
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-
+                .background(brush).height(55.dp)
         ) {
             Text(text = "How much money have you spent?", fontSize = 30.sp)
         }
@@ -70,14 +86,6 @@ fun SpendFeedback(
                 adjectivesWithColors = adjectivesWithColors,
                 image = image
             )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Selected: ${selectedSpendAdjective ?: "None"}", fontSize = 20.sp)
         }
     }
 }

@@ -2,6 +2,11 @@ package com.example.pruebas2
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -21,11 +26,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -41,7 +48,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -55,8 +68,78 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.pruebas2.ui.theme.BoxColor
 import com.example.pruebas2.ui.theme.DateTittle
+import com.example.pruebas2.ui.theme.DiaryColor0
+import com.example.pruebas2.ui.theme.DiaryColor1
+import com.example.pruebas2.ui.theme.DiaryColor2
+import com.example.pruebas2.ui.theme.DiaryColor3
+import com.example.pruebas2.ui.theme.DiaryColor4
+import com.example.pruebas2.ui.theme.DiaryColor5
+import com.example.pruebas2.ui.theme.DiaryColor6
+import com.example.pruebas2.ui.theme.DiaryColor7
+import com.example.pruebas2.ui.theme.DiaryColor8
+import com.example.pruebas2.ui.theme.DiaryColor9
+import com.example.pruebas2.ui.theme.FoodColor0
+import com.example.pruebas2.ui.theme.FoodColor1
+import com.example.pruebas2.ui.theme.FoodColor2
+import com.example.pruebas2.ui.theme.FoodColor3
+import com.example.pruebas2.ui.theme.FoodColor4
+import com.example.pruebas2.ui.theme.FoodColor5
+import com.example.pruebas2.ui.theme.FoodColor6
+import com.example.pruebas2.ui.theme.FoodColor7
+import com.example.pruebas2.ui.theme.FoodColor8
+import com.example.pruebas2.ui.theme.FoodColor9
+import com.example.pruebas2.ui.theme.SleepColor0
+import com.example.pruebas2.ui.theme.SleepColor1
+import com.example.pruebas2.ui.theme.SleepColor2
+import com.example.pruebas2.ui.theme.SleepColor3
+import com.example.pruebas2.ui.theme.SleepColor4
+import com.example.pruebas2.ui.theme.SleepColor5
+import com.example.pruebas2.ui.theme.SleepColor6
+import com.example.pruebas2.ui.theme.SleepColor7
+import com.example.pruebas2.ui.theme.SleepColor8
+import com.example.pruebas2.ui.theme.SleepColor9
+import com.example.pruebas2.ui.theme.SpendColor0
+import com.example.pruebas2.ui.theme.SpendColor1
+import com.example.pruebas2.ui.theme.SpendColor2
+import com.example.pruebas2.ui.theme.SpendColor3
+import com.example.pruebas2.ui.theme.SpendColor4
+import com.example.pruebas2.ui.theme.SpendColor5
+import com.example.pruebas2.ui.theme.SpendColor6
+import com.example.pruebas2.ui.theme.SpendColor7
+import com.example.pruebas2.ui.theme.SpendColor8
+import com.example.pruebas2.ui.theme.SpendColor9
+import com.example.pruebas2.ui.theme.StepsColor0
+import com.example.pruebas2.ui.theme.StepsColor1
+import com.example.pruebas2.ui.theme.StepsColor2
+import com.example.pruebas2.ui.theme.StepsColor3
+import com.example.pruebas2.ui.theme.StepsColor4
+import com.example.pruebas2.ui.theme.StepsColor5
+import com.example.pruebas2.ui.theme.StepsColor6
+import com.example.pruebas2.ui.theme.StepsColor7
+import com.example.pruebas2.ui.theme.StepsColor8
+import com.example.pruebas2.ui.theme.StepsColor9
 import com.example.pruebas2.ui.theme.TabsColor
 import com.example.pruebas2.ui.theme.TopBarColor
+import com.example.pruebas2.ui.theme.WeatherColor0
+import com.example.pruebas2.ui.theme.WeatherColor1
+import com.example.pruebas2.ui.theme.WeatherColor2
+import com.example.pruebas2.ui.theme.WeatherColor3
+import com.example.pruebas2.ui.theme.WeatherColor4
+import com.example.pruebas2.ui.theme.WeatherColor5
+import com.example.pruebas2.ui.theme.WeatherColor6
+import com.example.pruebas2.ui.theme.WeatherColor7
+import com.example.pruebas2.ui.theme.WeatherColor8
+import com.example.pruebas2.ui.theme.WeatherColor9
+import com.example.pruebas2.ui.theme.WeightsColor0
+import com.example.pruebas2.ui.theme.WeightsColor1
+import com.example.pruebas2.ui.theme.WeightsColor2
+import com.example.pruebas2.ui.theme.WeightsColor3
+import com.example.pruebas2.ui.theme.WeightsColor4
+import com.example.pruebas2.ui.theme.WeightsColor5
+import com.example.pruebas2.ui.theme.WeightsColor6
+import com.example.pruebas2.ui.theme.WeightsColor7
+import com.example.pruebas2.ui.theme.WeightsColor8
+import com.example.pruebas2.ui.theme.WeightsColor9
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
@@ -251,27 +334,80 @@ fun MyFAB(
     selectedSleepAdjective: Int?,
     contexto: Context,
 ) {
-    FloatingActionButton(onClick = {
-        InsertData(
-            dateCal = dateCal,
-            selectedDiaryAdjective = selectedDiaryAdjective,
-            selectedWeatherAdjective = selectedWeatherAdjective,
-            selectedStepsAdjective = selectedStepsAdjective,
-            selectedSpendAdjective = selectedSpendAdjective,
-            selectedWeightAdjective = selectedWeightAdjective,
-            selectedFoodAdjective = selectedFoodAdjective,
-            selectedSleepAdjective = selectedSleepAdjective,
-            contexto = contexto,
+    val value by rememberInfiniteTransition().animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 4000,
+                easing = LinearEasing
+            )
         )
+    )
+    val colors = listOf(
+        DiaryColor0, DiaryColor1, DiaryColor2, DiaryColor3,
+        DiaryColor4, DiaryColor5, DiaryColor6, DiaryColor7, DiaryColor8,
+        DiaryColor9, FoodColor0, FoodColor1, FoodColor2, FoodColor3,
+        FoodColor4, FoodColor5, FoodColor6, FoodColor7, FoodColor8,
+        FoodColor9,  SleepColor0, SleepColor4, SleepColor1, SleepColor2, SleepColor3,
+        SleepColor5, SleepColor8, SleepColor9,  SleepColor6, SleepColor7,
+        SpendColor0, SpendColor1, SpendColor2, SpendColor3,
+        SpendColor4, SpendColor5, SpendColor6, SpendColor8,
+        SpendColor9, SpendColor7, StepsColor0, StepsColor1, StepsColor2, StepsColor3,
+        StepsColor4, StepsColor5, StepsColor6, StepsColor7, StepsColor8,
+        StepsColor9, WeatherColor0, WeatherColor1, WeatherColor2, WeatherColor3,
+        WeatherColor4, WeatherColor5, WeatherColor6, WeatherColor7, WeatherColor8,
+        WeatherColor9, WeightsColor0, WeightsColor1, WeightsColor2, WeightsColor3,
+        WeightsColor4, WeightsColor5, WeightsColor6, WeightsColor7, WeightsColor8,
+        WeightsColor9
+    )
 
-    },
-        containerColor = TopBarColor) {
-        Image(
-            painterResource(id = R.drawable.save),
-            contentDescription = "null",
-            modifier = Modifier.size(60.dp)
+    var gradientBrush by remember {
+        mutableStateOf(
+            Brush.horizontalGradient(
+                colors = colors,
+                startX = -10.0f,
+                endX = 400.0f,
+                tileMode = TileMode.Repeated
+            )
         )
     }
+    Box (modifier = Modifier
+        .drawBehind {
+            rotate(value) {
+                drawCircle(
+                    gradientBrush, style = Stroke(width = 20.dp.value)
+                )
+            }
+        }.size(60.dp)){
+        FloatingActionButton(onClick = {
+            InsertData(
+                dateCal = dateCal,
+                selectedDiaryAdjective = selectedDiaryAdjective,
+                selectedWeatherAdjective = selectedWeatherAdjective,
+                selectedStepsAdjective = selectedStepsAdjective,
+                selectedSpendAdjective = selectedSpendAdjective,
+                selectedWeightAdjective = selectedWeightAdjective,
+                selectedFoodAdjective = selectedFoodAdjective,
+                selectedSleepAdjective = selectedSleepAdjective,
+                contexto = contexto,
+            )
+
+        },
+            containerColor = TopBarColor,
+            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+            modifier = Modifier.size(60.dp),
+            shape = CircleShape
+        ) {
+            Image(
+                painterResource(id = R.drawable.save),
+                contentDescription = "null",
+                modifier = Modifier.size(80.dp).scale(1.3f),
+                contentScale = ContentScale.Crop
+            )
+        }
+    }
+
 }
 
 fun UploadData(
@@ -448,17 +584,15 @@ fun AdjectiveRow(
         Spacer(modifier = Modifier.width(8.dp))
         Box(
             modifier = Modifier
-                .size(50.dp)
+                .size(57.dp)
         ){
             Image(
             painter = painterResource(image),
             contentDescription = null,
-            modifier = Modifier.size(60.dp),
+            modifier = Modifier.size(70.dp),
                 contentScale = ContentScale.Crop
             )
-
         }
-
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = adjective,
@@ -481,6 +615,5 @@ fun formatDate(date: LocalDate): String {
         dayOfMonth % 10 == 3 -> "${dayOfMonth}rd"
         else -> "${dayOfMonth}th"
     }
-
     return "$dayWithExtension of $month $year"
 }
