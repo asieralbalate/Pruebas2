@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.pruebas2.ui.theme.BoxColor
+import com.example.pruebas2.ui.theme.DateTittle
 import com.example.pruebas2.ui.theme.Purple40
 import com.example.pruebas2.ui.theme.TabsColor
 import com.example.pruebas2.ui.theme.TopBarColor
@@ -44,9 +45,19 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Resume(navController: NavHostController) {
+fun Resume(selectedYear: String, navController: NavHostController) {
+    val dataMap: Map<String, Int> = mapOf(
+        "11-02-23" to 0,
+        "12-03-23" to 1,
+        "10-01-23" to 2,
+        "20-01-23" to 3,
+        "15-06-23" to 4,
+        "15-08-23" to 5,
+        "10-08-23" to 6,
+        "12-12-23" to 7,
+    )
     Scaffold(
-        topBar = { MyResTopBar(navController) },
+        topBar = { MyResTopBar(navController, selectedYear) },
         floatingActionButton = { },
         floatingActionButtonPosition = FabPosition.End,
         content = {
@@ -56,13 +67,13 @@ fun Resume(navController: NavHostController) {
                         top = it.calculateTopPadding()
                     )
                     .background(BoxColor)
-            ) { MyResTabs()}
+            ) { MyResTabs(dataMap)}
         })
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MyResTabs() {
+fun MyResTabs(dataMap: Map<String,Int>) {
     val scope = rememberCoroutineScope()
 
     val imageResources = listOf(
@@ -75,7 +86,7 @@ fun MyResTabs() {
         R.drawable.sleep,
     )
 
-    val pagerState = rememberPagerState(initialPage = 0, initialPageOffsetFraction = 0f) { 4 }
+    val pagerState = rememberPagerState(initialPage = 0, initialPageOffsetFraction = 0f) { 7 }
     Column {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
@@ -101,10 +112,13 @@ fun MyResTabs() {
         }
         HorizontalPager(state = pagerState) { page ->
             when (page) {
-                0 -> ResumeDay()
-                1 -> ""
-                2 -> ""
-                3 -> ""
+                0 -> ResumeDay(dataMap)
+                1 -> ResumeWeather(dataMap)
+                2 -> ResumeSteps(dataMap)
+                3 -> ResumeSpend(dataMap)
+                4 -> ResumeWeights(dataMap)
+                5 -> ResumeFood(dataMap)
+                6 -> ResumeSleep(dataMap)
             }
         }
     }
@@ -112,9 +126,9 @@ fun MyResTabs() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyResTopBar(navController: NavHostController) {
+fun MyResTopBar(navController: NavHostController, selectedYear: String) {
     TopAppBar(
-        modifier = Modifier.height(40.dp),
+        modifier = Modifier.height(44.dp),
         colors = TopAppBarColors(
             containerColor = TopBarColor,
             scrolledContainerColor = Color.White,
@@ -131,8 +145,7 @@ fun MyResTopBar(navController: NavHostController) {
                 Image(
                     painterResource(id = R.drawable.goback), contentDescription = null
                 )
-            })
-                         },
+            }) },
         title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -140,14 +153,14 @@ fun MyResTopBar(navController: NavHostController) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 Text(
-                    text = "Year 202*",
-                    fontSize = 28.sp,
+                    text = "Year: $selectedYear",
+                    fontSize = 34.sp,
                     color = Color.White,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = DateTittle
                 )
             }
 
         }
     )
 }
-

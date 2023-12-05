@@ -28,16 +28,16 @@ import com.example.pruebas2.ui.theme.FoodColor9
 @Composable
 fun Food(selectedFoodAdjective: Int?, onFoodSelected: (Int?) -> Unit){
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("Italian", FoodColor0),
-        AdjectiveColorPair("American", FoodColor1),
-        AdjectiveColorPair("Turkish", FoodColor2),
-        AdjectiveColorPair("Mexican", FoodColor3),
-        AdjectiveColorPair("Japanese", FoodColor4),
-        AdjectiveColorPair("Indian", FoodColor5),
-        AdjectiveColorPair("Mediterranean", FoodColor6),
-        AdjectiveColorPair("Chinese", FoodColor7),
-        AdjectiveColorPair("Thai", FoodColor8),
-        AdjectiveColorPair("French", FoodColor9)
+        AdjectiveColorPair("Italian", FoodColor0, R.drawable.taco),
+        AdjectiveColorPair("American", FoodColor1, R.drawable.taco),
+        AdjectiveColorPair("Turkish", FoodColor2, R.drawable.taco),
+        AdjectiveColorPair("Mexican", FoodColor3, R.drawable.taco),
+        AdjectiveColorPair("Japanese", FoodColor4, R.drawable.taco),
+        AdjectiveColorPair("Indian", FoodColor5, R.drawable.taco),
+        AdjectiveColorPair("Mediterranean", FoodColor6, R.drawable.taco),
+        AdjectiveColorPair("Chinese", FoodColor7, R.drawable.taco),
+        AdjectiveColorPair("Thai", FoodColor8, R.drawable.taco),
+        AdjectiveColorPair("French", FoodColor9, R.drawable.taco)
     )
     Column (Modifier.fillMaxSize()){
         FoodFeedback(selectedFoodAdjective, onFoodSelected, adjectivesWithColors)
@@ -51,16 +51,17 @@ fun FoodFeedback(
     adjectivesWithColors: List<AdjectiveColorPair>) {
 
     Column {
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)){
-            Text(text = "What have you eaten today?", fontSize = 30.sp)
+        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+            Text(text = "What have you eaten today?", fontSize = 38.sp)
         }
-        for ((adjective, color) in adjectivesWithColors) {
+        for ((adjective, color, image) in adjectivesWithColors) {
             AdjectiveRow(
                 adjective = adjective,
                 color = color,
                 selectedDiaryAdjective = selectedFoodAdjective,
                 onAdjectiveSelected = onFoodSelected,
-                adjectivesWithColors = adjectivesWithColors
+                adjectivesWithColors = adjectivesWithColors,
+                image = image
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

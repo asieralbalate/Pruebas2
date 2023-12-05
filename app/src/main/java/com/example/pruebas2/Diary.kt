@@ -54,21 +54,34 @@ import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.pruebas2.ui.theme.BoxColor
+import com.example.pruebas2.ui.theme.DateTittle
 import com.example.pruebas2.ui.theme.TabsColor
 import com.example.pruebas2.ui.theme.TopBarColor
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.TextStyle
+import java.util.Date
+import java.util.Locale
 
 
-data class AdjectiveColorPair(val adjective: String, val color: Color)
-data class AdjectiveColorPair1(val adjective: String, val color: Color, val image: Int)
+data class AdjectiveColorPair(val adjective: String, val color: Color, val image: Int)
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Diary(selectedDate: String, navController: NavHostController) {
+    val inputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+    val date = inputFormat.parse(selectedDate)
+    val localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+
+    // Format the date in the desired format
+    val formattedDate = formatDate(localDate)
     val context = LocalContext.current
+
     var selectedDiaryAdjective by remember { mutableStateOf<Int?>(-1) }
     var selectedWeatherAdjective by remember { mutableStateOf<Int?>(-1) }
     var selectedStepsAdjective by remember { mutableStateOf<Int?>(-1) }
@@ -77,7 +90,7 @@ fun Diary(selectedDate: String, navController: NavHostController) {
     var selectedFoodAdjective by remember { mutableStateOf<Int?>(-1) }
     var selectedSleepAdjective by remember { mutableStateOf<Int?>(-1) }
     Scaffold(
-        topBar = { MyTopBar(navController, selectedDate) },
+        topBar = { MyTopBar(navController, formattedDate) },
         floatingActionButton = {
             MyFAB(
                 selectedDate, selectedDiaryAdjective,
@@ -194,7 +207,7 @@ fun MyTabs(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopBar(navController: NavHostController, selectedDate: String) {
-    TopAppBar(modifier = Modifier.height(40.dp), colors = TopAppBarColors(
+    TopAppBar(modifier = Modifier.height(44.dp), colors = TopAppBarColors(
         containerColor = TopBarColor,
         scrolledContainerColor = Color.White,
         navigationIconContentColor =TopBarColor,
@@ -215,9 +228,10 @@ fun MyTopBar(navController: NavHostController, selectedDate: String) {
             ) {
                 Text(
                     text = selectedDate,
-                    fontSize = 28.sp,
+                    fontSize = 34.sp,
                     color = Color.White,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = DateTittle
                 )
             }
 
@@ -393,71 +407,10 @@ fun UpdateData(
 
 
 @Composable
-fun AdjectiveRow1(
-    adjective: String,
-    color: Color,
-    image: Int,
-    selectedDiaryAdjective: Int?,
-    onAdjectiveSelected: (Int?) -> Unit,
-    adjectivesWithColors: List<AdjectiveColorPair1>
-) {
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp, bottom = 8.dp, start = 20.dp)
-            .selectable(
-                selected = (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }),
-                onClick = {
-                    onAdjectiveSelected(if (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }) {
-                        null
-                    } else {
-                        adjectivesWithColors.indexOfFirst { it.adjective == adjective }
-                    })
-                }
-            )
-    ) {
-        Checkbox(
-            checked = (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }),
-            onCheckedChange = null,
-            modifier = Modifier.size(30.dp),
-            colors = CheckboxDefaults.colors(checkedColor = TopBarColor)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Box(
-            modifier = Modifier
-                .size(34.dp)
-                .background(color)
-                .border(border = BorderStroke(1.dp, Color.Black))
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = adjective,
-            fontSize = 20.sp,
-            modifier = Modifier.align(Alignment.CenterVertically)
-        )
-        Box(
-            modifier = Modifier
-                .size(34.dp)
-                .background(color)
-                .border(border = BorderStroke(1.dp, Color.Black))
-        ) {
-            Image(
-                painter = painterResource(image),
-                contentDescription = null,
-                modifier = Modifier,
-                contentScale = ContentScale.FillWidth
-            )
-        }
-
-    }
-}
-
-@Composable
 fun AdjectiveRow(
     adjective: String,
     color: Color,
+    image: Int,
     selectedDiaryAdjective: Int?,
     onAdjectiveSelected: (Int?) -> Unit,
     adjectivesWithColors: List<AdjectiveColorPair>
@@ -467,7 +420,7 @@ fun AdjectiveRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp, bottom = 8.dp, start = 20.dp)
+            .padding(top = 2.dp, bottom = 2.dp, start = 18.dp)
             .selectable(
                 selected = (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }),
                 onClick = {
@@ -493,10 +446,41 @@ fun AdjectiveRow(
                 .border(border = BorderStroke(1.dp, Color.Black))
         )
         Spacer(modifier = Modifier.width(8.dp))
+        Box(
+            modifier = Modifier
+                .size(50.dp)
+        ){
+            Image(
+            painter = painterResource(image),
+            contentDescription = null,
+            modifier = Modifier.size(60.dp),
+                contentScale = ContentScale.Crop
+            )
+
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = adjective,
-            fontSize = 20.sp,
+            fontSize = 25.sp,
             modifier = Modifier.align(Alignment.CenterVertically)
         )
     }
+}
+
+@Composable
+fun formatDate(date: LocalDate): String {
+    val dayOfMonth = date.dayOfMonth
+    val month = date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+    val year = date.year
+
+    val dayWithExtension = when {
+        dayOfMonth in 11..13 -> "${dayOfMonth}th"
+        dayOfMonth % 10 == 1 -> "${dayOfMonth}st"
+        dayOfMonth % 10 == 2 -> "${dayOfMonth}nd"
+        dayOfMonth % 10 == 3 -> "${dayOfMonth}rd"
+        else -> "${dayOfMonth}th"
+    }
+
+    return "$dayWithExtension of $month $year"
 }

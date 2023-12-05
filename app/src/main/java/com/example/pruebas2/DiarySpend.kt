@@ -28,16 +28,16 @@ import com.example.pruebas2.ui.theme.SpendColor9
 @Composable
 fun Spend(selectedSpendAdjective: Int?, onSpendSelected: (Int?) -> Unit) {
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("Less than 1€", SpendColor0),
-        AdjectiveColorPair("1 - 5 €", SpendColor1),
-        AdjectiveColorPair("5 - 10 €", SpendColor2),
-        AdjectiveColorPair("10 - 20 €", SpendColor3),
-        AdjectiveColorPair("20 - 50 €", SpendColor4),
-        AdjectiveColorPair("50 - 100 €", SpendColor5),
-        AdjectiveColorPair("100 - 200 €", SpendColor6),
-        AdjectiveColorPair("200 - 500 €", SpendColor7),
-        AdjectiveColorPair("500 - 1.000 €", SpendColor8),
-        AdjectiveColorPair("More than 1.000 €", SpendColor9)
+        AdjectiveColorPair("-1€", SpendColor0, R.drawable.one),
+        AdjectiveColorPair("1 - 5 €", SpendColor1,R.drawable.five),
+        AdjectiveColorPair("5 - 10 €", SpendColor2, R.drawable.ten),
+        AdjectiveColorPair("10 - 20 €", SpendColor3, R.drawable.twenty),
+        AdjectiveColorPair("20 - 50 €", SpendColor4, R.drawable.fifty),
+        AdjectiveColorPair("50 - 100 €", SpendColor5, R.drawable.hundredk),
+        AdjectiveColorPair("100 - 200 €", SpendColor6, R.drawable.twohundk),
+        AdjectiveColorPair("200 - 500 €", SpendColor7, R.drawable.fivehundk),
+        AdjectiveColorPair("500 - 1.000 €", SpendColor8, R.drawable.thousk),
+        AdjectiveColorPair("+1.000 €", SpendColor9, R.drawable.morethousk)
     )
     Column(Modifier.fillMaxSize()) {
         SpendFeedback(selectedSpendAdjective, onSpendSelected, adjectivesWithColors)
@@ -57,17 +57,18 @@ fun SpendFeedback(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 15.dp)
+
         ) {
-            Text(text = "How much money have you spent?", fontSize = 24.sp)
+            Text(text = "How much money have you spent?", fontSize = 30.sp)
         }
-        for ((adjective, color) in adjectivesWithColors) {
+        for ((adjective, color, image) in adjectivesWithColors) {
             AdjectiveRow(
                 adjective = adjective,
                 color = color,
                 selectedDiaryAdjective = selectedSpendAdjective,
                 onAdjectiveSelected = onSpendSelected,
-                adjectivesWithColors = adjectivesWithColors
+                adjectivesWithColors = adjectivesWithColors,
+                image = image
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

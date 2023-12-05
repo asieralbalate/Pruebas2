@@ -28,16 +28,16 @@ import com.example.pruebas2.ui.theme.StepsColor9
 @Composable
 fun Steps(selectedStepsAdjective: Int?, onStepsSelected: (Int?) -> Unit){
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("Less than 100", StepsColor0),
-        AdjectiveColorPair("100 - 500", StepsColor1),
-        AdjectiveColorPair("500 - 1.000", StepsColor2),
-        AdjectiveColorPair("1.000 - 2.000", StepsColor3),
-        AdjectiveColorPair("2.000 - 5.000", StepsColor4),
-        AdjectiveColorPair("5.000 - 10.000", StepsColor5),
-        AdjectiveColorPair("10.000 - 15.000", StepsColor6),
-        AdjectiveColorPair("15.000 - 20.000", StepsColor7),
-        AdjectiveColorPair("20.000 - 30.000", StepsColor8),
-        AdjectiveColorPair("More than 30k", StepsColor9)
+        AdjectiveColorPair("-100", StepsColor0, R.drawable.lesshundred),
+        AdjectiveColorPair("100 - 500", StepsColor1, R.drawable.fivehundred),
+        AdjectiveColorPair("500 - 1.000", StepsColor2, R.drawable.thousand),
+        AdjectiveColorPair("1.000 - 2.000", StepsColor3, R.drawable.twothous),
+        AdjectiveColorPair("2.000 - 5.000", StepsColor4, R.drawable.fivethous),
+        AdjectiveColorPair("5.000 - 10.000", StepsColor5, R.drawable.tenthous),
+        AdjectiveColorPair("10.000 - 15.000", StepsColor6, R.drawable.fifteenthous),
+        AdjectiveColorPair("15.000 - 20.000", StepsColor7, R.drawable.twentythous),
+        AdjectiveColorPair("20.000 - 30.000", StepsColor8, R.drawable.thirtythous),
+        AdjectiveColorPair("+30.000", StepsColor9, R.drawable.morethirtythous)
     )
     Column (Modifier.fillMaxSize()){
         StepsFeedback(selectedStepsAdjective, onStepsSelected, adjectivesWithColors)
@@ -50,16 +50,17 @@ fun StepsFeedback(selectedStepsAdjective: Int?,
                   adjectivesWithColors: List<AdjectiveColorPair> ) {
 
     Column {
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)){
-            Text(text = "How many steps have you taken?", fontSize = 25.sp)
+        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+            Text(text = "How many steps have you taken?", fontSize = 30.sp)
         }
-        for ((adjective, color) in adjectivesWithColors) {
+        for ((adjective, color, image) in adjectivesWithColors) {
             AdjectiveRow(
                 adjective = adjective,
                 color = color,
                 selectedDiaryAdjective = selectedStepsAdjective,
                 onAdjectiveSelected = onStepsSelected,
-                adjectivesWithColors = adjectivesWithColors
+                adjectivesWithColors = adjectivesWithColors,
+                image = image
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

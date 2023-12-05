@@ -21,10 +21,30 @@ import com.example.pruebas2.ui.theme.DiaryColor6
 import com.example.pruebas2.ui.theme.DiaryColor7
 import com.example.pruebas2.ui.theme.DiaryColor8
 import com.example.pruebas2.ui.theme.DiaryColor9
+import com.example.pruebas2.ui.theme.StepsColor0
+import com.example.pruebas2.ui.theme.StepsColor1
+import com.example.pruebas2.ui.theme.StepsColor2
+import com.example.pruebas2.ui.theme.StepsColor3
+import com.example.pruebas2.ui.theme.StepsColor4
+import com.example.pruebas2.ui.theme.StepsColor5
+import com.example.pruebas2.ui.theme.StepsColor6
+import com.example.pruebas2.ui.theme.StepsColor7
+import com.example.pruebas2.ui.theme.StepsColor8
+import com.example.pruebas2.ui.theme.StepsColor9
+import com.example.pruebas2.ui.theme.WeatherColor0
+import com.example.pruebas2.ui.theme.WeatherColor1
+import com.example.pruebas2.ui.theme.WeatherColor2
+import com.example.pruebas2.ui.theme.WeatherColor3
+import com.example.pruebas2.ui.theme.WeatherColor4
+import com.example.pruebas2.ui.theme.WeatherColor5
+import com.example.pruebas2.ui.theme.WeatherColor6
+import com.example.pruebas2.ui.theme.WeatherColor7
+import com.example.pruebas2.ui.theme.WeatherColor8
+import com.example.pruebas2.ui.theme.WeatherColor9
 import java.util.*
 
 @Composable
-fun ResumeDay(dataMap: Map<String, Int>) {
+fun ResumeSteps(dataMap: Map<String, Int>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = currentSelectedDateMillis
@@ -38,7 +58,7 @@ fun ResumeDay(dataMap: Map<String, Int>) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                ,
+            ,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // Espacio vacío para la esquina superior izquierda
@@ -80,8 +100,8 @@ fun ResumeDay(dataMap: Map<String, Int>) {
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
-                                .background(getColorDay(dataMap, dayIndex, columnIndex))
-                                ,
+                                .background(getColorSteps(dataMap, dayIndex, columnIndex))
+                            ,
                             contentAlignment = Alignment.Center
                         ) {
 
@@ -94,7 +114,7 @@ fun ResumeDay(dataMap: Map<String, Int>) {
 }
 
 
-fun getColorDay(dataMap: Map<String, Int>, dayRow: Int, dayCol: Int ): Color{
+fun getColorSteps(dataMap: Map<String, Int>, dayRow: Int, dayCol: Int ): Color{
     var value = -1
     for (m in dataMap){
         val row = m.key.split("-")[0].toInt()
@@ -105,16 +125,16 @@ fun getColorDay(dataMap: Map<String, Int>, dayRow: Int, dayCol: Int ): Color{
         }
     }
     return when {
-        value == 0 -> DiaryColor0
-        value == 1 -> DiaryColor1
-        value == 2 -> DiaryColor2
-        value == 3 -> DiaryColor3
-        value == 4 -> DiaryColor4
-        value == 5 -> DiaryColor5
-        value == 6 -> DiaryColor6
-        value == 7 -> DiaryColor7
-        value == 8 -> DiaryColor8
-        value == 9 -> DiaryColor9
+        value == 0 -> StepsColor0
+        value == 1 -> StepsColor1
+        value == 2 -> StepsColor2
+        value == 3 -> StepsColor3
+        value == 4 -> StepsColor4
+        value == 5 -> StepsColor5
+        value == 6 -> StepsColor6
+        value == 7 -> StepsColor7
+        value == 8 -> StepsColor8
+        value == 9 -> StepsColor9
         else -> {Color.Gray}
     }
 }

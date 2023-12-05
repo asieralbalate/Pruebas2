@@ -25,8 +25,18 @@ class MainActivity : ComponentActivity() {
                     ) { backStackEntry ->
                         Diary(backStackEntry.arguments?.getString("selectedDate") ?: "", navController)
                     }
-
-                    composable("Resume") { Resume(navController) }
+                    composable(
+                        route = "Resume/{selectedYear}",
+                        arguments = listOf(navArgument("selectedYear") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        Resume(backStackEntry.arguments?.getString("selectedYear") ?: "", navController)
+                    }
+                    composable(
+                        route = "Schedule/{selectedDate}",
+                        arguments = listOf(navArgument("selectedDate") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        Schedule(backStackEntry.arguments?.getString("selectedDate") ?: "", navController)
+                    }
                 }
 
             }

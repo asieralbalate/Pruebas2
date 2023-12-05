@@ -28,16 +28,16 @@ import com.example.pruebas2.ui.theme.WeightsColor9
 @Composable
 fun Weights(selectedWeightAdjective: Int?, onWeightSelected: (Int?) -> Unit) {
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("Running", WeightsColor0),
-        AdjectiveColorPair("Climbing", WeightsColor1),
-        AdjectiveColorPair("Weightlifting", WeightsColor2),
-        AdjectiveColorPair("Cycling", WeightsColor3),
-        AdjectiveColorPair("Swimming", WeightsColor4),
-        AdjectiveColorPair("Boxing", WeightsColor5),
-        AdjectiveColorPair("Yoga", WeightsColor6),
-        AdjectiveColorPair("Dancing", WeightsColor7),
-        AdjectiveColorPair("Martial Arts", WeightsColor8),
-        AdjectiveColorPair("Gymnastics", WeightsColor9)
+        AdjectiveColorPair("Running", WeightsColor0, R.drawable.running),
+        AdjectiveColorPair("Climbing", WeightsColor1, R.drawable.climbing),
+        AdjectiveColorPair("Weightlifting", WeightsColor2, R.drawable.wheightlifting),
+        AdjectiveColorPair("Cycling", WeightsColor3, R.drawable.cycling),
+        AdjectiveColorPair("Swimming", WeightsColor4, R.drawable.swimming),
+        AdjectiveColorPair("Boxing", WeightsColor5, R.drawable.boxing),
+        AdjectiveColorPair("Yoga", WeightsColor6, R.drawable.yoga),
+        AdjectiveColorPair("Dancing", WeightsColor7, R.drawable.dancing),
+        AdjectiveColorPair("Martial Arts", WeightsColor8, R.drawable.martialarts),
+        AdjectiveColorPair("Gymnastics", WeightsColor9, R.drawable.gymnastics)
     )
 
     Column(Modifier.fillMaxSize()) {
@@ -58,17 +58,17 @@ fun WeightFeedback(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 15.dp)
         ) {
-            Text(text = "What exercise have you done today?", fontSize = 23.sp)
+            Text(text = "What exercise have you done today?", fontSize = 30.sp)
         }
-        for ((adjective, color) in adjectivesWithColors) {
+        for ((adjective, color, image) in adjectivesWithColors) {
             AdjectiveRow(
                 adjective = adjective,
                 color = color,
                 selectedDiaryAdjective = selectedWeightAdjective,
                 onAdjectiveSelected = onWeightSelected,
-                adjectivesWithColors = adjectivesWithColors
+                adjectivesWithColors = adjectivesWithColors,
+                image = image
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

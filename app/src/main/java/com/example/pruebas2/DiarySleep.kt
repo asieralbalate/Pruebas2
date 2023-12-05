@@ -28,16 +28,16 @@ import com.example.pruebas2.ui.theme.SleepColor9
 @Composable
 fun Sleep(selectedSleepAdjective: Int?, onSleepSelected: (Int?) -> Unit){
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("Less than 3 hours", SleepColor0),
-        AdjectiveColorPair("4 hours", SleepColor1),
-        AdjectiveColorPair("5 hours", SleepColor2),
-        AdjectiveColorPair("6 hours", SleepColor3),
-        AdjectiveColorPair("7 hours", SleepColor4),
-        AdjectiveColorPair("8 hours", SleepColor5),
-        AdjectiveColorPair("9 hours", SleepColor6),
-        AdjectiveColorPair("10 hours", SleepColor7),
-        AdjectiveColorPair("11 hours", SleepColor8),
-        AdjectiveColorPair("More than 11 hours", SleepColor9)
+        AdjectiveColorPair("-3 hours", SleepColor0, R.drawable.ambu),
+        AdjectiveColorPair("4 hours", SleepColor1, R.drawable.ambu),
+        AdjectiveColorPair("5 hours", SleepColor2, R.drawable.ambu),
+        AdjectiveColorPair("6 hours", SleepColor3, R.drawable.ambu),
+        AdjectiveColorPair("7 hours", SleepColor4, R.drawable.ambu),
+        AdjectiveColorPair("8 hours", SleepColor5, R.drawable.ambu),
+        AdjectiveColorPair("9 hours", SleepColor6, R.drawable.ambu),
+        AdjectiveColorPair("10 hours", SleepColor7, R.drawable.ambu),
+        AdjectiveColorPair("11 hours", SleepColor8, R.drawable.ambu),
+        AdjectiveColorPair("+11 hours", SleepColor9, R.drawable.ambu)
     )
     Column (Modifier.fillMaxSize()){
         SleepFeedback(selectedSleepAdjective, onSleepSelected, adjectivesWithColors)
@@ -51,16 +51,17 @@ fun SleepFeedback(
     adjectivesWithColors: List<AdjectiveColorPair>) {
 
     Column {
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)){
-            Text(text = "How many hours have you slept?", fontSize = 25.sp)
+        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+            Text(text = "How many hours have you slept?", fontSize = 30.sp)
         }
-        for ((adjective, color) in adjectivesWithColors) {
+        for ((adjective, color, image) in adjectivesWithColors) {
             AdjectiveRow(
                 adjective = adjective,
                 color = color,
                 selectedDiaryAdjective = selectedSleepAdjective,
                 onAdjectiveSelected = onSleepSelected,
-                adjectivesWithColors = adjectivesWithColors
+                adjectivesWithColors = adjectivesWithColors,
+                image = image
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

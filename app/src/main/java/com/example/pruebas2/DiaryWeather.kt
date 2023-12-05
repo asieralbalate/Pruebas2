@@ -28,16 +28,16 @@ import com.example.pruebas2.ui.theme.WeatherColor9
 @Composable
 fun Weather(selectedWeatherAdjective: Int?, onWeatherSelected: (Int?) -> Unit){
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("Sunny", WeatherColor0),
-        AdjectiveColorPair("Rainy", WeatherColor1),
-        AdjectiveColorPair("Cloudy", WeatherColor2),
-        AdjectiveColorPair("Windy", WeatherColor3),
-        AdjectiveColorPair("Snowy", WeatherColor4),
-        AdjectiveColorPair("Stormy", WeatherColor5),
-        AdjectiveColorPair("Foggy", WeatherColor6),
-        AdjectiveColorPair("Clear", WeatherColor7),
-        AdjectiveColorPair("Warm", WeatherColor8),
-        AdjectiveColorPair("Cold", WeatherColor9)
+        AdjectiveColorPair("Sunny", WeatherColor0, R.drawable.sunny),
+        AdjectiveColorPair("Rainy", WeatherColor1, R.drawable.rainy),
+        AdjectiveColorPair("Cloudy", WeatherColor2, R.drawable.cloudy),
+        AdjectiveColorPair("Windy", WeatherColor3, R.drawable.windy),
+        AdjectiveColorPair("Snowy", WeatherColor4, R.drawable.snowy),
+        AdjectiveColorPair("Stormy", WeatherColor5, R.drawable.stormy),
+        AdjectiveColorPair("Foggy", WeatherColor6, R.drawable.foggy),
+        AdjectiveColorPair("Clear", WeatherColor7, R.drawable.clear),
+        AdjectiveColorPair("Warm", WeatherColor8, R.drawable.warm),
+        AdjectiveColorPair("Cold", WeatherColor9, R.drawable.cold)
     )
     Column (Modifier.fillMaxSize()){
         WeatherFeedback(selectedWeatherAdjective, onWeatherSelected, adjectivesWithColors)
@@ -47,16 +47,17 @@ fun Weather(selectedWeatherAdjective: Int?, onWeatherSelected: (Int?) -> Unit){
 @Composable
 fun WeatherFeedback(selectedWeatherAdjective: Int?, onWeatherSelected: (Int?) -> Unit, adjectivesWithColors: List<AdjectiveColorPair>) {
     Column {
-        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp)){
-            Text(text = "How has the weather been?", fontSize = 30.sp)
+        Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+            Text(text = "How has the weather been?", fontSize = 38.sp)
         }
-        for ((adjective, color) in adjectivesWithColors) {
+        for ((adjective, color, image) in adjectivesWithColors) {
             AdjectiveRow(
                 adjective = adjective,
                 color = color,
                 selectedDiaryAdjective = selectedWeatherAdjective,
                 onAdjectiveSelected = onWeatherSelected,
-                adjectivesWithColors = adjectivesWithColors
+                adjectivesWithColors = adjectivesWithColors,
+                image = image
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
