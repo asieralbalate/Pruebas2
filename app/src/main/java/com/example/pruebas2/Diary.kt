@@ -462,7 +462,7 @@ fun AdjectiveRow(
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = adjective,
-            fontSize = 25.sp,
+            fontSize = 30.sp,
             modifier = Modifier.align(Alignment.CenterVertically)
         )
     }
