@@ -40,16 +40,16 @@ import com.example.pruebas2.ui.theme.WeightsColor9
 @Composable
 fun Food(selectedFoodAdjective: Int?, onFoodSelected: (Int?) -> Unit){
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("Italian", FoodColor0, R.drawable.taco),
-        AdjectiveColorPair("American", FoodColor1, R.drawable.taco),
-        AdjectiveColorPair("Turkish", FoodColor2, R.drawable.taco),
-        AdjectiveColorPair("Mexican", FoodColor3, R.drawable.taco),
-        AdjectiveColorPair("Japanese", FoodColor4, R.drawable.taco),
-        AdjectiveColorPair("Indian", FoodColor5, R.drawable.taco),
-        AdjectiveColorPair("Mediterranean", FoodColor6, R.drawable.taco),
-        AdjectiveColorPair("Chinese", FoodColor7, R.drawable.taco),
-        AdjectiveColorPair("Thai", FoodColor8, R.drawable.taco),
-        AdjectiveColorPair("French", FoodColor9, R.drawable.taco)
+        AdjectiveColorPair("Italian", FoodColor0, R.drawable.italian),
+        AdjectiveColorPair("American", FoodColor1, R.drawable.american),
+        AdjectiveColorPair("Turkish", FoodColor2, R.drawable.turkish),
+        AdjectiveColorPair("Mexican", FoodColor3, R.drawable.mexican),
+        AdjectiveColorPair("Japanese", FoodColor4, R.drawable.japanese),
+        AdjectiveColorPair("Indian", FoodColor5, R.drawable.indian),
+        AdjectiveColorPair("Mediterranean", FoodColor6, R.drawable.mediterranean),
+        AdjectiveColorPair("Chinese", FoodColor7, R.drawable.chinese),
+        AdjectiveColorPair("Thai", FoodColor8, R.drawable.thay),
+        AdjectiveColorPair("French", FoodColor9, R.drawable.french)
     )
     Column (Modifier.fillMaxSize()){
         FoodFeedback(selectedFoodAdjective, onFoodSelected, adjectivesWithColors)

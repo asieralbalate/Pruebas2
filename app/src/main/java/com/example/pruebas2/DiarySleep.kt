@@ -40,16 +40,16 @@ import com.example.pruebas2.ui.theme.SleepColor9
 @Composable
 fun Sleep(selectedSleepAdjective: Int?, onSleepSelected: (Int?) -> Unit){
     val adjectivesWithColors = listOf(
-        AdjectiveColorPair("-3 hours", SleepColor0, R.drawable.ambu),
-        AdjectiveColorPair("4 hours", SleepColor1, R.drawable.ambu),
-        AdjectiveColorPair("5 hours", SleepColor2, R.drawable.ambu),
-        AdjectiveColorPair("6 hours", SleepColor3, R.drawable.ambu),
-        AdjectiveColorPair("7 hours", SleepColor4, R.drawable.ambu),
-        AdjectiveColorPair("8 hours", SleepColor5, R.drawable.ambu),
-        AdjectiveColorPair("9 hours", SleepColor6, R.drawable.ambu),
-        AdjectiveColorPair("10 hours", SleepColor7, R.drawable.ambu),
-        AdjectiveColorPair("11 hours", SleepColor8, R.drawable.ambu),
-        AdjectiveColorPair("+11 hours", SleepColor9, R.drawable.ambu)
+        AdjectiveColorPair("-4 hours", SleepColor0, R.drawable.lessthreeh),
+        AdjectiveColorPair("4 hours", SleepColor1, R.drawable.fourh),
+        AdjectiveColorPair("5 hours", SleepColor2, R.drawable.fiveh),
+        AdjectiveColorPair("6 hours", SleepColor3, R.drawable.sixh),
+        AdjectiveColorPair("7 hours", SleepColor4, R.drawable.sevenh),
+        AdjectiveColorPair("8 hours", SleepColor5, R.drawable.eighth),
+        AdjectiveColorPair("9 hours", SleepColor6, R.drawable.nineh),
+        AdjectiveColorPair("10 hours", SleepColor7, R.drawable.tenh),
+        AdjectiveColorPair("11 hours", SleepColor8, R.drawable.elevenh),
+        AdjectiveColorPair("+11 hours", SleepColor9, R.drawable.morelevenh)
     )
     Column (Modifier.fillMaxSize()){
         SleepFeedback(selectedSleepAdjective, onSleepSelected, adjectivesWithColors)
