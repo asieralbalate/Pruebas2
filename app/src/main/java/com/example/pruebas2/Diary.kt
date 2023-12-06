@@ -381,7 +381,7 @@ fun MyFAB(
             }
         }.size(60.dp)){
         FloatingActionButton(onClick = {
-            InsertData(
+            UploadData(
                 dateCal = dateCal,
                 selectedDiaryAdjective = selectedDiaryAdjective,
                 selectedWeatherAdjective = selectedWeatherAdjective,
@@ -392,7 +392,6 @@ fun MyFAB(
                 selectedSleepAdjective = selectedSleepAdjective,
                 contexto = contexto,
             )
-
         },
             containerColor = TopBarColor,
             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
@@ -530,7 +529,7 @@ fun UpdateData(
     parametros.put("food", selectedFoodAdjective)
     parametros.put("sleep", selectedSleepAdjective)
     val requerimiento = JsonObjectRequest(
-        Request.Method.PUT,
+        Request.Method.POST,
         url,
         parametros,
         { response ->
@@ -556,7 +555,7 @@ fun AdjectiveRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 2.dp, bottom = 2.dp, start = 18.dp)
+            .padding(top = 1.dp, bottom = 1.dp, start = 18.dp)
             .selectable(
                 selected = (selectedDiaryAdjective == adjectivesWithColors.indexOfFirst { it.adjective == adjective }),
                 onClick = {

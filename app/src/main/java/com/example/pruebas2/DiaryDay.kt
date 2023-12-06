@@ -47,7 +47,6 @@ fun Day(selectedDiaryAdjective: Int?, onAdjectiveSelected: (Int?) -> Unit){
         AdjectiveColorPair("Rewarding", DiaryColor9, R.drawable.rewarding)
     )
 
-
     Column (
         Modifier
             .fillMaxSize()

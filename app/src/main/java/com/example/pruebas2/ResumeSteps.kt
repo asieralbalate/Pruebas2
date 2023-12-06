@@ -11,16 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.example.pruebas2.ui.theme.DiaryColor0
-import com.example.pruebas2.ui.theme.DiaryColor1
-import com.example.pruebas2.ui.theme.DiaryColor2
-import com.example.pruebas2.ui.theme.DiaryColor3
-import com.example.pruebas2.ui.theme.DiaryColor4
-import com.example.pruebas2.ui.theme.DiaryColor5
-import com.example.pruebas2.ui.theme.DiaryColor6
-import com.example.pruebas2.ui.theme.DiaryColor7
-import com.example.pruebas2.ui.theme.DiaryColor8
-import com.example.pruebas2.ui.theme.DiaryColor9
 import com.example.pruebas2.ui.theme.StepsColor0
 import com.example.pruebas2.ui.theme.StepsColor1
 import com.example.pruebas2.ui.theme.StepsColor2
@@ -31,20 +21,10 @@ import com.example.pruebas2.ui.theme.StepsColor6
 import com.example.pruebas2.ui.theme.StepsColor7
 import com.example.pruebas2.ui.theme.StepsColor8
 import com.example.pruebas2.ui.theme.StepsColor9
-import com.example.pruebas2.ui.theme.WeatherColor0
-import com.example.pruebas2.ui.theme.WeatherColor1
-import com.example.pruebas2.ui.theme.WeatherColor2
-import com.example.pruebas2.ui.theme.WeatherColor3
-import com.example.pruebas2.ui.theme.WeatherColor4
-import com.example.pruebas2.ui.theme.WeatherColor5
-import com.example.pruebas2.ui.theme.WeatherColor6
-import com.example.pruebas2.ui.theme.WeatherColor7
-import com.example.pruebas2.ui.theme.WeatherColor8
-import com.example.pruebas2.ui.theme.WeatherColor9
 import java.util.*
 
 @Composable
-fun ResumeSteps(dataMap: Map<String, Int>) {
+fun ResumeSteps(dataMap: Map<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = currentSelectedDateMillis
@@ -114,13 +94,13 @@ fun ResumeSteps(dataMap: Map<String, Int>) {
 }
 
 
-fun getColorSteps(dataMap: Map<String, Int>, dayRow: Int, dayCol: Int ): Color{
+fun getColorSteps(dataMap: Map<String, IntArray>, dayRow: Int, dayCol: Int ): Color{
     var value = -1
     for (m in dataMap){
         val row = m.key.split("-")[0].toInt()
         val col = m.key.split("-")[1].toInt()
         if (dayRow  == row - 1&& dayCol == col) {
-            value = m.value
+            value = m.value[2]
             break
         }
     }
@@ -135,6 +115,12 @@ fun getColorSteps(dataMap: Map<String, Int>, dayRow: Int, dayCol: Int ): Color{
         value == 7 -> StepsColor7
         value == 8 -> StepsColor8
         value == 9 -> StepsColor9
+        dayRow == 30 && dayCol == 2 -> Color.Black
+        dayRow == 29 && dayCol == 2 -> Color.Black
+        dayRow == 30 && dayCol == 4 -> Color.Black
+        dayRow == 30 && dayCol == 6 -> Color.Black
+        dayRow == 30 && dayCol == 9 -> Color.Black
+        dayRow == 30 && dayCol == 11 -> Color.Black
         else -> {Color.Gray}
     }
 }
