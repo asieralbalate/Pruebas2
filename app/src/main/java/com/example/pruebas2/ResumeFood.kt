@@ -33,7 +33,7 @@ fun ResumeFood(dataMap: Map<String, IntArray>) {
             ,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Espacio vacío para la esquina superior izquierda
+
             Spacer(modifier = Modifier.weight(1f))
             for (i in 1..monthsInYear) {
                 Text(
@@ -45,7 +45,7 @@ fun ResumeFood(dataMap: Map<String, IntArray>) {
             }
         }
 
-        // Calendar table
+
         repeat(daysInMonth) { dayIndex ->
             Row(
                 modifier = Modifier
@@ -56,9 +56,7 @@ fun ResumeFood(dataMap: Map<String, IntArray>) {
                 repeat(monthsInYear + 1) { columnIndex ->
                     val isWeekColumn = columnIndex == 0
                     val isDayColumn = columnIndex > 0
-
                     if (isWeekColumn) {
-                        // Números de día en la primera columna
                         Text(
                             text = (dayIndex + 1).toString(),
                             modifier = Modifier.weight(1f),
@@ -67,7 +65,6 @@ fun ResumeFood(dataMap: Map<String, IntArray>) {
                             fontSize = 16.sp
                         )
                     }  else if (isDayColumn) {
-                        // Celdas del calendario
                         Box(
                             modifier = Modifier
                                 .weight(1f)
@@ -92,7 +89,7 @@ fun getColorFood(dataMap: Map<String, IntArray>, dayRow: Int, dayCol: Int ): Col
         val row = m.key.split("-")[0].toInt()
         val col = m.key.split("-")[1].toInt()
         if (dayRow  == row - 1 && dayCol == col) {
-            value = m.value.get(5)
+            value = m.value[5]
             break
         }
     }

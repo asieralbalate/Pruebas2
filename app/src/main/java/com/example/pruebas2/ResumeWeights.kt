@@ -33,7 +33,6 @@ fun ResumeWeights(dataMap: Map<String, IntArray>) {
             ,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Espacio vacío para la esquina superior izquierda
             Spacer(modifier = Modifier.weight(1f))
             for (i in 1..monthsInYear) {
                 Text(
@@ -44,8 +43,6 @@ fun ResumeWeights(dataMap: Map<String, IntArray>) {
                 )
             }
         }
-
-        // Calendar table
         repeat(daysInMonth) { dayIndex ->
             Row(
                 modifier = Modifier
@@ -56,9 +53,7 @@ fun ResumeWeights(dataMap: Map<String, IntArray>) {
                 repeat(monthsInYear + 1) { columnIndex ->
                     val isWeekColumn = columnIndex == 0
                     val isDayColumn = columnIndex > 0
-
                     if (isWeekColumn) {
-                        // Números de día en la primera columna
                         Text(
                             text = (dayIndex + 1).toString(),
                             modifier = Modifier.weight(1f),
@@ -67,7 +62,6 @@ fun ResumeWeights(dataMap: Map<String, IntArray>) {
                             fontSize = 16.sp
                         )
                     }  else if (isDayColumn) {
-                        // Celdas del calendario
                         Box(
                             modifier = Modifier
                                 .weight(1f)

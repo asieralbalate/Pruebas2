@@ -41,7 +41,7 @@ fun ResumeDay(dataMap: Map<String, IntArray>) {
                 ,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Espacio vacío para la esquina superior izquierda
+
             Spacer(modifier = Modifier.weight(1f))
             for (i in 1..monthsInYear) {
                 Text(
@@ -66,7 +66,6 @@ fun ResumeDay(dataMap: Map<String, IntArray>) {
                     val isDayColumn = columnIndex > 0
 
                     if (isWeekColumn) {
-                        // Números de día en la primera columna
                         Text(
                             text = (dayIndex + 1).toString(),
                             modifier = Modifier.weight(1f),
@@ -75,7 +74,6 @@ fun ResumeDay(dataMap: Map<String, IntArray>) {
                             fontSize = 16.sp
                         )
                     }  else if (isDayColumn) {
-                        // Celdas del calendario
                         Box(
                             modifier = Modifier
                                 .weight(1f)

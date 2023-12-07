@@ -4,11 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,16 +24,6 @@ import com.example.pruebas2.ui.theme.SpendColor6
 import com.example.pruebas2.ui.theme.SpendColor7
 import com.example.pruebas2.ui.theme.SpendColor8
 import com.example.pruebas2.ui.theme.SpendColor9
-import com.example.pruebas2.ui.theme.StepsColor0
-import com.example.pruebas2.ui.theme.StepsColor1
-import com.example.pruebas2.ui.theme.StepsColor2
-import com.example.pruebas2.ui.theme.StepsColor3
-import com.example.pruebas2.ui.theme.StepsColor4
-import com.example.pruebas2.ui.theme.StepsColor5
-import com.example.pruebas2.ui.theme.StepsColor6
-import com.example.pruebas2.ui.theme.StepsColor7
-import com.example.pruebas2.ui.theme.StepsColor8
-import com.example.pruebas2.ui.theme.StepsColor9
 
 @Composable
 fun Spend(selectedSpendAdjective: Int?, onSpendSelected: (Int?) -> Unit) {

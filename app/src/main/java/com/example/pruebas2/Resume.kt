@@ -48,20 +48,17 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.Volley
 import com.example.pruebas2.ui.theme.*
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "MutableCollectionMutableState")
 @Composable
 fun Resume(selectedYear: String, navController: NavHostController) {
-    val dataMap: MutableMap<String, IntArray> = remember { mutableMapOf() }
+    var dataMap by remember { mutableStateOf<MutableMap<String, IntArray>>(mutableMapOf()) }
     val context = LocalContext.current
     LaunchedEffect(selectedYear) {
-        fillMap(selectedYear, dataMap, context)
+        dataMap = fillMap(selectedYear, context)
     }
     Scaffold(
         topBar = { MyResTopBar(navController, selectedYear) },
@@ -74,29 +71,28 @@ fun Resume(selectedYear: String, navController: NavHostController) {
                         top = it.calculateTopPadding()
                     )
                     .background(BoxColor)
-            ) { MyResTabs(dataMap) }
-        })
+            ) {
+                MyResTabs(dataMap) }
+        }
+    )
 }
 
-fun fillMap(selectedYear: String, dataMap: MutableMap<String, IntArray>, context: Context) {
-    val dataList = getAllDataFromDatabase(context)
 
-    for (data in dataList) {
 
-        val dateCal = data.getString("dateCal")
-        val values = intArrayOf(
-            data.getInt("day"),
-            data.getInt("weather"),
-            data.getInt("steps"),
-            data.getInt("spend"),
-            data.getInt("weights"),
-            data.getInt("food"),
-            data.getInt("sleep")
-        )
-        dataMap[dateCal] = values
+
+fun fillMap(selectedYear: String, context: Context): MutableMap<String, IntArray> {
+    val mapList = checkDatabase(context)
+    val rightYearMap: MutableMap<String,IntArray> = mutableMapOf()
+    mapList.forEach { (dateCal, values) ->
+        val year = dateCal.split("-")[2]
+        if (year == selectedYear) {
+            rightYearMap[dateCal] = values
+        } else {
+            return@forEach
+        }
     }
+    return rightYearMap
 }
-
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -313,7 +309,7 @@ fun MyResTopBar(navController: NavHostController, selectedYear: String) {
                     }
                 }
             }
-            Box() {
+            Box {
                 DropdownMenu(
                     offset = DpOffset.Zero,
                     expanded = isBoxVisible,
@@ -327,7 +323,7 @@ fun MyResTopBar(navController: NavHostController, selectedYear: String) {
                         } ?: emptyList()
 
                         selectedList.forEach { (adjective, color) ->
-                            Row (modifier = Modifier.padding(2.dp)){
+                            Row(modifier = Modifier.padding(2.dp)) {
                                 Box(
                                     modifier = Modifier
                                         .size(20.dp)

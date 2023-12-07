@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,11 +26,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -40,10 +45,14 @@ import com.example.pruebas2.ui.theme.FontTittle
 import com.example.pruebas2.ui.theme.RegText
 import com.example.pruebas2.ui.theme.TopBarColor
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
+import java.time.LocalDate
+import java.time.format.TextStyle
 import java.util.Date
 import java.util.Locale
 
+
+val eventsData = mutableStateListOf<Event>()
+data class Event(val dateCal: String, val event: String)
 @Composable
 fun Calendar(navController: NavHostController) {
     Surface(
@@ -58,13 +67,15 @@ fun Calendar(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerView(navController: NavHostController) {
+    val context = LocalContext.current
+    listEvents(context)
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
     val datePickerState =
         rememberDatePickerState(
             currentSelectedDateMillis,
             selectableDates = object : SelectableDates {
                 override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                    // Permitir la selección de todas las fechas
+
                     return true
                 }
             })
@@ -75,11 +86,13 @@ fun DatePickerView(navController: NavHostController) {
     val selectedDate = datePickerState.selectedDateMillis?.let {
         convertMillisToDate(it)
     }
-
+    val eventsSelectedDate = newFormattedDate
     val selectedYear = newFormattedDate?.split("-")?.get(2)
     Column(
-        modifier = Modifier.background(BoxColor),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .background(BoxColor)
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = CenterHorizontally
     ) {
         DatePicker(
             colors = DatePickerDefaults.colors(BoxColor),
@@ -135,11 +148,6 @@ fun DatePickerView(navController: NavHostController) {
             state = datePickerState,
             showModeToggle = true
         )
-        Spacer(
-            modifier = Modifier.height(
-                12.dp
-            )
-        )
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Button(
                 onClick = { navController.navigate("Schedule/${newFormattedDate}") },
@@ -150,6 +158,42 @@ fun DatePickerView(navController: NavHostController) {
             Button(
                 onClick = { navController.navigate("Resume/${selectedYear}") },
                 content = { Text(text = "Resume", fontFamily = FontTittle, fontSize = 28.sp) })
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 4.dp),
+            horizontalAlignment = CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            val filteredEvents = eventsData.filter { it.dateCal == eventsSelectedDate }
+            if (filteredEvents.isNotEmpty()) {
+                Row {
+                    Text(text = "Scheduled Tasks", fontSize = 22.sp)
+                }
+                filteredEvents.forEach { event ->
+                    val eventDetails = event.event.split("&&")
+                    eventDetails.forEachIndexed { index, detail ->
+                        Card(
+                            elevation = CardDefaults.cardElevation(5.dp),
+                            modifier = Modifier
+                                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = "${index + 1}: $detail",
+                                    fontSize = 22.sp,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -170,3 +214,37 @@ fun newFormatDateForDisplay(millis: Long): String {
     return "$dayOfMonth-$month-$year"
 }
 
+@Composable
+fun formatDate(date: LocalDate): String {
+    val dayOfMonth = date.dayOfMonth
+    val month = date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+    val year = date.year
+
+    val dayWithExtension = when {
+        dayOfMonth in 11..13 -> "${dayOfMonth}th"
+        dayOfMonth % 10 == 1 -> "${dayOfMonth}st"
+        dayOfMonth % 10 == 2 -> "${dayOfMonth}nd"
+        dayOfMonth % 10 == 3 -> "${dayOfMonth}rd"
+        else -> "${dayOfMonth}th"
+    }
+    return "$dayWithExtension of $month $year"
+}
+
+fun getCurrentDate(): String {
+    val calendar = java.util.Calendar.getInstance()
+    val formatter = SimpleDateFormat("d", Locale.getDefault())
+    val dayOfMonth = formatter.format(calendar.time).toInt()
+    val daySuffix = getDayOfMonthSuffix(dayOfMonth)
+    val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
+    return "${dayOfMonth}$daySuffix of ${dateFormat.format(calendar.time)}"
+}
+
+fun getDayOfMonthSuffix(n: Int): String {
+    return when {
+        n in 11..13 -> "th"
+        n % 10 == 1 -> "st"
+        n % 10 == 2 -> "nd"
+        n % 10 == 3 -> "rd"
+        else -> "th"
+    }
+}

@@ -62,97 +62,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.example.pruebas2.ui.theme.BoxColor
 import com.example.pruebas2.ui.theme.DateTittle
-import com.example.pruebas2.ui.theme.DiaryColor0
 import com.example.pruebas2.ui.theme.DiaryColor1
-import com.example.pruebas2.ui.theme.DiaryColor2
-import com.example.pruebas2.ui.theme.DiaryColor3
-import com.example.pruebas2.ui.theme.DiaryColor4
-import com.example.pruebas2.ui.theme.DiaryColor5
-import com.example.pruebas2.ui.theme.DiaryColor6
-import com.example.pruebas2.ui.theme.DiaryColor7
-import com.example.pruebas2.ui.theme.DiaryColor8
-import com.example.pruebas2.ui.theme.DiaryColor9
-import com.example.pruebas2.ui.theme.FoodColor0
-import com.example.pruebas2.ui.theme.FoodColor1
-import com.example.pruebas2.ui.theme.FoodColor2
-import com.example.pruebas2.ui.theme.FoodColor3
-import com.example.pruebas2.ui.theme.FoodColor4
 import com.example.pruebas2.ui.theme.FoodColor5
-import com.example.pruebas2.ui.theme.FoodColor6
-import com.example.pruebas2.ui.theme.FoodColor7
-import com.example.pruebas2.ui.theme.FoodColor8
-import com.example.pruebas2.ui.theme.FoodColor9
-import com.example.pruebas2.ui.theme.SleepColor0
-import com.example.pruebas2.ui.theme.SleepColor1
 import com.example.pruebas2.ui.theme.SleepColor2
-import com.example.pruebas2.ui.theme.SleepColor3
-import com.example.pruebas2.ui.theme.SleepColor4
-import com.example.pruebas2.ui.theme.SleepColor5
-import com.example.pruebas2.ui.theme.SleepColor6
-import com.example.pruebas2.ui.theme.SleepColor7
-import com.example.pruebas2.ui.theme.SleepColor8
-import com.example.pruebas2.ui.theme.SleepColor9
-import com.example.pruebas2.ui.theme.SpendColor0
-import com.example.pruebas2.ui.theme.SpendColor1
-import com.example.pruebas2.ui.theme.SpendColor2
-import com.example.pruebas2.ui.theme.SpendColor3
 import com.example.pruebas2.ui.theme.SpendColor4
-import com.example.pruebas2.ui.theme.SpendColor5
-import com.example.pruebas2.ui.theme.SpendColor6
-import com.example.pruebas2.ui.theme.SpendColor7
-import com.example.pruebas2.ui.theme.SpendColor8
-import com.example.pruebas2.ui.theme.SpendColor9
-import com.example.pruebas2.ui.theme.StepsColor0
-import com.example.pruebas2.ui.theme.StepsColor1
-import com.example.pruebas2.ui.theme.StepsColor2
-import com.example.pruebas2.ui.theme.StepsColor3
-import com.example.pruebas2.ui.theme.StepsColor4
-import com.example.pruebas2.ui.theme.StepsColor5
 import com.example.pruebas2.ui.theme.StepsColor6
-import com.example.pruebas2.ui.theme.StepsColor7
-import com.example.pruebas2.ui.theme.StepsColor8
-import com.example.pruebas2.ui.theme.StepsColor9
 import com.example.pruebas2.ui.theme.TabsColor
 import com.example.pruebas2.ui.theme.TopBarColor
-import com.example.pruebas2.ui.theme.WeatherColor0
-import com.example.pruebas2.ui.theme.WeatherColor1
 import com.example.pruebas2.ui.theme.WeatherColor2
-import com.example.pruebas2.ui.theme.WeatherColor3
-import com.example.pruebas2.ui.theme.WeatherColor4
-import com.example.pruebas2.ui.theme.WeatherColor5
-import com.example.pruebas2.ui.theme.WeatherColor6
-import com.example.pruebas2.ui.theme.WeatherColor7
-import com.example.pruebas2.ui.theme.WeatherColor8
-import com.example.pruebas2.ui.theme.WeatherColor9
 import com.example.pruebas2.ui.theme.WeightsColor0
-import com.example.pruebas2.ui.theme.WeightsColor1
-import com.example.pruebas2.ui.theme.WeightsColor2
-import com.example.pruebas2.ui.theme.WeightsColor3
-import com.example.pruebas2.ui.theme.WeightsColor4
-import com.example.pruebas2.ui.theme.WeightsColor5
-import com.example.pruebas2.ui.theme.WeightsColor6
-import com.example.pruebas2.ui.theme.WeightsColor7
-import com.example.pruebas2.ui.theme.WeightsColor8
-import com.example.pruebas2.ui.theme.WeightsColor9
 import kotlinx.coroutines.launch
-import org.json.JSONException
-import org.json.JSONObject
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.ZoneId
-import java.time.format.TextStyle
-import java.util.Date
 import java.util.Locale
 
 
 data class AdjectiveColorPair(val adjective: String, val color: Color, val image: Int)
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -161,7 +88,6 @@ fun Diary(selectedDate: String, navController: NavHostController) {
     val date = inputFormat.parse(selectedDate)
     val localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
 
-    // Format the date in the desired format
     val formattedDate = formatDate(localDate)
     val context = LocalContext.current
 
@@ -332,9 +258,9 @@ fun MyFAB(
     selectedWeightAdjective: Int?,
     selectedFoodAdjective: Int?,
     selectedSleepAdjective: Int?,
-    contexto: Context,
+    context: Context,
 ) {
-    val value by rememberInfiniteTransition().animateFloat(
+    val value by rememberInfiniteTransition(label = "").animateFloat(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
@@ -342,27 +268,14 @@ fun MyFAB(
                 durationMillis = 4000,
                 easing = LinearEasing
             )
-        )
+        ), label = ""
     )
     val colors = listOf(
-        DiaryColor0, DiaryColor1, DiaryColor2, DiaryColor3,
-        DiaryColor4, DiaryColor5, DiaryColor6, DiaryColor7, DiaryColor8,
-        DiaryColor9, FoodColor0, FoodColor1, FoodColor2, FoodColor3,
-        FoodColor4, FoodColor5, FoodColor6, FoodColor7, FoodColor8,
-        FoodColor9,  SleepColor0, SleepColor4, SleepColor1, SleepColor2, SleepColor3,
-        SleepColor5, SleepColor8, SleepColor9,  SleepColor6, SleepColor7,
-        SpendColor0, SpendColor1, SpendColor2, SpendColor3,
-        SpendColor4, SpendColor5, SpendColor6, SpendColor8,
-        SpendColor9, SpendColor7, StepsColor0, StepsColor1, StepsColor2, StepsColor3,
-        StepsColor4, StepsColor5, StepsColor6, StepsColor7, StepsColor8,
-        StepsColor9, WeatherColor0, WeatherColor1, WeatherColor2, WeatherColor3,
-        WeatherColor4, WeatherColor5, WeatherColor6, WeatherColor7, WeatherColor8,
-        WeatherColor9, WeightsColor0, WeightsColor1, WeightsColor2, WeightsColor3,
-        WeightsColor4, WeightsColor5, WeightsColor6, WeightsColor7, WeightsColor8,
-        WeightsColor9
+        DiaryColor1, FoodColor5, SleepColor2,
+        SpendColor4, StepsColor6, WeatherColor2, WeightsColor0
     )
 
-    var gradientBrush by remember {
+    val gradientBrush by remember {
         mutableStateOf(
             Brush.horizontalGradient(
                 colors = colors,
@@ -379,9 +292,9 @@ fun MyFAB(
                     gradientBrush, style = Stroke(width = 20.dp.value)
                 )
             }
-        }.size(60.dp)){
+        }.size(58.dp)){
         FloatingActionButton(onClick = {
-            UploadData(
+            uploadData(
                 dateCal = dateCal,
                 selectedDiaryAdjective = selectedDiaryAdjective,
                 selectedWeatherAdjective = selectedWeatherAdjective,
@@ -390,154 +303,23 @@ fun MyFAB(
                 selectedWeightAdjective = selectedWeightAdjective,
                 selectedFoodAdjective = selectedFoodAdjective,
                 selectedSleepAdjective = selectedSleepAdjective,
-                contexto = contexto,
+                context = context,
             )
         },
             containerColor = TopBarColor,
             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
-            modifier = Modifier.size(60.dp),
+            modifier = Modifier.size(58.dp),
             shape = CircleShape
         ) {
             Image(
                 painterResource(id = R.drawable.save),
                 contentDescription = "null",
-                modifier = Modifier.size(80.dp).scale(1.3f),
+                modifier = Modifier.size(80.dp).scale(1.35f),
                 contentScale = ContentScale.Crop
             )
         }
     }
 
-}
-
-fun UploadData(
-    dateCal: String,
-    selectedDiaryAdjective: Int?,
-    selectedWeatherAdjective: Int?,
-    selectedStepsAdjective: Int?,
-    selectedSpendAdjective: Int?,
-    selectedWeightAdjective: Int?,
-    selectedFoodAdjective: Int?,
-    selectedSleepAdjective: Int?,
-    contexto: Context,
-) {
-    CheckDate(dateCal,
-        {
-        exists ->
-            if (exists) {
-                UpdateData(dateCal,
-                    selectedDiaryAdjective,
-                    selectedWeatherAdjective,
-                    selectedStepsAdjective,
-                    selectedSpendAdjective,
-                    selectedWeightAdjective,
-                    selectedFoodAdjective,
-                    selectedSleepAdjective,
-                    contexto)
-            } else {
-                InsertData(dateCal,
-                    selectedDiaryAdjective,
-                    selectedWeatherAdjective,
-                    selectedStepsAdjective,
-                    selectedSpendAdjective,
-                    selectedWeightAdjective,
-                    selectedFoodAdjective,
-                    selectedSleepAdjective,
-                contexto)
-            }
-        },
-        contexto)
-}
-
-fun CheckDate(dateCal: String, existeFechaCallback: (Boolean) -> Unit, contexto: Context) {
-    val requestQueue = Volley.newRequestQueue(contexto)
-    val url = "https://dailyasiercalendar.000webhostapp.com/checkCalendar.php?dateCal=$dateCal"
-    val requerimiento = JsonArrayRequest(
-        Request.Method.GET,
-        url,
-        null,
-        { response ->
-            if (response.length() == 1) {
-                try {
-                    existeFechaCallback(true)
-                } catch (e: JSONException) {
-                }
-            } else {
-                existeFechaCallback(false)
-            }
-        }
-    ) { error ->
-    }
-    requestQueue.add(requerimiento)
-}
-
-fun InsertData(
-    dateCal: String,
-    selectedDiaryAdjective: Int?,
-    selectedWeatherAdjective: Int?,
-    selectedStepsAdjective: Int?,
-    selectedSpendAdjective: Int?,
-    selectedWeightAdjective: Int?,
-    selectedFoodAdjective: Int?,
-    selectedSleepAdjective: Int?,
-    contexto: Context,
-) {
-    val requestQueue = Volley.newRequestQueue(contexto)
-    val url = "https://dailyasiercalendar.000webhostapp.com/insertCalendar.php"
-    val parametros = JSONObject()
-    parametros.put("dateCal", dateCal)
-    parametros.put("day", selectedDiaryAdjective)
-    parametros.put("weather", selectedWeatherAdjective)
-    parametros.put("steps", selectedStepsAdjective)
-    parametros.put("spend", selectedSpendAdjective)
-    parametros.put("weights", selectedWeightAdjective)
-    parametros.put("food", selectedFoodAdjective)
-    parametros.put("sleep", selectedSleepAdjective)
-    val requerimiento = JsonObjectRequest(
-        Request.Method.POST,
-        url,
-        parametros,
-        { response ->
-
-        },
-        { error ->
-
-        }
-    )
-    requestQueue.add(requerimiento)
-}
-
-fun UpdateData(
-    dateCal: String,
-    selectedDiaryAdjective: Int?,
-    selectedWeatherAdjective: Int?,
-    selectedStepsAdjective: Int?,
-    selectedSpendAdjective: Int?,
-    selectedWeightAdjective: Int?,
-    selectedFoodAdjective: Int?,
-    selectedSleepAdjective: Int?,
-    contexto: Context,
-) {
-    val requestQueue = Volley.newRequestQueue(contexto)
-    val url = "https://dailyasiercalendar.000webhostapp.com/updateCalendar.php"
-    val parametros = JSONObject()
-    parametros.put("dateCal", dateCal)
-    parametros.put("day", selectedDiaryAdjective)
-    parametros.put("weather", selectedWeatherAdjective)
-    parametros.put("steps", selectedStepsAdjective)
-    parametros.put("spend", selectedSpendAdjective)
-    parametros.put("weights", selectedWeightAdjective)
-    parametros.put("food", selectedFoodAdjective)
-    parametros.put("sleep", selectedSleepAdjective)
-    val requerimiento = JsonObjectRequest(
-        Request.Method.POST,
-        url,
-        parametros,
-        { response ->
-        },
-        { error ->
-        }
-    )
-    requestQueue.add(requerimiento)
 }
 
 
@@ -601,18 +383,3 @@ fun AdjectiveRow(
     }
 }
 
-@Composable
-fun formatDate(date: LocalDate): String {
-    val dayOfMonth = date.dayOfMonth
-    val month = date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
-    val year = date.year
-
-    val dayWithExtension = when {
-        dayOfMonth in 11..13 -> "${dayOfMonth}th"
-        dayOfMonth % 10 == 1 -> "${dayOfMonth}st"
-        dayOfMonth % 10 == 2 -> "${dayOfMonth}nd"
-        dayOfMonth % 10 == 3 -> "${dayOfMonth}rd"
-        else -> "${dayOfMonth}th"
-    }
-    return "$dayWithExtension of $month $year"
-}
