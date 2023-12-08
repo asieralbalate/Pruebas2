@@ -2,7 +2,6 @@ package com.example.pruebas2
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
@@ -295,4 +294,33 @@ fun clearDatabase(dateCal: String, context: Context) {
         }
     )
     requestQueue.add(req)
+}
+
+
+fun deleteAllCalendarEvents(contexto: Context) {
+    val requestQueue = Volley.newRequestQueue(contexto)
+    val url = "https://dailyasiercalendar.000webhostapp.com/deleteAllCalendarEvents.php"
+    val requerimiento = JsonObjectRequest(
+        Request.Method.POST,
+        url,
+        null,
+        { response ->
+
+        }
+    ) { error ->  }
+    requestQueue.add(requerimiento)
+}
+
+fun deleteAllDiaryRecord(contexto: Context) {
+    val requestQueue = Volley.newRequestQueue(contexto)
+    val url = "https://dailyasiercalendar.000webhostapp.com/deleteAllDiaryRecord.php"
+    val requerimiento = JsonObjectRequest(
+        Request.Method.POST,
+        url,
+        null,
+        { response ->
+
+        }
+    ) { error ->  }
+    requestQueue.add(requerimiento)
 }

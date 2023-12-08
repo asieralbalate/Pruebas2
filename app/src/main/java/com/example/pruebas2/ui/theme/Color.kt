@@ -13,6 +13,7 @@ val Pink40 = Color(0xFF7D5260)
 val TopBarColor = Color(0xFF3A4D39)
 val TabsColor = Color(0xFF739072)
 val BoxColor = Color(0xFFECE3CE)
+val BoxColorSettings = Color(0xFF9e7756)
 
 val DiaryColor0 = Color(0xFF3A4D39)
 val DiaryColor1 = Color(0xFF748E63)

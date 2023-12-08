@@ -93,6 +93,13 @@ import java.util.Locale
 
 
 data class AdjectiveColorPair(val adjective: String, val color: Color, val image: Int)
+var selectedDiaryAdjective1 = mutableStateOf<Int?>(-1)
+var selectedWeatherAdjective1 = mutableStateOf<Int?>(-1)
+var selectedStepsAdjective1 = mutableStateOf<Int?>(-1)
+var selectedSpendAdjective1 = mutableStateOf<Int?>(-1)
+var selectedWeightAdjective1 = mutableStateOf<Int?>(-1)
+var selectedFoodAdjective1 = mutableStateOf<Int?>(-1)
+var selectedSleepAdjective1 = mutableStateOf<Int?>(-1)
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
