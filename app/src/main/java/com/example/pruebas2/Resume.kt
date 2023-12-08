@@ -2,6 +2,7 @@ package com.example.pruebas2
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -57,14 +58,19 @@ import kotlinx.coroutines.launch
 fun Resume(selectedYear: String, navController: NavHostController) {
     var dataMap by remember { mutableStateOf<MutableMap<String, IntArray>>(mutableMapOf()) }
     val context = LocalContext.current
-    LaunchedEffect(selectedYear) {
-        dataMap = fillMap(selectedYear, context)
+
+    LaunchedEffect(selectedYear, context) {
+        checkDatabase(context) { fetchedDataMap ->
+            dataMap = fillMap(selectedYear, fetchedDataMap)
+        }
     }
+
     Scaffold(
         topBar = { MyResTopBar(navController, selectedYear) },
         floatingActionButton = { },
         floatingActionButtonPosition = FabPosition.End,
         content = {
+
             Box(
                 modifier = Modifier
                     .padding(
@@ -72,6 +78,7 @@ fun Resume(selectedYear: String, navController: NavHostController) {
                     )
                     .background(BoxColor)
             ) {
+                Log.d("Resume", "DataMap size: ${dataMap.size}")
                 MyResTabs(dataMap) }
         }
     )
@@ -80,15 +87,12 @@ fun Resume(selectedYear: String, navController: NavHostController) {
 
 
 
-fun fillMap(selectedYear: String, context: Context): MutableMap<String, IntArray> {
-    val mapList = checkDatabase(context)
-    val rightYearMap: MutableMap<String,IntArray> = mutableMapOf()
-    mapList.forEach { (dateCal, values) ->
+fun fillMap(selectedYear: String, fetchedDataMap: MutableMap<String, IntArray>): MutableMap<String, IntArray> {
+    val rightYearMap: MutableMap<String, IntArray> = mutableMapOf()
+    fetchedDataMap.forEach { (dateCal, values) ->
         val year = dateCal.split("-")[2]
         if (year == selectedYear) {
             rightYearMap[dateCal] = values
-        } else {
-            return@forEach
         }
     }
     return rightYearMap
@@ -97,7 +101,7 @@ fun fillMap(selectedYear: String, context: Context): MutableMap<String, IntArray
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MyResTabs(dataMap: Map<String, IntArray>) {
+fun MyResTabs(dataMap: MutableMap<String, IntArray>) {
     val scope = rememberCoroutineScope()
     val imageResources = listOf(
         R.drawable.daywas,

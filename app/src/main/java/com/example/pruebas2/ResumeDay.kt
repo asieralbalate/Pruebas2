@@ -24,14 +24,12 @@ import com.example.pruebas2.ui.theme.DiaryColor9
 import java.util.*
 
 @Composable
-fun ResumeDay(dataMap: Map<String, IntArray>) {
+fun ResumeDay(dataMap: MutableMap<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = currentSelectedDateMillis
     val monthsInYear = 12
     val daysInMonth = 31
-
-
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         // Months header
@@ -92,7 +90,7 @@ fun ResumeDay(dataMap: Map<String, IntArray>) {
 }
 
 
-fun getColorDay(dataMap: Map<String, IntArray>, dayRow: Int, dayCol: Int ): Color{
+fun getColorDay(dataMap: MutableMap<String, IntArray>, dayRow: Int, dayCol: Int): Color{
     var value = -1
     for (m in dataMap){
         val row = m.key.split("-")[0].toInt()

@@ -2,6 +2,9 @@ package com.example.pruebas2
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.ShapeDrawable
+import android.widget.TextView
+import android.widget.Toast
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -17,6 +20,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +31,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,11 +40,16 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,6 +58,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
@@ -55,12 +66,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.example.pruebas2.ui.theme.BoxColor
 import com.example.pruebas2.ui.theme.DateTittle
@@ -98,7 +111,26 @@ fun Diary(selectedDate: String, navController: NavHostController) {
     var selectedWeightAdjective by remember { mutableStateOf<Int?>(-1) }
     var selectedFoodAdjective by remember { mutableStateOf<Int?>(-1) }
     var selectedSleepAdjective by remember { mutableStateOf<Int?>(-1) }
+    val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
+        snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState ,
+                    modifier = Modifier.absoluteOffset(x = 0.dp, y = 60.dp).clip(RoundedCornerShape(20.dp))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .background(TabsColor)
+                            .padding(12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Saved successfully",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+        },
         topBar = { MyTopBar(navController, formattedDate) },
         floatingActionButton = {
             MyFAB(
@@ -106,7 +138,7 @@ fun Diary(selectedDate: String, navController: NavHostController) {
                 selectedWeatherAdjective, selectedStepsAdjective,
                 selectedSpendAdjective, selectedWeightAdjective,
                 selectedFoodAdjective, selectedSleepAdjective,
-                context
+                context, snackbarHostState
             )
         },
         floatingActionButtonPosition = FabPosition.End,
@@ -259,7 +291,9 @@ fun MyFAB(
     selectedFoodAdjective: Int?,
     selectedSleepAdjective: Int?,
     context: Context,
+    snackbarHostState: SnackbarHostState
 ) {
+    val scope = rememberCoroutineScope()
     val value by rememberInfiniteTransition(label = "").animateFloat(
         initialValue = 0f,
         targetValue = 360f,
@@ -292,7 +326,8 @@ fun MyFAB(
                     gradientBrush, style = Stroke(width = 20.dp.value)
                 )
             }
-        }.size(58.dp)){
+        }
+        .size(58.dp)){
         FloatingActionButton(onClick = {
             uploadData(
                 dateCal = dateCal,
@@ -305,6 +340,7 @@ fun MyFAB(
                 selectedSleepAdjective = selectedSleepAdjective,
                 context = context,
             )
+            scope.launch { snackbarHostState.showSnackbar("Saved successfully") }
         },
             containerColor = TopBarColor,
             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
@@ -314,7 +350,9 @@ fun MyFAB(
             Image(
                 painterResource(id = R.drawable.save),
                 contentDescription = "null",
-                modifier = Modifier.size(80.dp).scale(1.35f),
+                modifier = Modifier
+                    .size(80.dp)
+                    .scale(1.35f),
                 contentScale = ContentScale.Crop
             )
         }
@@ -382,4 +420,3 @@ fun AdjectiveRow(
         )
     }
 }
-

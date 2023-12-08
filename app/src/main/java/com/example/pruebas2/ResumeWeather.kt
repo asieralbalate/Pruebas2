@@ -24,7 +24,7 @@ import com.example.pruebas2.ui.theme.WeatherColor9
 import java.util.*
 
 @Composable
-fun ResumeWeather(dataMap: Map<String, IntArray>) {
+fun ResumeWeather(dataMap: MutableMap<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = currentSelectedDateMillis
@@ -90,7 +90,7 @@ fun ResumeWeather(dataMap: Map<String, IntArray>) {
 }
 
 
-fun getColorWeather(dataMap: Map<String, IntArray>, dayRow: Int, dayCol: Int ): Color{
+fun getColorWeather(dataMap: MutableMap<String, IntArray>, dayRow: Int, dayCol: Int ): Color{
     var value = -1
     for (m in dataMap){
         val row = m.key.split("-")[0].toInt()

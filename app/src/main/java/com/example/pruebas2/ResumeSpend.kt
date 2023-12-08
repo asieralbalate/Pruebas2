@@ -16,7 +16,7 @@ import com.example.pruebas2.ui.theme.*
 import java.util.*
 
 @Composable
-fun ResumeSpend(dataMap: Map<String, IntArray>) {
+fun ResumeSpend(dataMap: MutableMap<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = currentSelectedDateMillis
@@ -86,7 +86,7 @@ fun ResumeSpend(dataMap: Map<String, IntArray>) {
 }
 
 
-fun getColorSpend(dataMap: Map<String, IntArray>, dayRow: Int, dayCol: Int ): Color{
+fun getColorSpend(dataMap: MutableMap<String, IntArray>, dayRow: Int, dayCol: Int ): Color{
     var value = -1
     for (m in dataMap){
         val row = m.key.split("-")[0].toInt()

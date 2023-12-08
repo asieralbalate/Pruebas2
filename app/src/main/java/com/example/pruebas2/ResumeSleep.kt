@@ -16,7 +16,7 @@ import com.example.pruebas2.ui.theme.*
 import java.util.*
 
 @Composable
-fun ResumeSleep(dataMap: Map<String, IntArray>) {
+fun ResumeSleep(dataMap: MutableMap<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = currentSelectedDateMillis
@@ -83,7 +83,7 @@ fun ResumeSleep(dataMap: Map<String, IntArray>) {
 }
 
 
-fun getColorSleep(dataMap: Map<String, IntArray>, dayRow: Int, dayCol: Int ): Color{
+fun getColorSleep(dataMap: MutableMap<String, IntArray>, dayRow: Int, dayCol: Int ): Color{
     var value = -1
     for (m in dataMap){
         val row = m.key.split("-")[0].toInt()

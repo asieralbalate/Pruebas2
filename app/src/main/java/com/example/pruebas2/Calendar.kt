@@ -19,7 +19,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Surface
@@ -30,19 +33,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.pruebas2.ui.theme.BoxColor
+import com.example.pruebas2.ui.theme.DateTittle
 import com.example.pruebas2.ui.theme.FontTittle
 import com.example.pruebas2.ui.theme.RegText
+import com.example.pruebas2.ui.theme.TabsColor
 import com.example.pruebas2.ui.theme.TopBarColor
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -52,7 +61,9 @@ import java.util.Locale
 
 
 val eventsData = mutableStateListOf<Event>()
+
 data class Event(val dateCal: String, val event: String)
+
 @Composable
 fun Calendar(navController: NavHostController) {
     Surface(
@@ -67,6 +78,7 @@ fun Calendar(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerView(navController: NavHostController) {
+    var isMyDropDownMenuOpen by remember { mutableStateOf(false) }
     val context = LocalContext.current
     listEvents(context)
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
@@ -101,7 +113,11 @@ fun DatePickerView(navController: NavHostController) {
                 if (selectedDate == null) {
                     Text(text = "No date selected", modifier = Modifier.padding(start = 10.dp))
                 } else {
-                    Row (Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically){
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
                             text = selectedDate.toString(),
                             modifier = Modifier.padding(start = 20.dp, top = 4.dp),
@@ -134,16 +150,91 @@ fun DatePickerView(navController: NavHostController) {
                         fontSize = 60.sp,
                         fontFamily = FontTittle
                     )
-                    Image(
-                        painter = painterResource(id = R.drawable.calleft),
-                        contentDescription = null,
-                        modifier = Modifier
+                    IconButton(
+                        onClick = { isMyDropDownMenuOpen = true }, modifier = Modifier
                             .size(60.dp)
                             .padding(end = 10.dp)
-                    )
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.settings),
+                            contentDescription = null,
+                        )
+                    }
                 }
-
-
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    DropdownMenu(
+                        offset = DpOffset(x = 130.dp, y = 0.dp),
+                        expanded = isMyDropDownMenuOpen,
+                        onDismissRequest = {
+                            isMyDropDownMenuOpen = false
+                        },
+                        modifier = Modifier.background(TabsColor)
+                    ) {
+                        DropdownMenuItem(
+                            onClick = {
+                                isMyDropDownMenuOpen = false
+                            },
+                            leadingIcon = {
+                                Image(
+                                    painter = painterResource(R.drawable.settings),
+                                    contentScale = ContentScale.FillWidth,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(50.dp)
+                                )
+                            },
+                            text = {
+                                Text(
+                                    text = "Clear Database Events",
+                                    fontFamily = DateTittle,
+                                    fontSize = 20.sp
+                                )
+                            }
+                        )
+                        DropdownMenuItem(
+                            onClick = {
+                                isMyDropDownMenuOpen = false
+                            },
+                            leadingIcon = {
+                                Image(
+                                    painter = painterResource(R.drawable.settings),
+                                    contentScale = ContentScale.FillWidth,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(50.dp)
+                                )
+                            },
+                            text = {
+                                Text(
+                                    text = "Clear Diary Data",
+                                    fontFamily = DateTittle,
+                                    fontSize = 20.sp
+                                )
+                            }
+                        )
+                        DropdownMenuItem(
+                            onClick = {
+                                isMyDropDownMenuOpen = false
+                            },
+                            leadingIcon = {
+                                Image(
+                                    painter = painterResource(R.drawable.settings),
+                                    contentScale = ContentScale.FillWidth,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(50.dp)
+                                )
+                            },
+                            text = {
+                                Text(
+                                    text = "Information",
+                                    fontFamily = DateTittle,
+                                    fontSize = 20.sp
+                                )
+                            }
+                        )
+                    }
+                }
             },
             state = datePickerState,
             showModeToggle = true

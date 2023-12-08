@@ -24,7 +24,7 @@ import com.example.pruebas2.ui.theme.StepsColor9
 import java.util.*
 
 @Composable
-fun ResumeSteps(dataMap: Map<String, IntArray>) {
+fun ResumeSteps(dataMap: MutableMap<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = currentSelectedDateMillis
@@ -93,7 +93,7 @@ fun ResumeSteps(dataMap: Map<String, IntArray>) {
 }
 
 
-fun getColorSteps(dataMap: Map<String, IntArray>, dayRow: Int, dayCol: Int ): Color{
+fun getColorSteps(dataMap: MutableMap<String, IntArray>, dayRow: Int, dayCol: Int ): Color{
     var value = -1
     for (m in dataMap){
         val row = m.key.split("-")[0].toInt()
