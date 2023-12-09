@@ -117,7 +117,7 @@ fun MyResTabs(dataMap: MutableMap<String, IntArray>) {
                         Image(
                             painter = painterResource(id = imageResource),
                             contentScale = ContentScale.FillWidth,
-                            contentDescription = null,
+                            contentDescription = "resume tabs images",
                             modifier = Modifier
                                 .width(60.dp)
                         )
@@ -143,13 +143,7 @@ fun MyResTabs(dataMap: MutableMap<String, IntArray>) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyResTopBar(navController: NavHostController, selectedYear: String) {
-
     var selectedMenuItem by remember { mutableStateOf<Pair<Int, String>?>(null) }
-
-
-
-
-
     TopAppBar(
         modifier = Modifier.height(44.dp),
         colors = TopAppBarColors(
@@ -161,7 +155,7 @@ fun MyResTopBar(navController: NavHostController, selectedYear: String) {
         ), actions = {
             IconButton(onClick = { isMenuVisibleResTopBar.value = true }) {
                 Image(
-                    painterResource(id = R.drawable.actionsresume), contentDescription = null
+                    painterResource(id = R.drawable.actionsresume), contentDescription = "resume topbar images"
                 )
             }
             Row(
@@ -187,7 +181,7 @@ fun MyResTopBar(navController: NavHostController, selectedYear: String) {
                                 Image(
                                     painter = painterResource(imageResource),
                                     contentScale = ContentScale.FillWidth,
-                                    contentDescription = null,
+                                    contentDescription = "resume dropdown images",
                                     modifier = Modifier.size(50.dp)
                                 )
                             },
@@ -237,7 +231,7 @@ fun MyResTopBar(navController: NavHostController, selectedYear: String) {
         navigationIcon = {
             IconButton(onClick = { navController.navigate("Calendar") }, content = {
                 Image(
-                    painterResource(id = R.drawable.goback), contentDescription = null
+                    painterResource(id = R.drawable.goback), contentDescription = "go back"
                 )
             })
         },

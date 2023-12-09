@@ -301,3 +301,21 @@ fun deleteAllDiaryRecord(context: Context) {
     }
     requestQueue.add(req)
 }
+
+fun deleteSingleEvent(dateCal: String, context: Context) {
+    val requestQueue = Volley.newRequestQueue(context)
+    val url = "https://dailyasiercalendar.000webhostapp.com/deleteSingleEvent.php"
+    val param = JSONObject()
+    param.put("dateCal", dateCal)
+    val req = JsonObjectRequest(
+        Request.Method.POST,
+        url,
+        param,
+        { response ->
+            Log.d("deleteSingleEvent", "Response: $response")
+        }
+    ) { error ->
+        Log.e("deleteSingleEvent", "Error: ${error.message}", error)
+    }
+    requestQueue.add(req)
+}

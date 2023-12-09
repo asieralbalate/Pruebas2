@@ -27,8 +27,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -149,6 +151,7 @@ fun Diary(selectedDate: String, navController: NavHostController) {
                         top = it.calculateTopPadding()
                     )
                     .background(BoxColor)
+                    .verticalScroll(rememberScrollState())
             ) {
                 MyTabs()
             }
@@ -187,7 +190,7 @@ fun MyTabs() {
                         Image(
                             painter = painterResource(id = imageResource),
                             contentScale = ContentScale.FillWidth,
-                            contentDescription = null,
+                            contentDescription = "diary tabs images",
                             modifier = Modifier
                                 .width(60.dp)
                         )
@@ -224,7 +227,7 @@ fun MyTopBar(navController: NavHostController, selectedDate: String) {
                 onClick = { navController.navigate("Calendar") },
                 content = {
                     Image(
-                        painterResource(id = R.drawable.goback), contentDescription = null
+                        painterResource(id = R.drawable.goback), contentDescription = "go back image"
                     )
                 }
             )
@@ -318,7 +321,7 @@ fun MyFAB(
         ) {
             Image(
                 painterResource(id = R.drawable.save),
-                contentDescription = "null",
+                contentDescription = "save",
                 modifier = Modifier
                     .size(80.dp)
                     .scale(1.35f),
@@ -370,7 +373,7 @@ fun AdjectiveRow(
         ) {
             Image(
                 painter = painterResource(image),
-                contentDescription = null,
+                contentDescription = "row images",
                 modifier = Modifier.size(70.dp),
                 contentScale = ContentScale.Crop
             )

@@ -106,7 +106,7 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
                             }
                         )
                         Button(
-                            onClick = { },
+                            onClick = { deleteSingleEvent(selectedDate, context) },
                             content = {
                                 Text(
                                     text = "Delete All",
@@ -169,7 +169,7 @@ fun ListEventsSchedule(selectedDate: String) {
                             IconButton(onClick = { }) {
                                 Image(
                                     painter = painterResource(id = R.drawable.delete),
-                                    contentDescription = null
+                                    contentDescription = "schedule delete"
                                 )
                             }
                         }
@@ -196,7 +196,7 @@ fun MyTopBarSchedule(navController: NavHostController, selectedDate: String) {
     ), navigationIcon = {
         IconButton(onClick = { navController.navigate("Calendar") }, content = {
             Image(
-                painterResource(id = R.drawable.goback), contentDescription = null
+                painterResource(id = R.drawable.goback), contentDescription = "schedule go back"
             )
         })
     },

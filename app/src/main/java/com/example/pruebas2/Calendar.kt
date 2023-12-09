@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -27,6 +28,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,9 +38,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -48,10 +53,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.pruebas2.ui.theme.BoxColor
 import com.example.pruebas2.ui.theme.BoxColorSettings
+import com.example.pruebas2.ui.theme.DateTittle
 import com.example.pruebas2.ui.theme.FontTittle
 import com.example.pruebas2.ui.theme.RegText
 import com.example.pruebas2.ui.theme.TabsColor
 import com.example.pruebas2.ui.theme.TopBarColor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -67,6 +75,8 @@ fun Calendar(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerView(navController: NavHostController) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     listEvents(context)
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
@@ -127,7 +137,7 @@ fun DatePickerView(navController: NavHostController) {
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.calright),
-                        contentDescription = null,
+                        contentDescription = "headerImage",
                         modifier = Modifier
                             .size(50.dp)
                             .padding(start = 10.dp)
@@ -139,11 +149,12 @@ fun DatePickerView(navController: NavHostController) {
                         fontFamily = FontTittle
                     )
                     IconButton(
-                        onClick = { showDropDownMenu.value = true }, modifier = Modifier.padding(end = 10.dp)
+                        onClick = { showDropDownMenu.value = true },
+                        modifier = Modifier.padding(end = 10.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.settings),
-                            contentDescription = null,
+                            contentDescription = "settings image",
                             modifier = Modifier
                                 .size(60.dp)
                         )
@@ -154,8 +165,8 @@ fun DatePickerView(navController: NavHostController) {
             state = datePickerState,
             showModeToggle = true
         )
-        ConfirmationDialogEvents(context)
-        ConfirmationDialogDiary(context)
+        ConfirmationDialogEvents(context, scope, snackbarHostState)
+        ConfirmationDialogDiary(context, scope, snackbarHostState)
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Button(
                 onClick = { navController.navigate("Schedule/${newFormattedDate}") },
@@ -169,10 +180,30 @@ fun DatePickerView(navController: NavHostController) {
         }
         ListEvents(eventsSelectedDate)
     }
+    Box(Modifier.fillMaxSize().padding(bottom = 12.dp), contentAlignment = Alignment.BottomCenter){
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .clip(RoundedCornerShape(20.dp))
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(TabsColor)
+                    .padding(12.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Delete completed",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
 }
 
 @Composable
-fun DropDownMenu(){
+fun DropDownMenu() {
     DropdownMenu(
         expanded = showDropDownMenu.value,
         onDismissRequest = {
@@ -187,10 +218,10 @@ fun DropDownMenu(){
             },
             leadingIcon = {
                 Image(
-                    painter = painterResource(R.drawable.settings),
+                    painter = painterResource(R.drawable.eventsdropdownmenu),
                     contentScale = ContentScale.FillWidth,
-                    contentDescription = null,
-                    modifier = Modifier.size(35.dp)
+                    contentDescription = "dropdown events",
+                    modifier = Modifier.size(40.dp)
                 )
             },
             text = {
@@ -208,10 +239,10 @@ fun DropDownMenu(){
             },
             leadingIcon = {
                 Image(
-                    painter = painterResource(R.drawable.settings),
+                    painter = painterResource(R.drawable.diarydropdownmenu),
                     contentScale = ContentScale.FillWidth,
-                    contentDescription = null,
-                    modifier = Modifier.size(35.dp)
+                    contentDescription = "dropdown diary",
+                    modifier = Modifier.size(40.dp)
                 )
             },
             text = {
@@ -228,10 +259,10 @@ fun DropDownMenu(){
             },
             leadingIcon = {
                 Image(
-                    painter = painterResource(R.drawable.settings),
+                    painter = painterResource(R.drawable.infodropdownmenu),
                     contentScale = ContentScale.FillWidth,
-                    contentDescription = null,
-                    modifier = Modifier.size(35.dp)
+                    contentDescription = "dropdown info",
+                    modifier = Modifier.size(40.dp)
                 )
             },
             text = {
@@ -246,29 +277,42 @@ fun DropDownMenu(){
 }
 
 @Composable
-fun ConfirmationDialogEvents(context: Context) {
-    if (showDialogEvents.value){
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+fun ConfirmationDialogEvents(context: Context, scope: CoroutineScope, snackbarHostState: SnackbarHostState ) {
+    if (showDialogEvents.value) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             AlertDialog(
                 containerColor = BoxColorSettings,
                 onDismissRequest = {
                     showDialogEvents.value = false
                 },
                 title = {
-                    Text(text = "Confirmation")
+                    Text(
+                        text = "CONFIRMATION",
+                        fontFamily = DateTittle,
+                        fontSize = 26.sp
+                    )
                 },
                 text = {
-                    Text(text = "Are you sure you want to clear all records from the database?")
+                    Text(
+                        text = "Are you sure you want to clear all EVENTS from the database?",
+                        fontFamily = DateTittle,
+                        fontSize = 20.sp
+                    )
                 },
                 confirmButton = {
                     TextButton(
                         onClick = {
                             showDialogEvents.value = false
                             deleteAllCalendarEvents(context)
+                            scope.launch { snackbarHostState.showSnackbar("Saved successfully") }
                         },
                         colors = buttonColors(containerColor = TabsColor),
                     ) {
-                        Text(text = "Yes")
+                        Text(
+                            text = "YES",
+                            fontFamily = DateTittle,
+                            fontSize = 16.sp
+                        )
                     }
                 },
                 dismissButton = {
@@ -276,9 +320,13 @@ fun ConfirmationDialogEvents(context: Context) {
                         onClick = {
                             showDialogEvents.value = false
                         },
-                        colors = buttonColors(contentColor = TabsColor),
+                        colors = buttonColors(containerColor = TabsColor),
                     ) {
-                        Text(text = "No")
+                        Text(
+                            text = "NO",
+                            fontFamily = DateTittle,
+                            fontSize = 16.sp
+                        )
                     }
                 }
             )
@@ -287,29 +335,42 @@ fun ConfirmationDialogEvents(context: Context) {
 }
 
 @Composable
-fun ConfirmationDialogDiary(context: Context) {
-    if (showDialogDiary.value){
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+fun ConfirmationDialogDiary(context: Context, scope: CoroutineScope, snackbarHostState: SnackbarHostState) {
+    if (showDialogDiary.value) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             AlertDialog(
                 containerColor = BoxColorSettings,
                 onDismissRequest = {
                     showDialogDiary.value = false
                 },
                 title = {
-                    Text(text = "Confirmation")
+                    Text(
+                        text = "CONFIRMATION",
+                        fontFamily = DateTittle,
+                        fontSize = 26.sp
+                    )
                 },
                 text = {
-                    Text(text = "Are you sure you want to clear all records from the database?")
+                    Text(
+                        fontFamily = DateTittle,
+                        fontSize = 20.sp,
+                        text = "Are you sure you want to clear all DIARY records from the database?"
+                    )
                 },
                 confirmButton = {
                     TextButton(
                         onClick = {
                             showDialogDiary.value = false
                             deleteAllDiaryRecord(context)
+                            scope.launch { snackbarHostState.showSnackbar("Saved successfully") }
                         },
                         colors = buttonColors(containerColor = TabsColor),
                     ) {
-                        Text(text = "Yes")
+                        Text(
+                            text = "Yes",
+                            fontFamily = DateTittle,
+                            fontSize = 16.sp
+                        )
                     }
                 },
                 dismissButton = {
@@ -319,7 +380,10 @@ fun ConfirmationDialogDiary(context: Context) {
                         },
                         colors = buttonColors(contentColor = TabsColor),
                     ) {
-                        Text(text = "No")
+                        Text(
+                            text = "No", fontFamily = DateTittle,
+                            fontSize = 16.sp
+                        )
                     }
                 }
             )
@@ -328,7 +392,7 @@ fun ConfirmationDialogDiary(context: Context) {
 }
 
 @Composable
-fun ListEvents(eventsSelectedDate: String?){
+fun ListEvents(eventsSelectedDate: String?) {
     Column(
         modifier = Modifier
             .fillMaxSize()
