@@ -1,8 +1,6 @@
 package com.example.pruebas2
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -77,7 +74,6 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
                     .background(BoxColor)
                     .fillMaxSize()
             ) {
-
                 Column {
                     OutlinedTextField(
                         value = selectedTask,
@@ -99,7 +95,8 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
                         Button(
                             onClick = {
                                 insertDatabase(selectedDate, selectedTask, context)
-                                      selectedTask = ""},
+                                selectedTask = ""
+                            },
                             content = {
                                 Text(
                                     text = "Add/Save",
@@ -119,70 +116,73 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
                             }
                         )
                     }
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        val filteredEvents = eventsData.filter { it.dateCal == selectedDate }
-                        if (filteredEvents.isNotEmpty()) {
-                            Row {
-                                Text(text = "Scheduled Tasks", fontSize = 26.sp)
-                            }
-                            filteredEvents.forEach { event ->
-                                val eventDetails = event.event.split("&&")
-                                eventDetails.forEachIndexed { index, detail ->
-                                    Card(
-                                        elevation = CardDefaults.cardElevation(5.dp),
-                                        modifier = Modifier
-                                            .padding(
-                                                top = 4.dp,
-                                                bottom = 4.dp,
-                                                start = 12.dp,
-                                                end = 12.dp
-                                            )
-                                            .fillMaxWidth()
-                                    ) {
-                                        Row(
-                                            horizontalArrangement = Arrangement.SpaceBetween,
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .background(TabsColor)
-                                        ) {
-                                            Text(
-                                                text = "${index + 1}: $detail",
-                                                fontSize = 28.sp,
-                                                modifier = Modifier.padding(
-                                                    start = 10.dp,
-                                                    top = 4.dp
-                                                )
-                                            )
-                                            IconButton(onClick = {  }) {
-                                                Image(
-                                                    painter = painterResource(id = R.drawable.delete),
-                                                    contentDescription = null
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            Row() {
-                                Text(text = "No tasks scheduled", fontSize = 26.sp)
-                            }
-                        }
-                    }
+                    ListEventsSchedule(selectedDate)
                 }
             }
         }
     )
 }
 
-
+@Composable
+fun ListEventsSchedule(selectedDate: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        val filteredEvents = eventsData.filter { it.dateCal == selectedDate }
+        if (filteredEvents.isNotEmpty()) {
+            Row {
+                Text(text = "Scheduled Tasks", fontSize = 26.sp)
+            }
+            filteredEvents.forEach { event ->
+                val eventDetails = event.event.split("&&")
+                eventDetails.forEachIndexed { index, detail ->
+                    Card(
+                        elevation = CardDefaults.cardElevation(5.dp),
+                        modifier = Modifier
+                            .padding(
+                                top = 4.dp,
+                                bottom = 4.dp,
+                                start = 12.dp,
+                                end = 12.dp
+                            )
+                            .fillMaxWidth()
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(TabsColor)
+                        ) {
+                            Text(
+                                text = "${index + 1}: $detail",
+                                fontSize = 28.sp,
+                                modifier = Modifier.padding(
+                                    start = 10.dp,
+                                    top = 4.dp
+                                )
+                            )
+                            IconButton(onClick = { }) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.delete),
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            Row {
+                Text(text = "No tasks scheduled", fontSize = 26.sp)
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

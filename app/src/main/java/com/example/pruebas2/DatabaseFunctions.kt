@@ -68,6 +68,7 @@ fun checkDate(dateCal: String, existsDateCallback: (Boolean) -> Unit, context: C
             }
         }
     ) { error ->
+        Log.e("checkDate", "Error: ${error.message}", error)
     }
     requestQueue.add(req)
 }
@@ -99,10 +100,10 @@ fun insertData(
         url,
         parameters,
         { response ->
-
+            Log.d("insertData", "Response: $response")
         },
         { error ->
-
+            Log.e("insertData", "Error: ${error.message}", error)
         }
     )
     requestQueue.add(req)
@@ -135,8 +136,10 @@ fun updateData(
         url,
         parameters,
         { response ->
+            Log.d("updateData", "Response: $response")
         },
         { error ->
+            Log.e("updateData", "Error: ${error.message}", error)
         }
     )
     requestQueue.add(req)
@@ -190,9 +193,9 @@ fun listEvents(context: Context) {
             val jsonArray = response.getJSONArray("list")
             eventsData.clear()
             for (i in 0 until jsonArray.length()) {
-                val registro = jsonArray.getJSONObject(i)
-                val dateCal = registro.getString("dateCal")
-                val event = registro.getString("event")
+                val reg = jsonArray.getJSONObject(i)
+                val dateCal = reg.getString("dateCal")
+                val event = reg.getString("event")
                 eventsData.add(
                     Event(
                         dateCal, event
@@ -201,70 +204,40 @@ fun listEvents(context: Context) {
             }
         },
         { error ->
+            Log.e("listEvents", "Error: ${error.message}", error)
         }
     )
     requestQueue.add(jsonObjectRequest)
 }
 
-fun insertDatabaseFuncionaSeguro(dateCal: String, selectedDiaryTask: String, context: Context) {
-    val url = "https://dailyasiercalendar.000webhostapp.com/insertTaskDatabase.php"
-    val requestQueue = Volley.newRequestQueue(context)
-    val parameters = JSONObject()
-    parameters.put("dateCal", dateCal)
-    parameters.put("event", selectedDiaryTask)
-
-    val req = JsonObjectRequest(
-        Request.Method.POST,
-        url,
-        parameters,
-        { response ->
-            // Impresión para depuración
-            Log.d("InsertDatabase", "Response: $response")
-        },
-        { error ->
-
-            Log.e("InsertDatabase", "Error: ${error.message}", error)
-        }
-    )
-    requestQueue.add(req)
-}
 fun insertDatabase(dateCal: String, selectedDiaryTask: String, context: Context) {
     val existingEvent = eventsData.find { it.dateCal == dateCal }
-
     if (existingEvent != null) {
-        // Si ya hay un evento para la fecha proporcionada, concatena los eventos
         val updatedEvent = Event(dateCal, "${existingEvent.event}&&$selectedDiaryTask")
-
-        // Actualiza la lista de eventos
         eventsData.removeAll { it.dateCal == dateCal }
         eventsData.add(updatedEvent)
-
-        // Actualiza la base de datos
         updateDatabase(dateCal, eventsData.toString(), context)
     } else {
-        // Si no hay eventos para la fecha proporcionada, inserta un nuevo registro
         val url = "https://dailyasiercalendar.000webhostapp.com/insertTaskDatabase.php"
         val requestQueue = Volley.newRequestQueue(context)
         val parameters = JSONObject()
         parameters.put("dateCal", dateCal)
         parameters.put("event", selectedDiaryTask)
-
         val req = JsonObjectRequest(
             Request.Method.POST,
             url,
             parameters,
             { response ->
-                // Impresión para depuración
                 Log.d("InsertDatabase", "Response: $response")
             },
             { error ->
-                // Impresión para depuración
+
                 Log.e("InsertDatabase", "Error: ${error.message}", error)
             }
         )
         requestQueue.add(req)
 
-        // Agrega el nuevo evento a la lista local
+
         eventsData.add(Event(dateCal, selectedDiaryTask))
     }
 }
@@ -285,11 +258,11 @@ fun clearDatabase(dateCal: String, context: Context) {
         url,
         parameters,
         { response ->
-            // Impresión para depuración
+
             Log.d("ClearDatabase", "Response: $response")
         },
         { error ->
-            // Impresión para depuración
+
             Log.e("ClearDatabase", "Error: ${error.message}", error)
         }
     )
@@ -297,30 +270,34 @@ fun clearDatabase(dateCal: String, context: Context) {
 }
 
 
-fun deleteAllCalendarEvents(contexto: Context) {
-    val requestQueue = Volley.newRequestQueue(contexto)
+fun deleteAllCalendarEvents(context: Context) {
+    val requestQueue = Volley.newRequestQueue(context)
     val url = "https://dailyasiercalendar.000webhostapp.com/deleteAllCalendarEvents.php"
-    val requerimiento = JsonObjectRequest(
+    val req = JsonObjectRequest(
         Request.Method.POST,
         url,
         null,
         { response ->
-
+            Log.d("deleteAllCalendarEvents", "Response: $response")
         }
-    ) { error ->  }
-    requestQueue.add(requerimiento)
+    ) { error ->
+        Log.e("deleteAllCalendarEvents", "Error: ${error.message}", error)
+    }
+    requestQueue.add(req)
 }
 
-fun deleteAllDiaryRecord(contexto: Context) {
-    val requestQueue = Volley.newRequestQueue(contexto)
+fun deleteAllDiaryRecord(context: Context) {
+    val requestQueue = Volley.newRequestQueue(context)
     val url = "https://dailyasiercalendar.000webhostapp.com/deleteAllDiaryRecord.php"
-    val requerimiento = JsonObjectRequest(
+    val req = JsonObjectRequest(
         Request.Method.POST,
         url,
         null,
         { response ->
-
+            Log.d("deleteAllDiaryRecord", "Response: $response")
         }
-    ) { error ->  }
-    requestQueue.add(requerimiento)
+    ) { error ->
+        Log.e("deleteAllDiaryRecord", "Error: ${error.message}", error)
+    }
+    requestQueue.add(req)
 }

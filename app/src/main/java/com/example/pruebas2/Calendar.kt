@@ -1,6 +1,5 @@
 package com.example.pruebas2
 
-import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,7 +33,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -54,13 +52,6 @@ import com.example.pruebas2.ui.theme.FontTittle
 import com.example.pruebas2.ui.theme.RegText
 import com.example.pruebas2.ui.theme.TabsColor
 import com.example.pruebas2.ui.theme.TopBarColor
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.Date
-import java.util.Locale
-
-
 
 
 @Composable
@@ -72,7 +63,6 @@ fun Calendar(navController: NavHostController) {
         DatePickerView(navController)
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -177,46 +167,7 @@ fun DatePickerView(navController: NavHostController) {
                 onClick = { navController.navigate("Resume/${selectedYear}") },
                 content = { Text(text = "Resume", fontFamily = FontTittle, fontSize = 28.sp) })
         }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 4.dp),
-            horizontalAlignment = CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            val filteredEvents = eventsData.filter { it.dateCal == eventsSelectedDate }
-            if (filteredEvents.isNotEmpty()) {
-                Row {
-                    Text(text = "Scheduled Tasks", fontSize = 26.sp)
-                }
-                filteredEvents.forEach { event ->
-                    val eventDetails = event.event.split("&&")
-                    eventDetails.forEachIndexed { index, detail ->
-                        Card(
-                            elevation = CardDefaults.cardElevation(5.dp),
-                            modifier = Modifier
-                                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
-                                .fillMaxWidth()
-                        ) {
-                            Row(
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = "${index + 1}: $detail",
-                                    fontSize = 26.sp,
-                                    modifier = Modifier.padding(
-                                        start = 10.dp,
-                                        top = 4.dp
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        ListEvents(eventsSelectedDate)
     }
 }
 
@@ -376,52 +327,46 @@ fun ConfirmationDialogDiary(context: Context) {
     }
 }
 
-@SuppressLint("SimpleDateFormat")
-fun convertMillisToDate(millis: Long): String {
-    val formatter = SimpleDateFormat("dd/MM/yyyy")
-    return formatter.format(Date(millis))
-}
-
-@SuppressLint("SimpleDateFormat")
-fun newFormatDateForDisplay(millis: Long): String {
-    val date = Date(millis)
-    val dayOfMonth = SimpleDateFormat("dd").format(date)
-    val month = SimpleDateFormat("MM").format(date)
-    val year = SimpleDateFormat("yyyy").format(date)
-    return "$dayOfMonth-$month-$year"
-}
-
 @Composable
-fun formatDate(date: LocalDate): String {
-    val dayOfMonth = date.dayOfMonth
-    val month = date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
-    val year = date.year
-
-    val dayWithExtension = when {
-        dayOfMonth in 11..13 -> "${dayOfMonth}th"
-        dayOfMonth % 10 == 1 -> "${dayOfMonth}st"
-        dayOfMonth % 10 == 2 -> "${dayOfMonth}nd"
-        dayOfMonth % 10 == 3 -> "${dayOfMonth}rd"
-        else -> "${dayOfMonth}th"
-    }
-    return "$dayWithExtension of $month $year"
-}
-
-fun getCurrentDate(): String {
-    val calendar = java.util.Calendar.getInstance()
-    val formatter = SimpleDateFormat("d", Locale.getDefault())
-    val dayOfMonth = formatter.format(calendar.time).toInt()
-    val daySuffix = getDayOfMonthSuffix(dayOfMonth)
-    val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
-    return "${dayOfMonth}$daySuffix of ${dateFormat.format(calendar.time)}"
-}
-
-fun getDayOfMonthSuffix(n: Int): String {
-    return when {
-        n in 11..13 -> "th"
-        n % 10 == 1 -> "st"
-        n % 10 == 2 -> "nd"
-        n % 10 == 3 -> "rd"
-        else -> "th"
+fun ListEvents(eventsSelectedDate: String?){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 4.dp),
+        horizontalAlignment = CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        val filteredEvents = eventsData.filter { it.dateCal == eventsSelectedDate }
+        if (filteredEvents.isNotEmpty()) {
+            Row {
+                Text(text = "Scheduled Tasks", fontSize = 26.sp)
+            }
+            filteredEvents.forEach { event ->
+                val eventDetails = event.event.split("&&")
+                eventDetails.forEachIndexed { index, detail ->
+                    Card(
+                        elevation = CardDefaults.cardElevation(5.dp),
+                        modifier = Modifier
+                            .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "${index + 1}: $detail",
+                                fontSize = 26.sp,
+                                modifier = Modifier.padding(
+                                    start = 10.dp,
+                                    top = 4.dp
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }

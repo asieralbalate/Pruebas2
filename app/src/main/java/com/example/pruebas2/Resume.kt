@@ -1,7 +1,6 @@
 package com.example.pruebas2
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -103,25 +102,14 @@ fun fillMap(selectedYear: String, fetchedDataMap: MutableMap<String, IntArray>):
 @Composable
 fun MyResTabs(dataMap: MutableMap<String, IntArray>) {
     val scope = rememberCoroutineScope()
-    val imageResources = listOf(
-        R.drawable.daywas,
-        R.drawable.weather,
-        R.drawable.steps,
-        R.drawable.spend,
-        R.drawable.weights,
-        R.drawable.food,
-        R.drawable.sleep,
-    )
-
     val pagerState = rememberPagerState(initialPage = 0, initialPageOffsetFraction = 0f) { 7 }
     Column {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
             containerColor = TabsColor,
             contentColor = Color.White,
-
             ) {
-            imageResources.forEachIndexed { index, imageResource ->
+            imageResourcesScheduleTabs.forEachIndexed { index, imageResource ->
                 Tab(
                     selected = pagerState.currentPage == index,
                     onClick = { scope.launch { pagerState.animateScrollToPage(page = index) } },
@@ -151,121 +139,16 @@ fun MyResTabs(dataMap: MutableMap<String, IntArray>) {
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyResTopBar(navController: NavHostController, selectedYear: String) {
-    var isMenuVisible by remember { mutableStateOf(false) }
-    var isBoxVisible by remember { mutableStateOf(false) }
+
     var selectedMenuItem by remember { mutableStateOf<Pair<Int, String>?>(null) }
-    val imageResources = listOf(
-        Pair(R.drawable.daywas, "Mood"),
-        Pair(R.drawable.weather, "Weather"),
-        Pair(R.drawable.steps, "Steps"),
-        Pair(R.drawable.spend, "Costs"),
-        Pair(R.drawable.weights, "Sports"),
-        Pair(R.drawable.food, "Foods"),
-        Pair(R.drawable.sleep, "Sleep"),
-    )
 
-    val adjectivesWithColorsMood = listOf(
-        Pair("Fantastic", DiaryColor0),
-        Pair("Terrible", DiaryColor1),
-        Pair("Productive", DiaryColor2),
-        Pair("Challenging", DiaryColor3),
-        Pair("Relaxing", DiaryColor4),
-        Pair("Exciting", DiaryColor5),
-        Pair("Hectic", DiaryColor6),
-        Pair("Joyful", DiaryColor7),
-        Pair("Frustrating", DiaryColor8),
-        Pair("Rewarding", DiaryColor9)
-    )
 
-    val adjectivesWithColorsFoods = listOf(
-        Pair("Italian", FoodColor0),
-        Pair("American", FoodColor1),
-        Pair("Turkish", FoodColor2),
-        Pair("Mexican", FoodColor3),
-        Pair("Japanese", FoodColor4),
-        Pair("Indian", FoodColor5),
-        Pair("Mediterranean", FoodColor6),
-        Pair("Chinese", FoodColor7),
-        Pair("Thai", FoodColor8),
-        Pair("French", FoodColor9)
-    )
 
-    val adjectivesWithColorsSleep = listOf(
-        Pair("-4 hours", SleepColor0),
-        Pair("4 hours", SleepColor1),
-        Pair("5 hours", SleepColor2),
-        Pair("6 hours", SleepColor3),
-        Pair("7 hours", SleepColor4),
-        Pair("8 hours", SleepColor5),
-        Pair("9 hours", SleepColor6),
-        Pair("10 hours", SleepColor7),
-        Pair("11 hours", SleepColor8),
-        Pair("+11 hours", SleepColor9)
-    )
 
-    val adjectivesWithColorsCosts = listOf(
-        Pair("-1€", SpendColor0),
-        Pair("1 - 5 €", SpendColor1),
-        Pair("5 - 10 €", SpendColor2),
-        Pair("10 - 20 €", SpendColor3),
-        Pair("20 - 50 €", SpendColor4),
-        Pair("50 - 100 €", SpendColor5),
-        Pair("100 - 200 €", SpendColor6),
-        Pair("200 - 500 €", SpendColor7),
-        Pair("500 - 1.000 €", SpendColor8),
-        Pair("+1.000 €", SpendColor9)
-    )
-
-    val adjectivesWithColorsSteps = listOf(
-        Pair("-100", StepsColor0),
-        Pair("100 - 500", StepsColor1),
-        Pair("500 - 1k", StepsColor2),
-        Pair("1k - 2k", StepsColor3),
-        Pair("2k - 5k", StepsColor4),
-        Pair("5k - 10k", StepsColor5),
-        Pair("10k - 15k", StepsColor6),
-        Pair("15k - 20k", StepsColor7),
-        Pair("20k - 30k", StepsColor8),
-        Pair("+30k", StepsColor9)
-    )
-
-    val adjectivesWithColorsWeather = listOf(
-        Pair("Sunny", WeatherColor0),
-        Pair("Rainy", WeatherColor1),
-        Pair("Cloudy", WeatherColor2),
-        Pair("Windy", WeatherColor3),
-        Pair("Snowy", WeatherColor4),
-        Pair("Stormy", WeatherColor5),
-        Pair("Foggy", WeatherColor6),
-        Pair("Clear", WeatherColor7),
-        Pair("Warm", WeatherColor8),
-        Pair("Cold", WeatherColor9)
-    )
-
-    val adjectivesWithColorsSports = listOf(
-        Pair("Running", WeightsColor0),
-        Pair("Climbing", WeightsColor1),
-        Pair("Weightlifting", WeightsColor2),
-        Pair("Cycling", WeightsColor3),
-        Pair("Swimming", WeightsColor4),
-        Pair("Boxing", WeightsColor5),
-        Pair("Yoga", WeightsColor6),
-        Pair("Dancing", WeightsColor7),
-        Pair("Martial Arts", WeightsColor8),
-        Pair("Gymnastics", WeightsColor9)
-    )
-    val adjectivesWithColorsMap = mapOf(
-        imageResources[0].second to adjectivesWithColorsMood,
-        imageResources[1].second to adjectivesWithColorsWeather,
-        imageResources[2].second to adjectivesWithColorsSteps,
-        imageResources[3].second to adjectivesWithColorsCosts,
-        imageResources[4].second to adjectivesWithColorsSports,
-        imageResources[5].second to adjectivesWithColorsFoods,
-        imageResources[6].second to adjectivesWithColorsSleep
-    )
 
     TopAppBar(
         modifier = Modifier.height(44.dp),
@@ -276,7 +159,7 @@ fun MyResTopBar(navController: NavHostController, selectedYear: String) {
             titleContentColor = TopBarColor,
             actionIconContentColor = Color.White
         ), actions = {
-            IconButton(onClick = { isMenuVisible = true }) {
+            IconButton(onClick = { isMenuVisibleResTopBar.value = true }) {
                 Image(
                     painterResource(id = R.drawable.actionsresume), contentDescription = null
                 )
@@ -286,17 +169,17 @@ fun MyResTopBar(navController: NavHostController, selectedYear: String) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 DropdownMenu(
-                    expanded = isMenuVisible,
+                    expanded = isMenuVisibleResTopBar.value,
                     onDismissRequest = {
-                        isMenuVisible = false
+                        isMenuVisibleResTopBar.value = false
                     },
                     modifier = Modifier.background(BoxColor)
                 ) {
-                    imageResources.forEachIndexed { index, (imageResource, name) ->
+                    imageResourcesResumeTopBar.forEachIndexed { index, (imageResource, name) ->
                         DropdownMenuItem(
                             onClick = {
-                                isMenuVisible = false
-                                isBoxVisible = true
+                                isMenuVisibleResTopBar.value = false
+                                isBoxVisibleResTopBar.value = true
                                 // Store the selected dropdown menu item
                                 selectedMenuItem = Pair(index, name)
                             },
@@ -316,9 +199,9 @@ fun MyResTopBar(navController: NavHostController, selectedYear: String) {
             Box {
                 DropdownMenu(
                     offset = DpOffset.Zero,
-                    expanded = isBoxVisible,
+                    expanded = isBoxVisibleResTopBar.value,
                     onDismissRequest = {
-                        isBoxVisible = false
+                        isBoxVisibleResTopBar.value = false
                     },
                     modifier = Modifier.background(BoxColor),
                     content = {
