@@ -149,7 +149,7 @@ fun Diary(selectedDate: String, navController: NavHostController) {
                 modifier = Modifier
                     .padding(
                         top = it.calculateTopPadding()
-                    )
+                    ).fillMaxSize()
                     .background(BoxColor)
                     .verticalScroll(rememberScrollState())
             ) {

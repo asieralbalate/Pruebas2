@@ -158,7 +158,7 @@ fun DatePickerView(navController: NavHostController) {
                             modifier = Modifier
                                 .size(60.dp)
                         )
-                        DropDownMenu()
+                        DropDownMenu(navController)
                     }
                 }
             },
@@ -180,7 +180,10 @@ fun DatePickerView(navController: NavHostController) {
         }
         ListEvents(eventsSelectedDate)
     }
-    Box(Modifier.fillMaxSize().padding(bottom = 12.dp), contentAlignment = Alignment.BottomCenter){
+    Box(
+        Modifier
+            .fillMaxSize()
+            .padding(bottom = 12.dp), contentAlignment = Alignment.BottomCenter){
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier
@@ -203,7 +206,7 @@ fun DatePickerView(navController: NavHostController) {
 }
 
 @Composable
-fun DropDownMenu() {
+fun DropDownMenu(navController: NavHostController) {
     DropdownMenu(
         expanded = showDropDownMenu.value,
         onDismissRequest = {
@@ -256,6 +259,7 @@ fun DropDownMenu() {
         DropdownMenuItem(
             onClick = {
                 showDropDownMenu.value = false
+                navController.navigate("About")
             },
             leadingIcon = {
                 Image(
@@ -267,7 +271,7 @@ fun DropDownMenu() {
             },
             text = {
                 Text(
-                    text = "Information",
+                    text = "About",
                     fontFamily = FontTittle,
                     fontSize = 26.sp
                 )
@@ -396,7 +400,8 @@ fun ListEvents(eventsSelectedDate: String?) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 4.dp),
+            .padding(top = 4.dp)
+            ,
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -409,6 +414,7 @@ fun ListEvents(eventsSelectedDate: String?) {
                 val eventDetails = event.event.split("&&")
                 eventDetails.forEachIndexed { index, detail ->
                     Card(
+                        colors= CardDefaults.cardColors(containerColor = BoxColorSettings),
                         elevation = CardDefaults.cardElevation(5.dp),
                         modifier = Modifier
                             .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)

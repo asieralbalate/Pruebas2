@@ -155,7 +155,7 @@ fun MyResTopBar(navController: NavHostController, selectedYear: String) {
         ), actions = {
             IconButton(onClick = { isMenuVisibleResTopBar.value = true }) {
                 Image(
-                    painterResource(id = R.drawable.actionsresume), contentDescription = "resume topbar images"
+                    painterResource(id = R.drawable.actionsresume), contentDescription = "resume top bar images"
                 )
             }
             Row(

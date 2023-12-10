@@ -210,41 +210,41 @@ fun listEvents(context: Context) {
     requestQueue.add(jsonObjectRequest)
 }
 
-fun insertDatabase(dateCal: String, selectedDiaryTask: String, context: Context) {
+fun insertOrAddDatabase(dateCal: String, selectedDiaryTask: String, context: Context) {
     val existingEvent = eventsData.find { it.dateCal == dateCal }
     if (existingEvent != null) {
-        val updatedEvent = Event(dateCal, "${existingEvent.event}&&$selectedDiaryTask")
+        val newString = "${existingEvent.event}&&$selectedDiaryTask"
+        updateDatabase(dateCal, newString, context)
         eventsData.removeAll { it.dateCal == dateCal }
-        eventsData.add(updatedEvent)
-        updateDatabase(dateCal, eventsData.toString(), context)
+        eventsData.add(Event(dateCal, newString))
     } else {
-        val url = "https://dailyasiercalendar.000webhostapp.com/insertTaskDatabase.php"
-        val requestQueue = Volley.newRequestQueue(context)
-        val parameters = JSONObject()
-        parameters.put("dateCal", dateCal)
-        parameters.put("event", selectedDiaryTask)
-        val req = JsonObjectRequest(
-            Request.Method.POST,
-            url,
-            parameters,
-            { response ->
-                Log.d("InsertDatabase", "Response: $response")
-            },
-            { error ->
-
-                Log.e("InsertDatabase", "Error: ${error.message}", error)
-            }
-        )
-        requestQueue.add(req)
-
-
+        insertDatabaseAux(dateCal, selectedDiaryTask, context)
         eventsData.add(Event(dateCal, selectedDiaryTask))
     }
 }
+fun insertDatabaseAux(dateCal: String, selectedDiaryTask: String, context: Context){
+    val url = "https://dailyasiercalendar.000webhostapp.com/insertTaskDatabase.php"
+    val requestQueue = Volley.newRequestQueue(context)
+    val parameters = JSONObject()
+    parameters.put("dateCal", dateCal)
+    parameters.put("event", selectedDiaryTask)
+    val req = JsonObjectRequest(
+        Request.Method.POST,
+        url,
+        parameters,
+        { response ->
+            Log.d("InsertDatabase", "Response: $response")
+        },
+        { error ->
 
+            Log.e("InsertDatabase", "Error: ${error.message}", error)
+        }
+    )
+    requestQueue.add(req)
+}
 fun updateDatabase(dateCal: String, updatedEvent: String, context: Context) {
     clearDatabase(dateCal, context)
-    insertDatabase(dateCal, updatedEvent, context)
+    insertDatabaseAux(dateCal, updatedEvent, context)
 }
 
 fun clearDatabase(dateCal: String, context: Context) {
@@ -269,6 +269,48 @@ fun clearDatabase(dateCal: String, context: Context) {
     requestQueue.add(req)
 }
 
+fun clearSingleDateDatabase(dateCal: String, context: Context) {
+    val requestQueue = Volley.newRequestQueue(context)
+    val url = "https://dailyasiercalendar.000webhostapp.com/clearDatabase.php"
+    val parameters = JSONObject()
+    parameters.put("dateCal", dateCal)
+
+    val req = JsonObjectRequest(
+        Request.Method.POST,
+        url,
+        parameters,
+        { response ->
+
+            Log.d("ClearDatabase", "Response: $response")
+        },
+        { error ->
+
+            Log.e("ClearDatabase", "Error: ${error.message}", error)
+        }
+    )
+    requestQueue.add(req)
+    eventsData.removeAll { it.dateCal == dateCal }
+}
+
+fun deleteOneRowDatabase(dateCal: String, row: String, context: Context){
+    val eventToDelete = eventsData.find { it.dateCal == dateCal }
+
+    if (eventToDelete != null) {
+        val updatedEvent = eventToDelete.event.split("&&").filterNot { it == row }.joinToString("&&")
+
+        if (updatedEvent.isEmpty()) {
+
+            clearSingleDateDatabase(dateCal, context)
+            eventsData.remove(eventToDelete)
+        } else {
+            Log.d("UPDATEDEVENT", "Response: $updatedEvent")
+            Log.d("DATECAL", "Response: $dateCal")
+
+            //-------faltaacabar----------//
+            eventsData[eventsData.indexOf(eventToDelete)] = eventToDelete.copy(event = updatedEvent)
+        }
+    }
+}
 
 fun deleteAllCalendarEvents(context: Context) {
     val requestQueue = Volley.newRequestQueue(context)
@@ -298,24 +340,6 @@ fun deleteAllDiaryRecord(context: Context) {
         }
     ) { error ->
         Log.e("deleteAllDiaryRecord", "Error: ${error.message}", error)
-    }
-    requestQueue.add(req)
-}
-
-fun deleteSingleEvent(dateCal: String, context: Context) {
-    val requestQueue = Volley.newRequestQueue(context)
-    val url = "https://dailyasiercalendar.000webhostapp.com/deleteSingleEvent.php"
-    val param = JSONObject()
-    param.put("dateCal", dateCal)
-    val req = JsonObjectRequest(
-        Request.Method.POST,
-        url,
-        param,
-        { response ->
-            Log.d("deleteSingleEvent", "Response: $response")
-        }
-    ) { error ->
-        Log.e("deleteSingleEvent", "Error: ${error.message}", error)
     }
     requestQueue.add(req)
 }

@@ -15,13 +15,13 @@ class MainActivity : ComponentActivity() {
 
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContent {
             Pruebas2Theme {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "SplashScreen") {
                     composable("SplashScreen") { SplashScreen(navController) }
+                    composable("About") { About(navController) }
                     composable("Calendar") { Calendar(navController) }
                     composable(
                         route = "Diary/{selectedDate}",

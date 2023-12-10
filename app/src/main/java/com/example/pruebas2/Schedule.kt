@@ -1,6 +1,7 @@
 package com.example.pruebas2
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -38,9 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.pruebas2.ui.theme.BoxColor
+import com.example.pruebas2.ui.theme.BoxColorSettings
 import com.example.pruebas2.ui.theme.DateTittle
 import com.example.pruebas2.ui.theme.FontTittle
-import com.example.pruebas2.ui.theme.TabsColor
 import com.example.pruebas2.ui.theme.TopBarColor
 import java.text.SimpleDateFormat
 import java.time.ZoneId
@@ -56,15 +56,9 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
     val context = LocalContext.current
     val formattedDate = formatDate(localDate)
     var selectedTask by remember { mutableStateOf("") }
-    var newSelectedTask by remember { mutableStateOf("") }
-
     listEvents(context)
     Scaffold(
         topBar = { MyTopBarSchedule(navController, formattedDate) },
-        floatingActionButton = {
-
-        },
-        floatingActionButtonPosition = FabPosition.End,
         content = {
             Box(
                 modifier = Modifier
@@ -86,6 +80,7 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
                             .padding(15.dp)
                             .height(100.dp),
                         singleLine = false,
+                        minLines = 2,
                         shape = RoundedCornerShape(20.dp, 20.dp, 20.dp, 20.dp),
                     )
                     Row(
@@ -94,7 +89,7 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
                     ) {
                         Button(
                             onClick = {
-                                insertDatabase(selectedDate, selectedTask, context)
+                                insertOrAddDatabase(selectedDate, selectedTask, context)
                                 selectedTask = ""
                             },
                             content = {
@@ -106,7 +101,9 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
                             }
                         )
                         Button(
-                            onClick = { deleteSingleEvent(selectedDate, context) },
+                            onClick = {
+                                clearSingleDateDatabase(selectedDate, context)
+                                      },
                             content = {
                                 Text(
                                     text = "Delete All",
@@ -116,7 +113,7 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
                             }
                         )
                     }
-                    ListEventsSchedule(selectedDate)
+                    ListEventsSchedule(selectedDate, context)
                 }
             }
         }
@@ -124,7 +121,7 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
 }
 
 @Composable
-fun ListEventsSchedule(selectedDate: String) {
+fun ListEventsSchedule(selectedDate: String, context: Context) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -156,7 +153,7 @@ fun ListEventsSchedule(selectedDate: String) {
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(TabsColor)
+                                .background(BoxColorSettings)
                         ) {
                             Text(
                                 text = "${index + 1}: $detail",
@@ -166,7 +163,7 @@ fun ListEventsSchedule(selectedDate: String) {
                                     top = 4.dp
                                 )
                             )
-                            IconButton(onClick = { }) {
+                            IconButton(onClick = { deleteOneRowDatabase(selectedDate,detail, context) }) {
                                 Image(
                                     painter = painterResource(id = R.drawable.delete),
                                     contentDescription = "schedule delete"
