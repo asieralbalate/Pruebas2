@@ -2,6 +2,7 @@ package com.example.pruebas2
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -34,6 +36,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -89,8 +93,12 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
                     ) {
                         Button(
                             onClick = {
-                                insertOrAddDatabase(selectedDate, selectedTask, context)
-                                selectedTask = ""
+                                val task = selectedTask.replace("\\s|\\n".toRegex(), "")
+                                Log.d("TASK", task)
+                                if (task != "") {
+                                    insertOrAddDatabase(selectedDate, task, context)
+                                    selectedTask = ""
+                                }
                             },
                             content = {
                                 Text(
@@ -103,7 +111,7 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
                         Button(
                             onClick = {
                                 clearSingleDateDatabase(selectedDate, context)
-                                      },
+                            },
                             content = {
                                 Text(
                                     text = "Delete All",
@@ -163,7 +171,13 @@ fun ListEventsSchedule(selectedDate: String, context: Context) {
                                     top = 4.dp
                                 )
                             )
-                            IconButton(onClick = { deleteOneRowDatabase(selectedDate,detail, context) }) {
+                            IconButton(onClick = {
+                                deleteOneRowDatabase(
+                                    selectedDate,
+                                    detail,
+                                    context
+                                )
+                            }) {
                                 Image(
                                     painter = painterResource(id = R.drawable.delete),
                                     contentDescription = "schedule delete"

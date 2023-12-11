@@ -19,8 +19,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             Pruebas2Theme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "SplashScreen") {
-                    composable("SplashScreen") { SplashScreen(navController) }
+                NavHost(navController = navController, startDestination = DestinationScreen.SplashScreenDest.route) {
+                    composable(route = DestinationScreen.SplashScreenDest.route) {
+                        SplashScreen(navController = navController)
+                    }
                     composable("About") { About(navController) }
                     composable("Calendar") { Calendar(navController) }
                     composable(

@@ -236,7 +236,6 @@ fun insertDatabaseAux(dateCal: String, selectedDiaryTask: String, context: Conte
             Log.d("InsertDatabase", "Response: $response")
         },
         { error ->
-
             Log.e("InsertDatabase", "Error: ${error.message}", error)
         }
     )
@@ -252,19 +251,13 @@ fun clearDatabase(dateCal: String, context: Context) {
     val url = "https://dailyasiercalendar.000webhostapp.com/clearDatabase.php"
     val parameters = JSONObject()
     parameters.put("dateCal", dateCal)
-
     val req = JsonObjectRequest(
         Request.Method.POST,
         url,
         parameters,
-        { response ->
-
-            Log.d("ClearDatabase", "Response: $response")
+        { response -> Log.d("ClearDatabase", "Response:$response")
         },
-        { error ->
-
-            Log.e("ClearDatabase", "Error: ${error.message}", error)
-        }
+        { error -> Log.e("ClearDatabase", "Error:${error.message}", error) }
     )
     requestQueue.add(req)
 }
@@ -298,15 +291,41 @@ fun deleteOneRowDatabase(dateCal: String, row: String, context: Context){
     if (eventToDelete != null) {
         val updatedEvent = eventToDelete.event.split("&&").filterNot { it == row }.joinToString("&&")
 
-        if (updatedEvent.isEmpty()) {
 
+        val updatedEventDatabase = eventToDelete.event.split("&&").filterNot { it == row }.joinToString("&&")
+        if (updatedEvent.isEmpty()) {
+            Log.d("UPDATEDEVENTEmpty", "Response: $updatedEvent")
             clearSingleDateDatabase(dateCal, context)
             eventsData.remove(eventToDelete)
         } else {
             Log.d("UPDATEDEVENT", "Response: $updatedEvent")
             Log.d("DATECAL", "Response: $dateCal")
 
-            //-------faltaacabar----------//
+
+            updateDatabase(dateCal, updatedEventDatabase, context)
+            eventsData[eventsData.indexOf(eventToDelete)] = eventToDelete.copy(event = updatedEvent)
+        }
+    }
+}
+
+fun deleteOneRowDatabasePruebas(dateCal: String, row: String, context: Context){
+    val eventToDelete = eventsData.find { it.dateCal == dateCal }
+
+    if (eventToDelete != null) {
+        val updatedEvent = eventToDelete.event.split("&&").filterNot { it == row }.joinToString("&&")
+
+
+        val updatedEventDatabase = eventToDelete.event.split("&&").filterNot { it == row }.joinToString("&&")
+        if (updatedEvent.isEmpty()) {
+            Log.d("UPDATEDEVENTEmpty", "Response: $updatedEvent")
+            clearSingleDateDatabase(dateCal, context)
+            eventsData.remove(eventToDelete)
+        } else {
+            Log.d("UPDATEDEVENT", "Response: $updatedEvent")
+            Log.d("DATECAL", "Response: $dateCal")
+
+
+            updateDatabase(dateCal, updatedEventDatabase, context)
             eventsData[eventsData.indexOf(eventToDelete)] = eventToDelete.copy(event = updatedEvent)
         }
     }
@@ -326,6 +345,7 @@ fun deleteAllCalendarEvents(context: Context) {
         Log.e("deleteAllCalendarEvents", "Error: ${error.message}", error)
     }
     requestQueue.add(req)
+    eventsData.clear()
 }
 
 fun deleteAllDiaryRecord(context: Context) {
