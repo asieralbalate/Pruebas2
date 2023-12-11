@@ -21,11 +21,12 @@ fun uploadData(
     selectedSleepAdjective: Int?,
     context: Context,
 ) {
-    checkDate(dateCal,
-        {
-                exists ->
+    checkDate(
+        dateCal,
+        { exists ->
             if (exists) {
-                updateData(dateCal,
+                updateData(
+                    dateCal,
                     selectedDiaryAdjective,
                     selectedWeatherAdjective,
                     selectedStepsAdjective,
@@ -33,9 +34,11 @@ fun uploadData(
                     selectedWeightAdjective,
                     selectedFoodAdjective,
                     selectedSleepAdjective,
-                    context)
+                    context
+                )
             } else {
-                insertData(dateCal,
+                insertData(
+                    dateCal,
                     selectedDiaryAdjective,
                     selectedWeatherAdjective,
                     selectedStepsAdjective,
@@ -43,10 +46,12 @@ fun uploadData(
                     selectedWeightAdjective,
                     selectedFoodAdjective,
                     selectedSleepAdjective,
-                    context)
+                    context
+                )
             }
         },
-        context)
+        context
+    )
 }
 
 fun checkDate(dateCal: String, existsDateCallback: (Boolean) -> Unit, context: Context) {
@@ -222,7 +227,8 @@ fun insertOrAddDatabase(dateCal: String, selectedDiaryTask: String, context: Con
         eventsData.add(Event(dateCal, selectedDiaryTask))
     }
 }
-fun insertDatabaseAux(dateCal: String, selectedDiaryTask: String, context: Context){
+
+fun insertDatabaseAux(dateCal: String, selectedDiaryTask: String, context: Context) {
     val url = "https://dailyasiercalendar.000webhostapp.com/insertTaskDatabase.php"
     val requestQueue = Volley.newRequestQueue(context)
     val parameters = JSONObject()
@@ -241,6 +247,7 @@ fun insertDatabaseAux(dateCal: String, selectedDiaryTask: String, context: Conte
     )
     requestQueue.add(req)
 }
+
 fun updateDatabase(dateCal: String, updatedEvent: String, context: Context) {
     clearDatabase(dateCal, context)
     insertDatabaseAux(dateCal, updatedEvent, context)
@@ -255,7 +262,8 @@ fun clearDatabase(dateCal: String, context: Context) {
         Request.Method.POST,
         url,
         parameters,
-        { response -> Log.d("ClearDatabase", "Response:$response")
+        { response ->
+            Log.d("ClearDatabase", "Response:$response")
         },
         { error -> Log.e("ClearDatabase", "Error:${error.message}", error) }
     )
@@ -285,14 +293,16 @@ fun clearSingleDateDatabase(dateCal: String, context: Context) {
     eventsData.removeAll { it.dateCal == dateCal }
 }
 
-fun deleteOneRowDatabase(dateCal: String, row: String, context: Context){
+fun deleteOneRowDatabase(dateCal: String, row: String, context: Context) {
     val eventToDelete = eventsData.find { it.dateCal == dateCal }
 
     if (eventToDelete != null) {
-        val updatedEvent = eventToDelete.event.split("&&").filterNot { it == row }.joinToString("&&")
+        val updatedEvent =
+            eventToDelete.event.split("&&").filterNot { it == row }.joinToString("&&")
 
 
-        val updatedEventDatabase = eventToDelete.event.split("&&").filterNot { it == row }.joinToString("&&")
+        val updatedEventDatabase =
+            eventToDelete.event.split("&&").filterNot { it == row }.joinToString("&&")
         if (updatedEvent.isEmpty()) {
             Log.d("UPDATEDEVENTEmpty", "Response: $updatedEvent")
             clearSingleDateDatabase(dateCal, context)
@@ -308,26 +318,25 @@ fun deleteOneRowDatabase(dateCal: String, row: String, context: Context){
     }
 }
 
-fun deleteOneRowDatabasePruebas(dateCal: String, row: String, context: Context){
+fun deleteOneRowDatabasePruebas(dateCal: String, rowToDelete: String, context: Context) {
     val eventToDelete = eventsData.find { it.dateCal == dateCal }
 
     if (eventToDelete != null) {
-        val updatedEvent = eventToDelete.event.split("&&").filterNot { it == row }.joinToString("&&")
+        val updated = eventToDelete.event.split("&&")
+        val auxUpdated = updated.filter { it != rowToDelete }
 
+        val updatedString = auxUpdated.joinToString("&&", prefix = "")
 
-        val updatedEventDatabase = eventToDelete.event.split("&&").filterNot { it == row }.joinToString("&&")
-        if (updatedEvent.isEmpty()) {
-            Log.d("UPDATEDEVENTEmpty", "Response: $updatedEvent")
-            clearSingleDateDatabase(dateCal, context)
-            eventsData.remove(eventToDelete)
-        } else {
-            Log.d("UPDATEDEVENT", "Response: $updatedEvent")
-            Log.d("DATECAL", "Response: $dateCal")
+        Log.d("UPDATEString", "Response: $updatedString")
 
-
-            updateDatabase(dateCal, updatedEventDatabase, context)
-            eventsData[eventsData.indexOf(eventToDelete)] = eventToDelete.copy(event = updatedEvent)
+        eventsData.replaceAll {
+            if (it.dateCal == dateCal) {
+                it.copy(event = updatedString)
+            } else {
+                it
+            }
         }
+        updateDatabase(dateCal, updatedString, context)
     }
 }
 

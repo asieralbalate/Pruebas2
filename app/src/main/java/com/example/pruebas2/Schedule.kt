@@ -172,7 +172,7 @@ fun ListEventsSchedule(selectedDate: String, context: Context) {
                                 )
                             )
                             IconButton(onClick = {
-                                deleteOneRowDatabase(
+                                deleteOneRowDatabasePruebas(
                                     selectedDate,
                                     detail,
                                     context
