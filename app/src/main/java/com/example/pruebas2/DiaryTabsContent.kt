@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
+//Function showing the day adjectives and colors
 @Composable
 fun Day() {
     Column(
@@ -45,7 +47,7 @@ fun Day() {
         }
     }
 }
-
+//Function showing the food adjectives and colors
 @Composable
 fun Food(){
     Column (Modifier.fillMaxSize()){
@@ -65,7 +67,7 @@ fun Food(){
         }
     }
 }
-
+//Function showing the sleep adjectives and colors
 @Composable
 fun Sleep(){
     Column (Modifier.fillMaxSize()){
@@ -85,7 +87,7 @@ fun Sleep(){
         }
     }
 }
-
+//Function showing the spend adjectives and colors
 @Composable
 fun Spend() {
     Column(Modifier.fillMaxSize()) {
@@ -109,7 +111,7 @@ fun Spend() {
         }
     }
 }
-
+//Function showing the steps adjectives and colors
 @Composable
 fun Steps(){
     Column (Modifier.fillMaxSize()){
@@ -129,7 +131,7 @@ fun Steps(){
         }
     }
 }
-
+//Function showing the weather adjectives and colors
 @Composable
 fun Weather(){
     Column (Modifier.fillMaxSize()){
@@ -149,7 +151,7 @@ fun Weather(){
         }
     }
 }
-
+//Function showing the sports adjectives and colors
 @Composable
 fun Weights() {
     Column(Modifier.fillMaxSize()) {

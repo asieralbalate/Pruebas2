@@ -11,8 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.pruebas2.ui.theme.Pruebas2Theme
 
+// In this function, the entire structure for navigating between screens within the same project is implemented.
 class MainActivity : ComponentActivity() {
-
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +48,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-

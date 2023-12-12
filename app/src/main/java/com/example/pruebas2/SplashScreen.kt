@@ -21,12 +21,14 @@ import com.example.pruebas2.ui.theme.BoxColor
 import kotlinx.coroutines.delay
 
 
+// Class of the route
 sealed class DestinationScreen(val route: String) {
     object SplashScreenDest : DestinationScreen(route =
     "splash_screen")
     object MainScreenDest : DestinationScreen(route = "Calendar")
 }
 
+// Function to do the animation of the splash
 @Composable
 fun AnimationSplashContent(
     scaleAnimation: Animatable<Float, AnimationVector1D>,
@@ -34,7 +36,6 @@ fun AnimationSplashContent(
     durationMillisAnimation: Int,
     delayScreen: Long
 ) {
-
     LaunchedEffect(key1 = true) {
         scaleAnimation.animateTo(
             targetValue = 0.5F,
@@ -58,6 +59,7 @@ fun AnimationSplashContent(
     }
 }
 
+//Function to desing the splash
 @Composable
 fun DesignSplashScreen(
     imagePainter: Painter
@@ -75,19 +77,17 @@ fun DesignSplashScreen(
     }
 }
 
+//Function to show the splash and do the animation
 @Composable
 fun SplashScreen(navController: NavController) {
-
     val scaleAnimation: Animatable<Float, AnimationVector1D> =
         remember { Animatable(initialValue = 0f) }
-
     AnimationSplashContent(
         scaleAnimation = scaleAnimation,
         navController = navController,
         durationMillisAnimation = 1500,
         delayScreen = 1500L
     )
-
     DesignSplashScreen(
         imagePainter = painterResource(id =
         R.drawable.splashscreen),

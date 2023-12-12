@@ -32,6 +32,8 @@ import com.example.pruebas2.ui.theme.BoxColorSettings
 import com.example.pruebas2.ui.theme.DateTittle
 import com.example.pruebas2.ui.theme.TopBarColor
 
+
+//In this function, the content of the 'about' screen is displayed, which consists of a scaffold with text inside it.
 @Composable
 fun About(navController: NavHostController) {
     Scaffold(
@@ -76,6 +78,8 @@ fun About(navController: NavHostController) {
     )
 }
 
+
+//Composition of topAppbar inside About
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopBarInformation(navController: NavHostController) {

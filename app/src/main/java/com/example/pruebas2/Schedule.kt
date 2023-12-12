@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,8 +35,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -50,7 +47,8 @@ import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.util.Locale
 
-
+//A function with a scaffold that includes an app bar for backward navigation. It contains a text input for entering data into the database,
+// two buttons—one for adding and the other for deleting—as well as a list of elements for the selected date, if any exist. If not, it displays nothing.
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnrememberedMutableState")
 @Composable
 fun Schedule(selectedDate: String, navController: NavHostController) {
@@ -62,7 +60,9 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
     var selectedTask by remember { mutableStateOf("") }
     listEvents(context)
     Scaffold(
-        topBar = { MyTopBarSchedule(navController, formattedDate) },
+        topBar = {
+            MyTopBarSchedule(navController, formattedDate)
+        },
         content = {
             Box(
                 modifier = Modifier
@@ -128,6 +128,7 @@ fun Schedule(selectedDate: String, navController: NavHostController) {
     )
 }
 
+// Function to show the list of the events
 @Composable
 fun ListEventsSchedule(selectedDate: String, context: Context) {
     Column(
@@ -172,7 +173,7 @@ fun ListEventsSchedule(selectedDate: String, context: Context) {
                                 )
                             )
                             IconButton(onClick = {
-                                deleteOneRowDatabasePruebas(
+                                deleteOneRowDatabase(
                                     selectedDate,
                                     detail,
                                     context
@@ -195,9 +196,14 @@ fun ListEventsSchedule(selectedDate: String, context: Context) {
     }
 }
 
+
+// Function to show the bar and to navigate back
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopBarSchedule(navController: NavHostController, selectedDate: String) {
+fun MyTopBarSchedule(
+    navController: NavHostController,
+    selectedDate: String
+) {
     TopAppBar(modifier = Modifier.height(44.dp), colors = TopAppBarColors(
         containerColor = TopBarColor,
         scrolledContainerColor = Color.White,
@@ -205,7 +211,9 @@ fun MyTopBarSchedule(navController: NavHostController, selectedDate: String) {
         titleContentColor = TopBarColor,
         actionIconContentColor = Color.White
     ), navigationIcon = {
-        IconButton(onClick = { navController.navigate("Calendar") }, content = {
+        IconButton(onClick = {
+            navController.navigate("Calendar")
+        }, content = {
             Image(
                 painterResource(id = R.drawable.goback), contentDescription = "schedule go back"
             )

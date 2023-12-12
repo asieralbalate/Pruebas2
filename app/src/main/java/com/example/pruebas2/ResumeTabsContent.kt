@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
+
+// Function to show the resume of the day from the database
 @Composable
 fun ResumeDay(dataMap: MutableMap<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
@@ -80,6 +82,7 @@ fun ResumeDay(dataMap: MutableMap<String, IntArray>) {
     }
 }
 
+// Function to show the resume of the food from the database
 @Composable
 fun ResumeFood(dataMap: MutableMap<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
@@ -87,11 +90,7 @@ fun ResumeFood(dataMap: MutableMap<String, IntArray>) {
     calendar.timeInMillis = currentSelectedDateMillis
     val monthsInYear = 12
     val daysInMonth = 31
-
-
-
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        // Months header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -109,8 +108,6 @@ fun ResumeFood(dataMap: MutableMap<String, IntArray>) {
                 )
             }
         }
-
-
         repeat(daysInMonth) { dayIndex ->
             Row(
                 modifier = Modifier
@@ -146,7 +143,7 @@ fun ResumeFood(dataMap: MutableMap<String, IntArray>) {
         }
     }
 }
-
+// Function to show the resume of the sleep from the database
 @Composable
 fun ResumeSleep(dataMap: MutableMap<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
@@ -154,11 +151,7 @@ fun ResumeSleep(dataMap: MutableMap<String, IntArray>) {
     calendar.timeInMillis = currentSelectedDateMillis
     val monthsInYear = 12
     val daysInMonth = 31
-
-
-
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        // Months header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -214,6 +207,7 @@ fun ResumeSleep(dataMap: MutableMap<String, IntArray>) {
     }
 }
 
+// Function to show the resume of the spend from the database
 @Composable
 fun ResumeSpend(dataMap: MutableMap<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
@@ -222,7 +216,6 @@ fun ResumeSpend(dataMap: MutableMap<String, IntArray>) {
     val monthsInYear = 12
     val daysInMonth = 31
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        // Months header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -275,7 +268,7 @@ fun ResumeSpend(dataMap: MutableMap<String, IntArray>) {
         }
     }
 }
-
+// Function to show the resume of the steps from the database
 @Composable
 fun ResumeSteps(dataMap: MutableMap<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
@@ -283,11 +276,7 @@ fun ResumeSteps(dataMap: MutableMap<String, IntArray>) {
     calendar.timeInMillis = currentSelectedDateMillis
     val monthsInYear = 12
     val daysInMonth = 31
-
-
-
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        // Months header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -305,8 +294,6 @@ fun ResumeSteps(dataMap: MutableMap<String, IntArray>) {
                 )
             }
         }
-
-        // Calendar table
         repeat(daysInMonth) { dayIndex ->
             Row(
                 modifier = Modifier
@@ -344,7 +331,7 @@ fun ResumeSteps(dataMap: MutableMap<String, IntArray>) {
         }
     }
 }
-
+// Function to show the resume of the weather from the database
 @Composable
 fun ResumeWeather(dataMap: MutableMap<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
@@ -352,11 +339,7 @@ fun ResumeWeather(dataMap: MutableMap<String, IntArray>) {
     calendar.timeInMillis = currentSelectedDateMillis
     val monthsInYear = 12
     val daysInMonth = 31
-
-
-
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        // Months header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -373,7 +356,6 @@ fun ResumeWeather(dataMap: MutableMap<String, IntArray>) {
                 )
             }
         }
-
         repeat(daysInMonth) { dayIndex ->
             Row(
                 modifier = Modifier
@@ -410,6 +392,7 @@ fun ResumeWeather(dataMap: MutableMap<String, IntArray>) {
         }
     }
 }
+// Function to show the resume of the sports from the database
 @Composable
 fun ResumeWeights(dataMap: Map<String, IntArray>) {
     val currentSelectedDateMillis by remember { mutableStateOf(System.currentTimeMillis()) }
@@ -417,11 +400,7 @@ fun ResumeWeights(dataMap: Map<String, IntArray>) {
     calendar.timeInMillis = currentSelectedDateMillis
     val monthsInYear = 12
     val daysInMonth = 31
-
-
-
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        // Months header
         Row(
             modifier = Modifier
                 .fillMaxWidth()

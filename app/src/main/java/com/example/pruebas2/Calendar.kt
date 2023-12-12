@@ -61,7 +61,7 @@ import com.example.pruebas2.ui.theme.TopBarColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
+//Front of the Calendar
 @Composable
 fun Calendar(navController: NavHostController) {
     Surface(
@@ -72,6 +72,10 @@ fun Calendar(navController: NavHostController) {
     }
 }
 
+// In this function, the calendar is displayed with various added features such as searching for a date by text, etc.
+// Additionally, a title with the formatted date is shown, along with three buttons to navigate through different pages.
+// If there is any event on the selected date, a list of those events is displayed on the screen.
+// If you click on the top-right button, a dropdown menu is displayed with various options.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerView(navController: NavHostController) {
@@ -205,6 +209,10 @@ fun DatePickerView(navController: NavHostController) {
     }
 }
 
+
+//In this function we have the structure of the dropdownmenu with it's items.
+//If you select the first two rows the program shows a dialog to confirm the input.
+//If you choose the las row yo navigate to the about page
 @Composable
 fun DropDownMenu(navController: NavHostController) {
     DropdownMenu(
@@ -280,6 +288,7 @@ fun DropDownMenu(navController: NavHostController) {
     }
 }
 
+//This is the dialog to confirm de delete of the eventsCalendar database
 @Composable
 fun ConfirmationDialogEvents(context: Context, scope: CoroutineScope, snackbarHostState: SnackbarHostState ) {
     if (showDialogEvents.value) {
@@ -338,6 +347,7 @@ fun ConfirmationDialogEvents(context: Context, scope: CoroutineScope, snackbarHo
     }
 }
 
+//This is the dialog to confirm de delete of the diary calendar database
 @Composable
 fun ConfirmationDialogDiary(context: Context, scope: CoroutineScope, snackbarHostState: SnackbarHostState) {
     if (showDialogDiary.value) {
@@ -395,6 +405,7 @@ fun ConfirmationDialogDiary(context: Context, scope: CoroutineScope, snackbarHos
     }
 }
 
+// This function list the events of the database and filters it on the date selected
 @Composable
 fun ListEvents(eventsSelectedDate: String?) {
     Column(

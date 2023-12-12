@@ -86,17 +86,17 @@ import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.util.Locale
 
-
+//In this function, the journal screen is displayed, consisting of a scaffold with a
+// top app bar and a series of navigable tabs. Additionally, there is a floating button
+// to save the information in the database.
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Diary(selectedDate: String, navController: NavHostController) {
     val inputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
     val date = inputFormat.parse(selectedDate)
     val localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-
     val formattedDate = formatDate(localDate)
     val context = LocalContext.current
-
     val snackbarHostState = remember { SnackbarHostState() }
     DisposableEffect(Unit) {
         onDispose {
@@ -108,7 +108,6 @@ fun Diary(selectedDate: String, navController: NavHostController) {
             selectedWeightAdjective.value = -1
             selectedFoodAdjective.value = -1
             selectedSleepAdjective.value = -1
-            // Reset other selected values if needed
         }
     }
     Scaffold(
@@ -159,12 +158,11 @@ fun Diary(selectedDate: String, navController: NavHostController) {
     )
 }
 
-
+// Tab function to navigate between the selected functions and show the icons in the tab
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyTabs() {
     val scope = rememberCoroutineScope()
-
     val imageResources = listOf(
         R.drawable.daywas,
         R.drawable.weather,
@@ -212,6 +210,7 @@ fun MyTabs() {
     }
 }
 
+// TopBar function with an icon to navigate back
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopBar(navController: NavHostController, selectedDate: String) {
@@ -250,7 +249,8 @@ fun MyTopBar(navController: NavHostController, selectedDate: String) {
     )
 }
 
-
+// Button to save all the info into the database
+// It shows a snackbar when pressed
 @Composable
 fun MyFAB(
     dateCal: String,
@@ -332,7 +332,7 @@ fun MyFAB(
 
 }
 
-
+// In this function, the structure for displaying rows with various checkboxes, images, and text is constructed
 @Composable
 fun AdjectiveRow(
     adjective: String,

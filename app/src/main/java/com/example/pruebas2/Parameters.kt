@@ -342,6 +342,7 @@ val adjectivesWithColorsMap = mapOf(
 var isMenuVisibleResTopBar = mutableStateOf(false)
 var isBoxVisibleResTopBar = mutableStateOf(false)
 
+//-------------------ResumeTabsContent------------------//
 fun getColorDay(dataMap: MutableMap<String, IntArray>, dayRow: Int, dayCol: Int): Color{
     var value = -1
     for (m in dataMap){
@@ -558,3 +559,5 @@ fun getColorWeights(dataMap: Map<String, IntArray>, dayRow: Int, dayCol: Int ): 
         else -> {Color.Gray}
     }
 }
+
+//-----------------------------------------------//

@@ -51,19 +51,18 @@ import androidx.navigation.NavHostController
 import com.example.pruebas2.ui.theme.*
 import kotlinx.coroutines.launch
 
-
+//A function containing the framework in which the summary of the database for the entire year is displayed, organized by colors.
+// It includes tabs for navigation, a top app bar for backward navigation, and an icon that displays a dropdown menu with a legend for visualizing the colors.
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "MutableCollectionMutableState")
 @Composable
 fun Resume(selectedYear: String, navController: NavHostController) {
     var dataMap by remember { mutableStateOf<MutableMap<String, IntArray>>(mutableMapOf()) }
     val context = LocalContext.current
-
     LaunchedEffect(selectedYear, context) {
         checkDatabase(context) { fetchedDataMap ->
             dataMap = fillMap(selectedYear, fetchedDataMap)
         }
     }
-
     Scaffold(
         topBar = { MyResTopBar(navController, selectedYear) },
         floatingActionButton = { },
@@ -85,7 +84,7 @@ fun Resume(selectedYear: String, navController: NavHostController) {
 
 
 
-
+// Function to fill the map from the database
 fun fillMap(selectedYear: String, fetchedDataMap: MutableMap<String, IntArray>): MutableMap<String, IntArray> {
     val rightYearMap: MutableMap<String, IntArray> = mutableMapOf()
     fetchedDataMap.forEach { (dateCal, values) ->
@@ -97,7 +96,7 @@ fun fillMap(selectedYear: String, fetchedDataMap: MutableMap<String, IntArray>):
     return rightYearMap
 }
 
-
+// Function to show the images in the tabs and to navigate throw them
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyResTabs(dataMap: MutableMap<String, IntArray>) {
@@ -139,7 +138,7 @@ fun MyResTabs(dataMap: MutableMap<String, IntArray>) {
     }
 }
 
-
+// Function to show the top bar with the dropdownmenu and the button to go back
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyResTopBar(navController: NavHostController, selectedYear: String) {

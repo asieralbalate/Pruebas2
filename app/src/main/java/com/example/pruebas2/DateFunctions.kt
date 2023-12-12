@@ -8,12 +8,14 @@ import java.time.format.TextStyle
 import java.util.Date
 import java.util.Locale
 
+// Format text into the format selected
 @SuppressLint("SimpleDateFormat")
 fun convertMillisToDate(millis: Long): String {
     val formatter = SimpleDateFormat("dd/MM/yyyy")
     return formatter.format(Date(millis))
 }
 
+// Format text into date
 @SuppressLint("SimpleDateFormat")
 fun newFormatDateForDisplay(millis: Long): String {
     val date = Date(millis)
@@ -23,6 +25,7 @@ fun newFormatDateForDisplay(millis: Long): String {
     return "$dayOfMonth-$month-$year"
 }
 
+// Format the date into text
 @Composable
 fun formatDate(date: LocalDate): String {
     val dayOfMonth = date.dayOfMonth
