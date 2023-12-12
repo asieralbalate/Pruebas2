@@ -331,7 +331,7 @@ fun deleteOneRowDatabase(dateCal: String, rowToDelete: String, context: Context)
         Log.d("UPDATEString", "Response: $updatedString")
         updateDatabase(dateCal, updatedString, context)
         if (updatedString == ""){
-            eventsData.clear()
+            clearSingleDateDatabase(dateCal, context)
         } else {
             eventsData.replaceAll {
                 if (it.dateCal == dateCal) {

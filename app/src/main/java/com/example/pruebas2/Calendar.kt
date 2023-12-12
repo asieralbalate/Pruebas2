@@ -392,7 +392,7 @@ fun ConfirmationDialogDiary(context: Context, scope: CoroutineScope, snackbarHos
                         onClick = {
                             showDialogDiary.value = false
                         },
-                        colors = buttonColors(contentColor = TabsColor),
+                        colors = buttonColors(containerColor = TabsColor),
                     ) {
                         Text(
                             text = "No", fontFamily = DateTittle,
@@ -417,6 +417,7 @@ fun ListEvents(eventsSelectedDate: String?) {
         verticalArrangement = Arrangement.Top
     ) {
         val filteredEvents = eventsData.filter { it.dateCal == eventsSelectedDate }
+
         if (filteredEvents.isNotEmpty()) {
             Row {
                 Text(text = "Scheduled Tasks", fontSize = 26.sp)
